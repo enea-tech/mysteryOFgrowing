@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050505">
+<title>GROW 420 — Street Cult Grow Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--ng:#39ff14;--np:#bf00ff;--no:#ff6600;--nc:#00ffff;--nk:#ff1493;--ny:#f0e800;--dk:#0a0a0a;--d2:#050505;--cd:#111;--bd:#222}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100vh;background:var(--d2)}
+::-webkit-scrollbar-track{background:var(--d2)}
+::-webkit-scrollbar-thumb{background:#333;border-radius:4px}
+::selection{background:var(--ng);color:#000}
+@keyframes lf{0%{transform:translateY(-10vh) rotate(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+@keyframes sl{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+@keyframes growUp{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulseGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(57,255,20,.6))}50%{filter:drop-shadow(0 0 20px rgba(57,255,20,.9))}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.grunge{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-size:200px}
+.scanline{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.scanline::before{content:'';position:absolute;width:100%;height:2px;background:rgba(57,255,20,.08);animation:sl 6s linear infinite;box-shadow:0 0 10px rgba(57,255,20,.2)}
+#leaves{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.falling-bud{position:fixed;pointer-events:none;z-index:1;width:36px;height:36px;background-size:contain;background-repeat:no-repeat;opacity:.55;animation:lf linear infinite;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(191,0,255,.5))}
+.page{padding:20px;padding-bottom:120px;min-height:100vh;position:relative;z-index:2;animation:fadeIn .4s ease}
+.page-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.card{background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s}
+.card:active{transform:scale(.98)}
+.btn{padding:14px 28px;border-radius:12px;border:none;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
+.btn:active{transform:scale(.95)}
+.inp{background:rgba(10,10,10,.6);border:1px solid rgba(51,51,51,.7);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;width:100%;outline:none;transition:border-color .2s;font-family:'Inter',sans-serif}
+.inp:focus{border-color:var(--ng)}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;font-family:'Orbitron',sans-serif;text-transform:uppercase;letter-spacing:1px}
+.prog{height:6px;background:#1a1a1a;border-radius:99px;overflow:hidden}
+.prog-f{height:100%;border-radius:99px;transition:width .5s ease}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:10px;color:#666}
+.nav-item.active{font-weight:700}
+.t-graffiti{font-family:'Permanent Marker',cursive}
+.t-tech{font-family:'Orbitron',sans-serif}
+.gn{color:var(--ng);text-shadow:0 0 10px rgba(57,255,20,.5)}
+.gp{color:var(--np);text-shadow:0 0 10px rgba(191,0,255,.5)}
+.go{color:var(--no);text-shadow:0 0 10px rgba(255,102,0,.5)}
+.gc{color:var(--nc);text-shadow:0 0 10px rgba(0,255,255,.5)}
+.gk{color:var(--nk);text-shadow:0 0 10px rgba(255,20,147,.5)}
+.gy{color:var(--ny);text-shadow:0 0 10px rgba(240,232,0,.5)}
+.gl-g{box-shadow:0 0 15px rgba(57,255,20,.3),inset 0 0 15px rgba(57,255,20,.1)}
+.gl-p{box-shadow:0 0 15px rgba(191,0,255,.3),inset 0 0 15px rgba(191,0,255,.1)}
+.gl-o{box-shadow:0 0 15px rgba(255,102,0,.3),inset 0 0 15px rgba(255,102,0,.1)}
+.gl-c{box-shadow:0 0 15px rgba(0,255,255,.3),inset 0 0 15px rgba(0,255,255,.1)}
+.gl-k{box-shadow:0 0 15px rgba(255,20,147,.3),inset 0 0 15px rgba(255,20,147,.1)}
+.gl-y{box-shadow:0 0 15px rgba(240,232,0,.3),inset 0 0 15px rgba(240,232,0,.1)}
+.header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.75);backdrop-filter:blur(20px);border-bottom:1px solid rgba(34,34,34,.6);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.8);backdrop-filter:blur(20px);border-top:1px solid rgba(34,34,34,.6);display:flex;padding:6px 8px}
+.menu-overlay{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);padding-top:80px;display:none;flex-direction:column;gap:4px}
+.menu-overlay.open{display:flex}
+.menu-btn{background:none;border:none;padding:16px 24px;color:#888;font-size:18px;font-family:'Orbitron';text-align:left;cursor:pointer;border-left:4px solid transparent;display:flex;align-items:center;gap:16px;transition:all .2s}
+.menu-btn:hover,.menu-btn.active{color:#fff;border-left-color:currentColor}
+.smoke-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
+.home-bg{position:fixed;inset:0;z-index:0;background:url('assets/bg-home.jpg') center/cover no-repeat;opacity:.6;pointer-events:none}
+.home-bg::after{content:'';position:fixed;inset:0;background:rgba(5,5,5,.2);pointer-events:none}
+.pixel-plant{width:160px;height:160px;object-fit:contain;image-rendering:pixelated;animation:growUp .8s ease,pulseGlow 3s ease infinite,float 4s ease infinite}
+.plant-stage{position:relative;width:220px;height:270px;margin:0 auto 28px}
+.plant-container{position:absolute;top:35px;left:50%;transform:translateX(-50%);width:160px;height:160px}
+.plant-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;opacity:0;transform:scale(0.85) translateY(12px);transition:all 1s cubic-bezier(0.22,1,0.36,1);filter:drop-shadow(0 8px 20px rgba(0,0,0,.6))}
+.plant-img.active{opacity:1;transform:scale(1) translateY(0)}
+.plant-img.was-active{opacity:0.12;transform:scale(0.92) translateY(6px);transition:all 1.2s ease}
+.plant-ring{position:absolute;top:15px;left:50%;transform:translateX(-50%);width:195px;height:195px;z-index:0;pointer-events:none}
+.plant-ring-bg{fill:none;stroke:#1a1a1a;stroke-width:3.5}
+.plant-ring-progress{fill:none;stroke-width:3.5;stroke-linecap:round;transition:stroke-dasharray 1s cubic-bezier(0.22,1,0.36,1),stroke .6s ease;transform:rotate(-90deg);transform-origin:center;filter:drop-shadow(0 0 8px currentColor)}
+.plant-glow{position:absolute;bottom:45px;left:50%;transform:translateX(-50%);width:130px;height:55px;border-radius:50%;filter:blur(28px);z-index:-1;transition:all .8s ease;animation:pulseGlow 4s ease-in-out infinite}
+.plant-particles{position:absolute;top:35px;left:50%;transform:translateX(-50%);width:160px;height:160px;pointer-events:none;z-index:2;overflow:visible}
+.particle{position:absolute;width:3px;height:3px;border-radius:50%;opacity:0;animation:particleFloat 2.5s ease-out infinite}
+@keyframes particleFloat{0%{transform:translateY(0) scale(1);opacity:.9}50%{opacity:.5}100%{transform:translateY(-55px) scale(0);opacity:0}}
+.plant-badge{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-family:'Orbitron',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:2px;padding:5px 16px;border-radius:99px;background:rgba(0,0,0,.55);border:1px solid currentColor;white-space:nowrap;font-weight:700}
+.plant-shine{position:absolute;top:35px;left:50%;transform:translateX(-50%);width:160px;height:160px;pointer-events:none;z-index:3;overflow:hidden;border-radius:12px}
+.plant-shine::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:shineSweep 5s ease-in-out infinite}
+@keyframes shineSweep{0%,100%{left:-100%}50%{left:200%}}
+.strain-card{padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:12px;transition:all .2s}
+.strain-card:hover{border-color:#333}
+.tool-card{padding:20px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:12px}
+body.stoner-mode .strain-card,body.stoner-mode .tool-card{background:rgba(10,10,10,.55)!important;border-color:rgba(57,255,20,.5)!important;animation:rainbowBorder 4s linear infinite!important}
+.timer-display{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;text-align:center;letter-spacing:2px}
+.chrono-display{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;text-align:center;letter-spacing:2px}
+@keyframes neonFlicker{0%,100%{opacity:1}50%{opacity:.95}}
+.hero-glow{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(57,255,20,.08) 0%,transparent 70%);pointer-events:none;z-index:0;animation:neonFlicker 4s ease-in-out infinite}
+@keyframes stonerBg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes stonerPulse{0%,100%{filter:brightness(1) saturate(1)}50%{filter:brightness(1.4) saturate(1.6)}}
+@keyframes rainbowBorder{0%{border-color:#39ff14}25%{border-color:#bf00ff}50%{border-color:#ff6600}75%{border-color:#00ffff}100%{border-color:#ff1493}}
+@keyframes stonerGradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.stoner-gradient{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0;transition:opacity 1s ease;background:linear-gradient(135deg,#bf00ff 0%,#39ff14 25%,#ff6600 50%,#00ffff 75%,#ff1493 100%);background-size:500% 500%;animation:stonerGradientShift 6s ease infinite;mix-blend-mode:hard-light}
+body.stoner-mode .stoner-gradient{opacity:.45}
+body.stoner-mode .page{animation:stonerPulse 3s ease-in-out infinite}
+body.stoner-mode .card{background:rgba(10,10,10,.55)!important;border-color:rgba(57,255,20,.5)!important;animation:rainbowBorder 4s linear infinite!important}
+body.stoner-mode .t-graffiti{text-shadow:0 0 15px currentColor,0 0 35px currentColor!important}
+body.stoner-mode .t-tech{letter-spacing:4px!important;text-shadow:0 0 10px rgba(255,255,255,.4)!important}
+body.stoner-mode .header{background:rgba(5,5,5,.65)!important;border-bottom-color:var(--ng)!important;box-shadow:0 0 25px rgba(57,255,20,.25)!important}
+body.stoner-mode .bottom-nav{background:rgba(5,5,5,.65)!important;border-top-color:var(--ng)!important;box-shadow:0 0 25px rgba(57,255,20,.25)!important}
+body.stoner-mode .nav-item.active{text-shadow:0 0 12px currentColor!important}
+body.stoner-mode .falling-bud{opacity:.75!important;filter:drop-shadow(0 0 14px rgba(191,0,255,.7))!important}
+body.stoner-mode .plant-glow{filter:blur(40px) brightness(1.8)!important}
+body.stoner-mode .plant-ring-progress{filter:drop-shadow(0 0 15px currentColor)!important}
+body.stoner-mode .btn{box-shadow:0 0 15px rgba(57,255,20,.35)!important}
+body.stoner-mode .inp:focus{border-color:var(--np)!important;box-shadow:0 0 15px rgba(191,0,255,.5)!important}
+body.stoner-mode .hero-glow{background:radial-gradient(circle,rgba(191,0,255,.18) 0%,transparent 70%)!important}
+body.stoner-mode .scanline::before{background:rgba(255,20,147,.12)!important;box-shadow:0 0 15px rgba(255,20,147,.3)!important}
+.stoner-btn-active{color:#ff1493 !important;text-shadow:0 0 15px #ff1493,0 0 35px #ff1493;animation:neonFlicker .4s ease-in-out infinite}
+</style>
+</head>
+<body>
+<div class="grunge"></div>
+<div class="hero-glow"></div>
+<div class="scanline"></div>
+<canvas class="smoke-canvas" id="smoke"></canvas>
+<div id="leaves"></div>
+<div class="stoner-gradient"></div>
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:10px">
+    <img src="assets/logo.jpg" style="width:36px;height:36px;border-radius:8px;object-fit:cover;border:1px solid #333" alt="logo">
+    <span id="header-title" class="t-graffiti" style="font-size:20px;letter-spacing:2px">GROW 420</span>
+  </div>
+  <button id="stonerBtn" onclick="toggleStonerMode()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;transition:all .3s" title="Stoner Mode">🌈</button>
+<button onclick="toggleMenu()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">☰</button>
+</div>
+
+<div class="menu-overlay" id="menu">
+  <button class="menu-btn" onclick="go('home')">🏠 Home</button>
+  <button class="menu-btn" onclick="go('guide')">📖 Guida</button>
+  <button class="menu-btn" onclick="go('journal')">📓 Journal</button>
+  <button class="menu-btn" onclick="go('diagnosis')">🔍 Diagnosi</button>
+  <button class="menu-btn" onclick="go('tools')">🧮 Tools</button>
+  <button class="menu-btn" onclick="go('strains')">🧬 Strains</button>
+  <button class="menu-btn" onclick="go('timer')">⏱️ Timer</button>
+</div>
+<div id="app" style="padding-top:60px"></div>
+<div class="bottom-nav" id="bottomNav"></div>
+
+<script>
+    const phases=[
+{id:0,name:"Setup",subtitle:"Preparazione ambiente",emoji:'<img src="assets/"+phaseIconFiles[0]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"1–2 giorni",tag:"Pre-grow",color:"#39ff14",light:"—",temp:"18–25°C",humidity:"Qualsiasi",water:"—",nutrients:"Nessuno",steps:[{label:"Monta il grow tent",detail:"Assembla la tenda nel posto definitivo. Assicurati che il pavimento regga il peso."},{label:"Installa la lampada LED",detail:"Appendi la LED al centro del tent. Distanza iniziale: 50–60cm."},{label:"Collega ventilazione",detail:"Ventilatore in basso → aria fresca. Filtro carboni in alto → odori escono."},{label:"Posiziona igrometro/termometro",detail:"Metti il sensore all'altezza delle cime future, non vicino alla lampada."},{label:"Prepara il substrato",detail:"Terra leggera + 20% perlite. Riempi vasi da germinazione (0.5–1L)."},{label:"Testa il pH-metro",detail:"Calibra con soluzione inclusa. pH target acqua: 6.0–6.5."},{label:"Configura il timer",detail:"Imposta 18h luce / 6h buio per la fase veg."}],tips:["Fai girare il tent vuoto per 24h prima di mettere le piante.","Usa una presa multipla con protezione da sovratensione."],problems:[]},
+{id:1,name:"Germinazione",subtitle:"Il seme si sveglia",emoji:'<img src="assets/"+phaseIconFiles[1]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"3–7 giorni",tag:"Settimana 0",color:"#8fb87a",light:"Nessuna (o luce tenue)",temp:"22–26°C",humidity:"70–80%",water:"Pochissima",nutrients:"Zero",steps:[{label:"Metodo bicchiere d'acqua",detail:"Metti il seme in acqua a temperatura ambiente (pH 6.5) per 12–24h."},{label:"Metodo carta umida",detail:"Tra due fogli di carta bagnati, in sacchetto zip chiuso, posto caldo e buio."},{label:"Controlla ogni 12h",detail:"Tieni umida la carta senza inzupparla. Usa pinzette."},{label:"Aspetta la radichetta",detail:"Quando è lunga 0.5–1cm, è pronta per essere piantata."},{label:"Pianta nel substrato",detail:"Buchino da 1cm, radichetta verso il basso, copri leggermente."},{label:"Crea umidità alta",detail:"Copri con cupola di plastica. Togli 10 min al giorno per arieggiare."}],tips:["Non innaffiare il substrato — spruzza intorno al seme.","Il caldo accelera: un tappetino riscaldante aiuta."],problems:[{prob:"Seme non germina dopo 7 giorni",sol:"Prova acqua ossigenata diluita (3%) per 1h prima di ritentare."},{prob:"Radichetta bruna/nera",sol:"Troppa umidità o muffa. Ricomincia con seme nuovo."}]},
+{id:2,name:"Seedling",subtitle:"La piantina emerge",emoji:'<img src="assets/"+phaseIconFiles[2]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Settimane 1–2",color:"#6db56d",light:"18h ON / 6h OFF",temp:"22–26°C",humidity:"65–75%",water:"Minima, solo intorno alla piantina",nutrients:"Zero (la terra è sufficiente)",steps:[{label:"Aspetta la prima apertura",detail:"I cotiledoni escono entro 24–48h dalla piantagione."},{label:"Rimuovi la cupola gradualmente",detail:"Dopo 3–4 giorni apri per qualche ora, poi rimuovi al giorno 5–7."},{label:"Accendi la lampada a distanza",detail:"LED a 50–60cm. Le piantine sono delicate."},{label:"Irrigazione leggera",detail:"Innaffia in cerchio intorno, mai sopra. Terra leggermente umida."},{label:"Aspetta le prime foglie vere",detail:"Dopo i cotiledoni arrivano foglie dentellate. A 2–3 set la fase è finita."},{label:"Controlla il pH dell'acqua",detail:"Ogni annaffiatura: pH 6.0–6.5. Usa drops correttori."}],tips:["Non sovrainnaffiare — è l'errore #1 dei principianti.","Brezza lieve rinforza lo stelo."],problems:[{prob:"Piantina si allunga tantissimo",sol:"Troppo poca luce. Avvicina la lampada."},{prob:"Foglie cotiledoni gialle in fretta",sol:"Normale — le cotiledoni si consumano."},{prob:"Stelo sottilissimo che si piega",sol:"Troppo poca ventilazione. Aggiungi brezza delicata."}]},
+{id:3,name:"Vegetativa",subtitle:"Crescita esplosiva",emoji:'<img src="assets/"+phaseIconFiles[3]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"3–5 settimane",tag:"Settimane 3–7",color:"#4ea86a",light:"18h ON / 6h OFF",temp:"20–28°C",humidity:"50–65%",water:"Moderata, quando primi cm asciutti",nutrients:"Grow (N alto) — 50% dose",steps:[{label:"Trapianta in vaso più grande",detail:"Radici che fuoriescono = trapianta in 7–11L. Non disturbare la radice."},{label:"Inizia i nutrienti Grow",detail:"Dalla settimana 3, metà dose. Aumenta gradualmente."},{label:"Inizia LST",detail:"Piega il ramo principale verso il bordo del vaso. Fissalo con fil di ferro."},{label:"Topping (non per auto)",detail:"A 5–6 nodi, taglia la punta. La pianta farà 2 rami principali."},{label:"Mantieni le foglie pulite",detail:"Rimuovi foglie morte. Non toccare quelle sane."},{label:"Controlla ogni giorno",detail:"Osserva colore, forma, macchie. Prima rilevi, prima risolvi."},{label:"Trapianta in vaso finale",detail:"Verso la fine: vaso definitivo da 11–15L. Ultimo trapianto."}],tips:["Ruota il vaso di 90° ogni 2–3 giorni.","Test del dito: se umido a 3cm, non innaffiare.","Fotografa ogni 2–3 giorni per vedere i cambiamenti."],problems:[{prob:"Foglie con punte bruciate",sol:"Nutrient burn. Riduci dose del 30%, fai flush."},{prob:"Foglie gialle dal basso",sol:"Carenza azoto. Aumenta fertilizzante Grow."},{prob:"Crescita lenta",sol:"Controlla pH, luce e temperatura."}]},
+{id:4,name:"Pre-fioritura",subtitle:"La transizione",emoji:'<img src="assets/"+phaseIconFiles[4]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–10 giorni",tag:"Settimana 7–8",color:"#b8a84a",light:"12h ON / 12h OFF (foto) — Auto 18/6",temp:"20–26°C",humidity:"45–55%",water:"Moderata",nutrients:"Transizione: riduci N, aumenta P e K",steps:[{label:"Cambia il ciclo di luce",detail:"12h luce / 12h buio per fotoperiodo. Le auto lo fanno da sole."},{label:"Osserva i pre-fiori",detail:"Pistilli bianchi = femmina ✅ / Sacchetti = maschio ❌. Rimuovi maschi."},{label:"Fai il lollipopping",detail:"Rimuovi rami e foglie nella parte bassa (sotto i 2/3)."},{label:"Cambia i nutrienti",detail:"Passa da Grow (N alto) a Bloom (P e K alti, N basso)."},{label:"Abbassa l'umidità",detail:"Riduci verso il 45–55%. Alta umidità = rischio muffa."}],tips:["Nessuna luce durante le 12h di buio.","Fai l'ultima foto prima che i fiori arrivino."],problems:[{prob:"Pianta non fiorisce dopo 2 settimane",sol:"Controlla luce durante il buio. Ogni fessura del tent."},{prob:"Appare un maschio",sol:"Rimuovilo subito prima che apra i sacchi pollinici."}]},
+{id:5,name:"Fioritura",subtitle:"I fiori si formano",emoji:'<img src="assets/"+phaseIconFiles[5]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"6–9 settimane",tag:"Settimane 8–16",color:"#c47a3a",light:"12h/12h (foto) / 18–20h (auto)",temp:"18–25°C",humidity:"40–50%",water:"Abbondante",nutrients:"Bloom (PK alto) — piena dose",steps:[{label:"Osserva i fiori crescere",detail:"Le cime si formano sulle punte. Pistilli bianchi sempre più densi."},{label:"Avvicina la lampada",detail:"Abbassa LED a 35–45cm. Più luce = cime più dense."},{label:"Sostieni i rami pesanti",detail:"Tutori bambù o clip per rami che si piegano."},{label:"Nutrienti piena dose",detail:"Bloom a dose piena. Aggiungi booster PK nelle settimane di picco."},{label:"Controlla umidità ogni giorno",detail:"Fiori densi + umidità alta = Bud Rot. Mantieni sotto il 50%."},{label:"Defoliazione leggera",detail:"Rimuovi solo foglie grandi che ombrano le cime."},{label:"Tieni traccia delle settimane",detail:"Conta dalla prima comparsa dei fiori per capire quando raccogliere."}],tips:["Terpeni si sviluppano meglio con sbalzo termico notte/giorno (3–5°C).","Non spruzzare acqua sulle cime in fioritura.","Le cime in alto maturano prima di quelle in basso."],problems:[{prob:"Bud Rot (muffa grigia nei fiori)",sol:"Rimuovi subito con forbici sterilizzate. Abbassa umidità."},{prob:"Fiori pallidi e poco densi",sol:"Luce insufficiente. Avvicina la LED."},{prob:"Foglie arricciate verso il basso",sol:"Overwatering. Lascia asciugare di più."}]},
+{id:6,name:"Flushing",subtitle:"Pulizia finale",emoji:'<img src="assets/"+phaseIconFiles[6]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Ultime 1–2 settimane",color:"#4a8ab5",light:"Invariato",temp:"18–24°C",humidity:"40–45%",water:"Abbondante — solo acqua pH 6.0–6.5",nutrients:"ZERO — solo acqua pulita",steps:[{label:"Riconosci i segnali di maturità",detail:"Foglie che ingialliscono. Pistilli arrossati. Pianta che rallenta."},{label:"Controlla i tricomi",detail:"Lente 30–60x: trasparenti=immaturi / lattiginosi=pronti / ambrati=maturi."},{label:"Inizia il flush",detail:"Solo acqua pulita pH 6.0–6.5. L'acqua in eccesso porta via i sali."},{label:"Ripeti ogni 2–3 giorni",detail:"Per 7–14 giorni solo acqua. Le foglie ingialliscono, è normale."},{label:"Osserva il cambiamento",detail:"Tricomi ambrati aumentano. Aroma più intenso."}],tips:["Un buon flush migliora drasticamente il sapore.","Assaggia una foglia: amara = continua, neutra = pronto.","Ultime 48h al buio completo per più resina."],problems:[{prob:"Pianta perde foglie rapidamente",sol:"Normale durante il flush. I fiori devono restare sani."}]},
+{id:7,name:"Raccolta",subtitle:"Il momento della verità",emoji:'<img src="assets/"+phaseIconFiles[7]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"1 giorno",tag:"Harvest Day",color:"#c4823a",light:"Spegni tutto prima di tagliare",temp:"18–22°C",humidity:"50%",water:"Nessuna — ultima annaffiatura 2 giorni prima",nutrients:"Nessuno",steps:[{label:"Prepara il materiale",detail:"Forbici da trimming, vassoi, guanti in nitrile, filo per appendere."},{label:"Taglia alla base",detail:"Taglia la pianta allo stelo principale. Wet trim o dry trim."},{label:"Wet trim",detail:"Rimuovi fan leaves subito. Lascia sugar leaves per dopo."},{label:"Dividi in rami",detail:"Rami di 20–30cm per facilitare l'essiccazione."},{label:"Pesa il raccolto fresco",detail:"100g freschi = ~20–25g secchi. Annota il peso."},{label:"Appendi i rami a testa in giù",detail:"Stanza buia, circolazione d'aria ma senza correnti dirette."}],tips:["Indossa guanti: la resina si attacca alle dita.","Lavora in ambiente pulito.","Raccogli sugar leaves separatamente per hash/edibles."],problems:[{prob:"Fiori con odore di fieno dopo il taglio",sol:"Normale nelle prime ore. Se persiste = essiccazione troppo rapida."}]},
+{id:8,name:"Essiccazione",subtitle:"Pazienza è la chiave",emoji:'<img src="assets/"+phaseIconFiles[8]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Post-harvest",color:"#8a7a4a",light:"Buio totale",temp:"15–20°C",humidity:"45–55%",water:"—",nutrients:"—",steps:[{label:"Imposta il posto",detail:"Buio, 15–20°C, umidità 45–55%. Ventilatore per circolazione, non diretto sui fiori."},{label:"Controlla ogni giorno",detail:"Niente fiori che si toccano. Odore ammoniacale = muffa."},{label:"Test dello stelo",detail:"Dopo 7 giorni: si flette = umido / si spezza = pronto per curing."},{label:"Dry trim",detail:"Rimuovi foglie rimaste con forbici piccole. Taglia fiori dai rami."},{label:"Non affrettare",detail:"Essiccazione rapida = sapore di fieno. Lenta e fresca = qualità superiore."}],tips:["Umidità troppo alta? Deumidificatore.","Troppo bassa? Ciotola d'acqua vicino ai rami.","Ideale: 10–14 giorni a 18°C / 50% umidità."],problems:[{prob:"Odore ammoniacale / muffa",sol:"Isola rami infetti. Aumenta ventilazione, abbassa umidità."},{prob:"Fiori secchi in 3–4 giorni",sol:"Troppo caldo/asciutto. Qualità compromessa."}]},
+{id:9,name:"Curing",subtitle:"La stagionatura che fa la differenza",emoji:'<img src="assets/"+phaseIconFiles[9]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"2–8 settimane",tag:"Finale",color:"#7a4ea8",light:"Buio totale (barattoli chiusi)",temp:"18–22°C",humidity:"58–65%",water:"—",nutrients:"—",steps:[{label:"Prepara i barattoli",detail:"Vetro a chiusura ermetica. Pulisci e asciuga perfettamente."},{label:"Riempi a ¾",detail:"Non pressare. Lascia respirare. 2/3–3/4 del barattolo."},{label:"Burping settimane 1–2",detail:"Apri 1–2 volte al giorno per 15–20 min. Odore ammoniacale = tieni aperti 2–4h."},{label:"Monitora umidità",detail:"Ideale 58–62%. Usa Boveda pack 62% per stabilità."},{label:"Burping settimane 3–4",detail:"Riduci a 1 volta ogni 2–3 giorni. Sapori si complessificano."},{label:"Curing lungo",detail:"Dopo 4 settimane è pronto. Fino a 8 settimane = qualità superiore."},{label:"Conservazione finale",detail:"Barattoli chiusi al buio e fresco. Dura 6–12 mesi."}],tips:["Il curing trasforma fiori mediocri in eccellenti.","Boveda pack 62% = curing perfetto senza pensarci.","Etichetta con varietà e data di inizio."],problems:[{prob:"Muffa nel barattolo",sol:"Rimuovi fiori infetti. Sterilizza. Più burping per i sani."},{prob:"Fiori troppo secchi",sol:"Boveda pack 62% — re-idrata in 2–3 giorni."},{prob:"Fiori troppo umidi (>70%)",sol:"Barattolo aperto alcune ore al giorno finché scende sotto 65%."}]}
+];
+const strains=[{name:"White Widow",type:"Hybrid",thc:"18–25%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Facile",desc:"Leggenda olandese. Euforia cerebrale e relax fisico."},
+{name:"Amnesia Haze",type:"Sativa",thc:"20–25%",cbd:"<1%",flowerTime:"10–12 settimane",yield:"500–600g/m²",difficulty:"Media",desc:"Sativa energizzante citrica. Richiede spazio e pazienza."},
+{name:"OG Kush",type:"Hybrid",thc:"19–26%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"350–450g/m²",difficulty:"Media",desc:"Icona californiana. Profumo pino e agrumi. Effetto potente."},
+{name:"Girl Scout Cookies",type:"Hybrid",thc:"20–28%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Dolce e terrosa. Euforia cerebrale poi relax profondo."},
+{name:"Blue Dream",type:"Hybrid",thc:"17–24%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"500–600g/m²",difficulty:"Facile",desc:"Crescita vigorosa, resa alta. Sapore mirtilli dolci."},
+{name:"Gorilla Glue #4",type:"Hybrid",thc:"25–30%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Media",desc:"THC sky-high. Effetto pesante. Resina abbondante."},
+{name:"Zkittlez",type:"Indica",thc:"19–23%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"Esplosione frutta tropicale dolce. Relax senza sedazione."},
+{name:"Runtz",type:"Hybrid",thc:"23–29%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Croce Zkittlez x Gelato. Dolce fruttato, potente e bilanciato."},
+{name:"Critical + 2.0",type:"Indica",thc:"18–22%",cbd:"<1%",flowerTime:"6–7 settimane",yield:"600–700g/m²",difficulty:"Facile",desc:"Resa mostruosa in tempi record. Ideale per principianti."}
+];
+
+const diagnosisData=[
+{category:"Foglie",icon:"🍃",color:"#39ff14",issues:[{name:"Foglie gialle dal basso",cause:"Carenza Azoto (N)",fix:"Aumenta fertilizzante Grow. Controlla pH."},{name:"Punte bruciate marroni",cause:"Nutrient Burn",fix:"Riduci dose del 30%. Fai flush con acqua pulita."},{name:"Foglie viola/rosse",cause:"Carenza Fosforo o freddo",fix:"Temp notturne >15°C. Aggiungi Bloom."},{name:"Chiazze gialle irregolari",cause:"pH sbagliato o carenza Cal/Mag",fix:"pH 6.0–6.5. Aggiungi CalMag se necessario."},{name:"Foglie arricciate verso il basso",cause:"Overwatering",fix:"Lascia asciugare la terra. Riduci frequenza."},{name:"Foglie secche e croccanti",cause:"Underwatering o umidità bassa",fix:"Aumenta umidità. Innaffia più spesso."}]},
+{category:"Cime/Fiori",icon:"🌸",color:"#ff1493",issues:[{name:"Muffa grigia dentro i fiori",cause:"Bud Rot (Botrytis)",fix:"Rimuovi SUBITO. Abbassa umidità sotto 45%."},{name:"Fiori pallidi e poco densi",cause:"Luce insufficiente",fix:"Avvicina LED a 35–45cm. Controlla watt."},{name:"Polvere bianca sui fiori",cause:"Powdery Mildew",fix:"Spray bicarbonato (1 cucchiaio/litro)."}]},
+{category:"Parassiti",icon:"🐛",color:"#ff6600",issues:[{name:"Puntini su foglie + ragnatele",cause:"Ragnetto Rosso",fix:"Spray acqua + sapone Marsiglia ogni 3 giorni."},{name:"Moscerini neri nel terriccio",cause:"Fungus Gnat",fix:"Lascia asciugare terra. Trappole gialle. Sabbia fine."},{name:"Piccoli insetti verdi sotto foglie",cause:"Afidi",fix:"Olio di neem diluito ogni 3 giorni per 2 settimane."}]},
+{category:"Crescita",icon:"📏",color:"#00ffff",issues:[{name:"Piantina si allunga troppo",cause:"Etiolamento (luce scarsa)",fix:"Avvicina lampada. Minimo 200–300 PPFD."},{name:"Crescita bloccata",cause:"pH sbagliato o radici soffocate",fix:"Controlla pH e drenaggio. Trapianta se necessario."},{name:"Stelo sottile che crolla",cause:"Mancanza ventilazione",fix:"Aggiungi ventilatore leggero. Wind stress positivo."}]}
+];
+
+function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+(function(){
+const canvas=document.getElementById('smoke');
+if(!canvas)return;
+const ctx=canvas.getContext('2d');
+let w,h,particles=[];
+function resize(){w=canvas.width=window.innerWidth;h=canvas.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+class Particle{
+constructor(){this.reset()}
+reset(){
+this.x=Math.random()*w;this.y=h+Math.random()*100;
+this.vx=(Math.random()-0.5)*0.5;this.vy=-Math.random()*1.5-0.5;
+this.size=Math.random()*80+40;this.alpha=0;this.life=0;this.maxLife=Math.random()*400+300
+}
+update(){
+this.x+=this.vx+Math.sin(this.life*0.01)*0.5;this.y+=this.vy;
+this.life++;this.size+=0.15;
+if(this.life<60)this.alpha=Math.min(this.alpha+0.003,0.08);
+else if(this.life>this.maxLife-100)this.alpha=Math.max(this.alpha-0.003,0);
+if(this.life>=this.maxLife)this.reset()
+}
+draw(){
+ctx.beginPath();
+const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size);
+g.addColorStop(0,`rgba(150,150,150,${this.alpha})`);
+g.addColorStop(1,'rgba(150,150,150,0)');
+ctx.fillStyle=g;ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()
+}
+}
+for(let i=0;i<25;i++)particles.push(new Particle());
+function loop(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(loop)}
+loop()
+})();
+
+(function(){
+const container=document.getElementById('leaves');
+if(!container)return;
+const buds=[
+"url('assets/bud-pixel-1.png')",
+"url('assets/bud-pixel-2.png')",
+"url('assets/bud-pixel-3.png')"];
+for(let i=0;i<14;i++){
+const el=document.createElement('div');
+el.className='falling-bud';
+el.style.backgroundImage=buds[i%3];
+el.style.left=(Math.random()*100)+'%';
+el.style.animationDelay=(Math.random()*15)+'s';
+el.style.animationDuration=(Math.random()*12+18)+'s';
+const size=Math.random()*16+28;
+el.style.width=size+'px';
+el.style.height=size+'px';
+container.appendChild(el)
+}
+})();
+let currentPage='home',currentStageIndex=0,lastStageIndex=-1;
+const navItems=[
+{id:'home',label:'Home',icon:'🏠',color:'var(--ng)'},
+{id:'guide',label:'Guida',icon:'📖',color:'var(--ng)'},
+{id:'journal',label:'Journal',icon:'📓',color:'var(--np)'},
+{id:'diagnosis',label:'Diagnosi',icon:'🔍',color:'var(--no)'},
+{id:'tools',label:'Tools',icon:'🧮',color:'var(--nc)'},
+{id:'strains',label:'Strains',icon:'🧬',color:'var(--nk)'},
+{id:'timer',label:'Timer',icon:'⏱️',color:'var(--ny)'}
+];
+
+function toggleMenu(){document.getElementById('menu').classList.toggle('open')}
+function go(page){
+currentPage=page;
+document.getElementById('menu').classList.remove('open');
+window.scrollTo(0,0);
+updateHeader();
+renderBottomNav();
+renderPage()
+}
+function updateHeader(){
+const item=navItems.find(n=>n.id===currentPage);
+const title=document.getElementById('header-title');
+if(title&&item){title.style.color=item.color;title.style.textShadow='0 0 10px '+item.color}
+}
+function renderBottomNav(){
+const nav=document.getElementById('bottomNav');
+nav.innerHTML=navItems.map(item=>`<button class="nav-item ${item.id===currentPage?'active':''}" onclick="go('${item.id}')" style="color:${item.id===currentPage?item.color:'#666'}"><span style="font-size:20px">${item.icon}</span><span>${item.label}</span></button>`).join('')
+}
+function renderPage(){
+const app=document.getElementById('app');
+let html='';
+switch(currentPage){
+case'home':html=renderHome();break;
+case'guide':html=renderGuide();break;
+case'journal':html=renderJournal();break;
+case'diagnosis':html=renderDiagnosis();break;
+case'tools':html=renderTools();break;
+case'strains':html=renderStrains();break;
+case'timer':html=renderTimer();break;
+default:html=renderHome()
+}
+app.innerHTML=`<div class="page-bg" style="${getPageBg()}"></div><div class="page">${html}</div>`;
+switch(currentPage){
+case'home':initHome();break;
+case'guide':initGuide();break;
+case'journal':initJournal();break;
+case'diagnosis':initDiagnosis();break;
+case'tools':initTools();break;
+case'strains':initStrains();break;
+case'timer':initTimer();break;
+default:initHome()
+}
+}
+function toggleStonerMode(){            // ← FUORI, funzione globale
+    const body=document.body;
+    body.classList.toggle('stoner-mode');
+    const active=body.classList.contains('stoner-mode');
+    lsSet('stoner-mode',active);
+    const btn=document.getElementById('stonerBtn');
+    if(btn){btn.classList.toggle('stoner-btn-active',active);btn.textContent=active?'🔥':'🌈';}
+}
+(function(){                            // ← FUORI, IIFE di inizializzazione
+    if(lsGet('stoner-mode',false)){
+        document.body.classList.add('stoner-mode');
+        const btn=document.getElementById('stonerBtn');
+        if(btn){btn.classList.add('stoner-btn-active');btn.textContent='🔥';}
+    }
+})();
+function renderHome(){
+const progress=lsGet('grow-progress',{});
+const plants=lsGet('grow-plants',[]);
+const totalSteps=phases.reduce((a,p)=>a+p.steps.length,0);
+const completed=Object.values(progress).filter(Boolean).length;
+const overall=Math.round((completed/totalSteps)*100)||0;
+const active=plants[0];
+const stageIndex=Math.min(Math.floor(overall/17),5);
+currentStageIndex=stageIndex;
+const stageColors=['#8fb87a','#6db56d','#4ea86a','#b8a84a','#c47a3a','#7a4ea8'];
+const stageColor=stageColors[stageIndex]||'#39ff14';
+const stageNames=['Setup','Seedling','Vegetativa','Pre-fioritura','Fioritura','Harvest'];
+const phaseName=active?(phases[active.phase]?.name||stageNames[stageIndex]):stageNames[stageIndex];
+const ringDash=Math.round(overall*5.53);
+const stageImgs=[0,1,2,3,4,5].map(i=>{
+let cls='plant-img';
+if(i===stageIndex)cls+=' active';
+else if(i===lastStageIndex&&i!==stageIndex)cls+=' was-active';
+return`<img src="assets/stage${i}.png" class="${cls}" alt="stadio ${i}">`;
+}).join('');
+let html=`<div style="position:relative">
+<div style="text-align:center;margin-bottom:32px">
+<h1 class="t-graffiti gn" style="font-size:42px;margin-bottom:8px">GROW 420</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Street Cult Grow Journal</p>
+</div>
+<div class="plant-stage">
+<div class="plant-glow" style="background:radial-gradient(circle,${stageColor}45 0%,transparent 70%)"></div>
+<svg class="plant-ring" viewBox="0 0 200 200">
+<circle class="plant-ring-bg" cx="100" cy="100" r="88"/>
+<circle class="plant-ring-progress" cx="100" cy="100" r="88" stroke-dasharray="${ringDash} 553" stroke="${stageColor}"/>
+</svg>
+<div class="plant-shine"></div>
+<div class="plant-container">${stageImgs}</div>
+<div class="plant-particles" id="plantParticles"></div>
+<div class="plant-badge" style="color:${stageColor}">${phaseName}</div>
+</div>
+<div class="card gl-g" style="padding:24px;margin-bottom:20px;text-align:center;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(57,255,20,.25)">
+<div style="font-size:13px;color:#666;margin-bottom:8px;font-family:Orbitron;letter-spacing:2px;text-transform:uppercase">Progresso Totale</div>
+<div style="font-size:48px;font-weight:900;color:var(--ng);font-family:Orbitron;text-shadow:0 0 20px rgba(57,255,20,.4)">${overall}%</div>
+<div class="prog" style="margin-top:12px"><div class="prog-f" style="width:${overall}%;background:var(--ng);box-shadow:0 0 10px rgba(57,255,20,.8)"></div></div>
+<div style="font-size:12px;color:#555;margin-top:8px">${completed} / ${totalSteps} step completati</div>
+</div>`;
+if(active){
+html+=`<div class="card gl-p" style="padding:20px;margin-bottom:20px;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(191,0,255,.25)">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<span style="font-size:32px"></span>
+<div>
+<div style="font-weight:700;font-size:16px">${esc(active.name)}</div>
+<div style="font-size:12px;color:#888">${esc(active.strain)} • Giorno ${active.day}</div>
+</div>
+</div>
+<div style="display:flex;gap:8px">
+<span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${phases[active.phase]?.name||'Setup'}</span>
+<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">${esc(active.type)}</span>
+</div>
+</div>`;
+}
+const items=[
+{label:'Guida',icon:'📖',color:'var(--ng)',page:'guide',desc:'10 fasi'},
+{label:'Journal',icon:'📓',color:'var(--np)',page:'journal',desc:'Le tue piante'},
+{label:'Diagnosi',icon:'🔍',color:'var(--no)',page:'diagnosis',desc:'Problemi'},
+{label:'Tools',icon:'🧮',color:'var(--nc)',page:'tools',desc:'Calcolatori'},
+{label:'Strains',icon:'🧬',color:'var(--nk)',page:'strains',desc:'Varietà'},
+{label:'Timer',icon:'⏱️',color:'var(--ny)',page:'timer',desc:'Countdown'}
+];
+html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">`;
+items.forEach(item=>{
+html+=`<button class="card" onclick="go('${item.page}')" style="padding:20px;text-align:left;border:none;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)">
+<span style="font-size:28px">${item.icon}</span>
+<span style="font-weight:700;font-size:14px;color:${item.color};font-family:Orbitron;letter-spacing:1px">${item.label}</span>
+<span style="font-size:11px;color:#666">${item.desc}</span>
+</button>`;
+});
+html+=`</div></div>`;
+return html;
+}
+function initHome(){
+const container=document.getElementById('plantParticles');
+if(!container)return;
+container.innerHTML='';
+const count=[3,5,7,9,12,0][currentStageIndex]||0;
+const colors=['#8fb87a','#6db56d','#4ea86a','#b8a84a','#c47a3a','#7a4ea8'];
+const c=colors[currentStageIndex]||'#bf00ff';
+for(let i=0;i<count;i++){
+const p=document.createElement('div');
+p.className='particle';
+p.style.left=(25+Math.random()*50)+'%';
+p.style.top=(30+Math.random()*40)+'%';
+p.style.animationDelay=(Math.random()*3)+'s';
+p.style.animationDuration=(2+Math.random()*2)+'s';
+p.style.background=c;
+p.style.boxShadow=`0 0 4px ${c}`;
+container.appendChild(p)
+}
+lastStageIndex=currentStageIndex;
+}
+const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',timer:'assets/art7.jpg'};
+function getPageBg(){const url=pageBgs[currentPage];return url?`background:linear-gradient(rgba(5,5,5,.55),rgba(5,5,5,.70)),url('${url}') center/cover no-repeat;`:''}
+const phaseIconFiles=['01_Setup.png','02_Germinazione.png','03_Seedling.png','04_Vegetativa.png','05_Pre-Fioritura.png','06_Fioritura.png','07_Flushing.png','08_Raccolta.png','09_Essiccazione.png','10_Curing.png'];
+let guideState={activePhase:0,tab:'steps'};
+
+function renderGuide(){
+const p=phases[guideState.activePhase];
+const progress=lsGet('grow-progress',{});
+const completed=p.steps.filter((_,i)=>progress[guideState.activePhase+'-'+i]).length;
+const pct=Math.round((completed/p.steps.length)*100);
+let html=`<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Grow Guide</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Dallo setup al curing</p>
+</div>
+<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:16px">
+${phases.map((ph,i)=>`<button onclick="setPhase(${i})" style="min-width:80px;padding:8px;border-radius:12px;border:2px solid ${i===guideState.activePhase?ph.color:'#222'};background:${i===guideState.activePhase?ph.color+'20':'#111'};cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0">
+<img src="assets/${phaseIconFiles[i]}" style="width:64px;height:64px;image-rendering:pixelated;object-fit:cover;display:block;border-radius:4px">
+</button>`).join('')}
+</div>
+<div class="card gl-g" style="padding:20px;margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+<div>
+<span class="badge" style="background:${p.color}20;color:${p.color};border:1px solid ${p.color}50;margin-bottom:8px;display:inline-flex">${p.tag}</span>
+<h2 style="font-size:24px;font-weight:800;color:#fff;margin:8px 0 4px;font-family:Orbitron;display:flex;align-items:center;gap:10px"><img src="assets/${phaseIconFiles[guideState.activePhase]}" style="width:48px;height:48px;image-rendering:pixelated;object-fit:cover;display:block;flex-shrink:0;border-radius:4px"></h2>
+</div>
+<div style="text-align:center;background:rgba(10,10,10,.5);padding:10px 16px;border-radius:12px;border:1px solid ${p.color}40">
+<div style="font-size:10px;color:#555;font-family:Orbitron">DURATA</div>
+<div style="font-size:13px;color:${p.color};font-weight:700;font-family:Orbitron">${p.duration}</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+${[
+{icon:'💡',color:'#f0e800',label:'Luce',val:p.light},
+{icon:'🌡️',color:'#ff4444',label:'Temp',val:p.temp},
+{icon:'💧',color:'#00ccff',label:'Umidità',val:p.humidity},
+{icon:'🚰',color:'#4a90d9',label:'Acqua',val:p.water},
+{icon:'🧪',color:'#bf00ff',label:'Nutrienti',val:p.nutrients},
+{icon:'⏱️',color:'#f0e800',label:'Durata',val:p.duration}
+].map(x=>`<div style="background:rgba(10,10,10,.5);border:1px solid rgba(34,34,34,.5);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;flex:1;min-width:120px">
+<span style="font-size:18px">${x.icon}</span>
+<div>
+<div style="font-size:9px;color:#555;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px">${x.label}</div>
+<div style="font-size:12px;color:#ccc;font-weight:700">${esc(x.val)}</div>
+</div>
+</div>`).join('')}
+</div>
+<div style="display:flex;background:rgba(17,17,17,.55);border-radius:12px;overflow:hidden;margin-bottom:16px">
+${['steps','tips','problems'].map(t=>`<button onclick="setTab('${t}')" style="flex:1;padding:12px;border:none;background:${guideState.tab===t?p.color+'25':'transparent'};color:${guideState.tab===t?p.color:'#666'};font-family:Orbitron;font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:1px;border-bottom:2px solid ${guideState.tab===t?p.color:'transparent'}">${t==='steps'?'📋 Compiti':t==='tips'?'💡 Pro Tips':'⚠️ Problemi'}</button>`).join('')}
+</div>`;
+if(guideState.tab==='steps'){
+html+=`<div style="display:flex;flex-direction:column;gap:10px">`;
+p.steps.forEach((step,i)=>{
+const key=guideState.activePhase+'-'+i;
+const done=progress[key];
+html+=`<div class="card" style="padding:16px;background:${done?'#0a1a0a':'#111'};border:1px solid ${done?p.color+'60':'#222'};cursor:pointer" onclick="toggleStep(${guideState.activePhase},${i})">
+<div style="display:flex;align-items:flex-start;gap:12px">
+<div style="width:22px;height:22px;border-radius:6px;border:2px solid ${done?p.color:'#444'};background:${done?p.color+'30':'transparent'};display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;font-size:12px;color:${done?p.color:'transparent'}">${done?'✓':''}</div>
+<div style="flex:1">
+<div style="font-weight:700;font-size:14px;color:${done?'#aaa':'#fff'};text-decoration:${done?'line-through':'none'}">${esc(step.label)}</div>
+<div style="font-size:12px;color:#666;margin-top:4px;line-height:1.5">${esc(step.detail)}</div>
+</div>
+</div>
+</div>`;
+});
+html+=`</div>`;
+}
+
+if(guideState.tab==='tips'){
+html+=`<div style="display:flex;flex-direction:column;gap:10px">`;
+p.tips.forEach(tip=>{
+html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<span style="font-size:18px">💡</span>
+<div style="font-size:13px;color:#bbb;line-height:1.6">${esc(tip)}</div>
+</div>
+</div>`;
+});
+html+=`</div>`;
+}
+
+if(guideState.tab==='problems'){
+if(!p.problems.length){
+html+=`<div style="text-align:center;padding:40px 20px;color:#555">
+<div style="font-size:48px;margin-bottom:12px">✅</div>
+<div style="font-family:Orbitron;font-size:14px">Nessun problema noto in questa fase</div>
+<div style="font-size:12px;margin-top:8px">Tutto smooth, keep growing!</div>
+</div>`;
+}else{
+html+=`<div style="display:flex;flex-direction:column;gap:10px">`;
+p.problems.forEach(pr=>{
+html+=`<div class="card" style="padding:16px;background:rgba(26,10,10,.55);border:1px solid rgba(51,34,34,.5)">
+<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px">
+<span style="font-size:18px">⚠️</span>
+<div style="font-weight:700;font-size:14px;color:#ff8888">${esc(pr.prob)}</div>
+</div>
+<div style="font-size:12px;color:#888;line-height:1.6"><span style="color:var(--ng)">SOLUZIONE:</span> ${esc(pr.sol)}</div>
+</div>`;
+});
+html+=`</div>`;
+}
+}
+
+html+=`</div></div>`;
+return html;
+}
+
+function setPhase(i){guideState.activePhase=i;renderPage()}
+function setTab(t){guideState.tab=t;renderPage()}
+function toggleStep(phase,step){
+const progress=lsGet('grow-progress',{});
+const key=phase+'-'+step;
+progress[key]=!progress[key];
+lsSet('grow-progress',progress);
+renderPage();
+}
+function initGuide(){}
+let journalView='list';
+let journalEditId=null
+function renderJournal(){
+const plants=lsGet('grow-plants',[]);
+if(journalView==='form')return renderPlantForm();
+if(journalView==='detail')return renderPlantDetail();
+let html=`<div>
+<div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center">
+<div>
+<h1 class="t-graffiti gp" style="font-size:32px;margin-bottom:4px">Journal</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Le tue piante</p>
+</div>
+<button onclick="newPlant()" class="btn" style="background:var(--np);color:#fff;font-size:11px;padding:10px 16px">＋ Nuova</button>
+</div>`;
+if(!plants.length){
+html+=`<div style="text-align:center;padding:60px 20px">
+<div style="font-size:64px;margin-bottom:16px">🌱</div>
+<div style="font-family:Orbitron;font-size:16px;color:#666;margin-bottom:8px">Nessuna pianta ancora</div>
+<div style="font-size:13px;color:#444;margin-bottom:24px">Inizia il tuo grow journal aggiungendo la prima pianta</div>
+<button onclick="newPlant()" class="btn" style="background:var(--np);color:#fff">Aggiungi Pianta</button>
+</div>`;
+}else{
+html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
+plants.forEach((pl,idx)=>{
+const phaseName=phases[pl.phase]?.name||'Setup';
+const phaseColor=phases[pl.phase]?.color||'#39ff14';
+html+=`<div class="card" style="padding:16px;cursor:pointer;border-left:3px solid ${phaseColor}" onclick="openPlant(${idx})">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+<div>
+<div style="font-weight:700;font-size:16px">${esc(pl.name)}</div>
+<div style="font-size:12px;color:#888">${esc(pl.strain)} • ${pl.type}</div>
+</div>
+<span class="badge" style="background:${phaseColor}20;color:${phaseColor};border:1px solid ${phaseColor}50">${phaseName}</span>
+</div>
+<div style="display:flex;gap:12px;margin-top:8px">
+<div style="font-size:11px;color:#555"><span style="color:#777">Giorno</span> <span style="color:#fff;font-weight:700">${pl.day}</span></div>
+<div style="font-size:11px;color:#555"><span style="color:#777">Iniziata</span> <span style="color:#fff">${pl.startDate}</span></div>
+</div>
+<div style="margin-top:10px">
+<div class="prog"><div class="prog-f" style="width:${Math.min((pl.phase/9)*100,100)}%;background:${phaseColor}"></div></div>
+</div>
+</div>`;
+});
+html+=`</div>`;
+}
+html+=`</div>`;
+return html;
+}
+
+function renderPlantForm(){
+const plants=lsGet('grow-plants',[]);
+const edit=journalEditId!==null?plants[journalEditId]:null;
+let html=`<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gp" style="font-size:28px;margin-bottom:4px">${edit?'Modifica':'Nuova'} Pianta</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">${edit?'Aggiorna i dati':'Configura il tuo grow'}</p>
+</div>
+<div class="card" style="padding:20px">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Nome Pianta</div>
+<input type="text" id="pName" class="inp" placeholder="es. Purple Haze #1" value="${esc(edit?edit.name:'')}"></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Strain / Varietà</div>
+<input type="text" id="pStrain" class="inp" placeholder="es. Northern Lights" value="${esc(edit?edit.strain:'')}"></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Tipo</div>
+<select id="pType" class="inp">
+<option value="Fotoperiodo" ${edit&&edit.type==='Fotoperiodo'?'selected':''}>Fotoperiodo</option>
+<option value="Autofiorente" ${edit&&edit.type==='Autofiorente'?'selected':''}>Autofiorente</option>
+</select></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Fase Attuale</div>
+<select id="pPhase" class="inp">
+${phases.map((ph,i)=>`<option value="${i}" ${edit&&edit.phase===i?'selected':''}>${ph.emoji} ${ph.name}</option>`).join('')}
+</select></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Giorno Corrente</div>
+<input type="number" id="pDay" class="inp" placeholder="1" value="${edit?edit.day:'1'}"></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Data Inizio</div>
+<input type="date" id="pDate" class="inp" value="${edit?edit.startDate:new Date().toISOString().split('T')[0]}"></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Note</div>
+<textarea id="pNotes" class="inp" rows="3" placeholder="Note personali sulla pianta...">${esc(edit?edit.notes:'')}</textarea></div>
+<div style="display:flex;gap:10px;margin-top:8px">
+<button onclick="savePlant()" class="btn" style="flex:1;background:var(--np);color:#fff">Salva</button>
+<button onclick="cancelPlant()" class="btn" style="flex:1;background:#222;color:#888">Annulla</button>
+</div>
+${edit?`<button onclick="deletePlant()" class="btn" style="width:100%;background:#1a0505;color:#c44;border:1px solid #331111;margin-top:8px">🗑️ Elimina Pianta</button>`:''}
+</div>
+</div>
+</div>`;
+return html;
+}
+
+function renderPlantDetail(){
+const plants=lsGet('grow-plants',[]);
+const pl=plants[journalEditId];
+if(!pl)return renderJournal();
+const phase=phases[pl.phase]||phases[0];
+let html=`<div>
+<div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+<button onclick="journalView='list';journalEditId=null;renderPage()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;font-family:Orbitron">← INDIETRO</button>
+<button onclick="journalView='form';renderPage()" style="background:none;border:none;color:var(--np);font-size:13px;cursor:pointer;font-family:Orbitron">MODIFICA</button>
+</div>
+<div class="card gl-p" style="padding:20px;margin-bottom:16px">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+<span style="font-size:40px">🌿</span>
+<div>
+<div style="font-weight:800;font-size:22px;font-family:Orbitron">${esc(pl.name)}</div>
+<div style="font-size:13px;color:#888">${esc(pl.strain)} • ${pl.type}</div>
+</div>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<span class="badge" style="background:${phase.color}20;color:${phase.color};border:1px solid ${phase.color}50">${phase.emoji} ${phase.name}</span>
+<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">Giorno ${pl.day}</span>
+<span class="badge" style="background:rgba(0,255,255,.1);color:var(--nc)">Iniziata ${pl.startDate}</span>
+</div>
+</div>
+<div class="card" style="padding:20px;margin-bottom:16px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Parametri Attuali</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+${[
+{icon:'💡',label:'Luce',val:phase.light},
+{icon:'🌡️',label:'Temp',val:phase.temp},
+{icon:'💧',label:'Umidità',val:phase.humidity},
+{icon:'🚰',label:'Acqua',val:phase.water},
+{icon:'🧪',label:'Nutrienti',val:phase.nutrients},
+{icon:'⏱️',label:'Durata',val:phase.duration}
+].map(x=>`<div style="background:rgba(10,10,10,.5);border:1px solid rgba(34,34,34,.5);border-radius:10px;padding:10px">
+<div style="font-size:10px;color:#444;font-family:Orbitron;text-transform:uppercase;margin-bottom:4px">${x.icon} ${x.label}</div>
+<div style="font-size:12px;color:#ccc">${esc(x.val)}</div>
+</div>`).join('')}
+</div>
+</div>
+<div class="card" style="padding:20px;margin-bottom:16px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Note</div>
+<div style="font-size:13px;color:#aaa;line-height:1.7;white-space:pre-wrap">${esc(pl.notes)||'<span style="color:#444;font-style:italic">Nessuna nota...</span>'}</div>
+</div>
+<div class="card" style="padding:20px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Log Rapido</div>
+<div style="display:flex;gap:8px;margin-bottom:12px">
+<input type="text" id="logInput" class="inp" placeholder="Aggiungi un log..." style="flex:1">
+<button onclick="addLog()" class="btn" style="background:var(--np);color:#fff;padding:10px 16px;font-size:11px">＋</button>
+</div>
+<div id="logList" style="display:flex;flex-direction:column;gap:8px">`;
+const logs=pl.logs||[];
+if(!logs.length){
+html+=`<div style="font-size:12px;color:#444;text-align:center;padding:12px">Nessun log ancora</div>`;
+}else{
+logs.slice().reverse().forEach(log=>{
+html+=`<div style="background:rgba(10,10,10,.45);border:1px solid rgba(26,26,26,.5);border-radius:8px;padding:10px 12px
+">
+<div style="font-size:10px;color:#444;margin-bottom:4px;font-family:Orbitron">${log.date}</div>
+<div style="font-size:12px;color:#bbb">${esc(log.text)}</div>
+</div>`;
+});
+}
+html+=`</div></div></div>`;
+return html;
+}
+
+function newPlant(){journalView='form';journalEditId=null;renderPage()}
+function cancelPlant(){journalView='list';journalEditId=null;renderPage()}
+function savePlant(){
+const name=document.getElementById('pName').value.trim();
+const strain=document.getElementById('pStrain').value.trim();
+const type=document.getElementById('pType').value;
+const phase=parseInt(document.getElementById('pPhase').value);
+const day=parseInt(document.getElementById('pDay').value)||1;
+const startDate=document.getElementById('pDate').value;
+const notes=document.getElementById('pNotes').value.trim();
+if(!name){alert('Inserisci un nome per la pianta');return}
+const plants=lsGet('grow-plants',[]);
+const data={name,strain,type,phase,day,startDate,notes,logs:[]};
+if(journalEditId!==null){data.logs=plants[journalEditId].logs||[];plants[journalEditId]=data}
+else{plants.push(data)}
+lsSet('grow-plants',plants);
+journalView='list';journalEditId=null;renderPage()
+}
+function deletePlant(){
+if(!confirm('Eliminare questa pianta?'))return;
+const plants=lsGet('grow-plants',[]);
+plants.splice(journalEditId,1);
+lsSet('grow-plants',plants);
+journalView='list';journalEditId=null;renderPage()
+}
+function openPlant(idx){journalEditId=idx;journalView='detail';renderPage()}
+function addLog(){
+const input=document.getElementById('logInput');
+const text=input.value.trim();
+if(!text)return;
+const plants=lsGet('grow-plants',[]);
+if(!plants[journalEditId])return;
+if(!plants[journalEditId].logs)plants[journalEditId].logs=[];
+plants[journalEditId].logs.push({date:new Date().toLocaleString('it-IT'),text});
+lsSet('grow-plants',plants);
+renderPage()
+}
+function initJournal(){}
+
+let diagFilter=null;
+function renderDiagnosis(){
+let html=`<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti go" style="font-size:32px;margin-bottom:4px">Diagnosi</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Trova il problema e la cura</p>
+</div>
+<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:16px">
+<button onclick="setDiagFilter(null)" style="min-width:70px;padding:10px 14px;border-radius:12px;border:2px solid ${diagFilter===null?'var(--no)':'#222'};background:${diagFilter===null?'#ff660020':'#111'};color:${diagFilter===null?'var(--no)':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">Tutti</button>
+${diagnosisData.map((cat,i)=>`<button onclick="setDiagFilter(${i})" style="min-width:90px;padding:10px 14px;border-radius:12px;border:2px solid ${diagFilter===i?cat.color:'#222'};background:${diagFilter===i?cat.color+'20':'#111'};color:${diagFilter===i?cat.color:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;display:flex;align-items:center;gap:6px;flex-shrink:0">
+<span style="font-size:16px">${cat.icon}</span><span>${cat.category}</span>
+</button>`).join('')}
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">`;
+const cats=diagFilter!==null?[diagnosisData[diagFilter]]:diagnosisData;
+cats.forEach(cat=>{
+html+=`<div style="margin-bottom:4px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+<span style="font-size:20px">${cat.icon}</span>
+<span style="font-family:Orbitron;font-size:13px;color:${cat.color};text-transform:uppercase;letter-spacing:2px">${cat.category}</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">`;
+cat.issues.forEach(iss=>{
+html+=`<div class="card" style="padding:16px;background:#111;border:1px solid #222">
+<div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:6px">${esc(iss.name)}</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<div style="font-size:11px;color:#888"><span style="color:var(--no);font-family:Orbitron;font-size:10px">CAUSA:</span> ${esc(iss.cause)}</div>
+<div style="font-size:11px;color:#888"><span style="color:var(--ng);font-family:Orbitron;font-size:10px">FIX:</span> ${esc(iss.fix)}</div>
+</div>
+</div>`;
+});
+html+=`</div></div>`;
+});
+html+=`</div></div>`;
+return html;
+}
+function setDiagFilter(i){diagFilter=i;renderPage()}
+function initDiagnosis(){}
+function renderTools(){
+return `<div class="page" style="${getPageBg()}">
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gc" style="font-size:32px;margin-bottom:4px">Tools</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Calcolatori grow</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div class="tool-card gl-c">
+<div style="font-family:Orbitron;font-size:13px;color:var(--nc);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">💡 Illuminazione</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Watt LED reali</div><input type="number" id="tLedW" class="inp" placeholder="es. 240" oninput="calcLight()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Area grow (m²)</div><input type="number" id="tLedA" class="inp" placeholder="es. 0.64" step="0.01" oninput="calcLight()"></div>
+<div id="tLedR" style="font-size:13px;color:#ccc;padding:10px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+<div class="tool-card gl-c">
+<div style="font-family:Orbitron;font-size:13px;color:var(--nc);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">🧪 Dosaggio Nutrienti</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Dose etichetta (ml/L)</div><input type="number" id="tNutD" class="inp" placeholder="es. 4" step="0.1" oninput="calcNut()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Litri acqua</div><input type="number" id="tNutL" class="inp" placeholder="es. 5" step="0.1" oninput="calcNut()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">% dose desiderata</div><input type="number" id="tNutP" class="inp" placeholder="es. 50" oninput="calcNut()"></div>
+<div id="tNutR" style="font-size:13px;color:#ccc;padding:10px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+<div class="tool-card gl-c">
+<div style="font-family:Orbitron;font-size:13px;color:var(--nc);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">🌾 Stima Resa</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Watt LED</div><input type="number" id="tYldW" class="inp" placeholder="es. 240" oninput="calcYield()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Skill level (g/W)</div>
+<select id="tYldS" class="inp" onchange="calcYield()">
+<option value="0.5">Principiante (0.5 g/W)</option>
+<option value="1" selected>Intermedio (1 g/W)</option>
+<option value="1.5">Esperto (1.5 g/W)</option>
+</select></div>
+<div id="tYldR" style="font-size:13px;color:#ccc;padding:10px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+<div class="tool-card gl-c">
+<div style="font-family:Orbitron;font-size:13px;color:var(--nc);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px">⚖️ Convertitore Unità</div>
+<div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:10px">
+<div style="flex:1"><div style="font-size:11px;color:#555;margin-bottom:4px">Valore</div><input type="number" id="tConvV" class="inp" placeholder="es. 28" oninput="calcConv()"></div>
+<div style="flex:1"><div style="font-size:11px;color:#555;margin-bottom:4px">Da</div>
+<select id="tConvF" class="inp" onchange="calcConv()">
+<option value="g">Grammi</option><option value="oz">Once</option><option value="lb">Libbre</option>
+</select></div>
+<div style="flex:1"><div style="font-size:11px;color:#555;margin-bottom:4px">A</div>
+<select id="tConvT" class="inp" onchange="calcConv()">
+<option value="oz">Once</option><option value="g">Grammi</option><option value="lb">Libbre</option>
+</select></div>
+</div>
+<div id="tConvR" style="font-size:13px;color:#ccc;padding:10px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+</div>
+</div>`;
+}
+function calcLight(){
+const w=parseFloat(document.getElementById('tLedW').value)||0;
+const a=parseFloat(document.getElementById('tLedA').value)||0;
+const r=document.getElementById('tLedR');
+if(!w||!a){r.innerHTML='Inserisci i dati...';return}
+const wm=Math.round(w/a);
+let txt=`<span style="color:var(--nc);font-weight:700">${wm} W/m²</span> — `;
+if(wm<300)txt+='<span style="color:var(--no)">Troppo poco ⚠️</span>';
+else if(wm<500)txt+='<span style="color:var(--ny)">Sufficiente</span>';
+else if(wm<800)txt+='<span style="color:var(--ng)">Ottimo ✅</span>';
+else txt+='<span style="color:var(--np)">Professionale 🔥</span>';
+r.innerHTML=txt;
+}
+function calcNut(){
+const d=parseFloat(document.getElementById('tNutD').value)||0;
+const l=parseFloat(document.getElementById('tNutL').value)||0;
+const p=parseFloat(document.getElementById('tNutP').value)||0;
+const r=document.getElementById('tNutR');
+if(!d||!l){r.innerHTML='Inserisci i dati...';return}
+const ml=((d*l)*(p/100)).toFixed(2);
+r.innerHTML=`Aggiungi <span style="color:var(--nc);font-weight:700">${ml} ml</span> di nutriente all'acqua`;
+}
+function calcYield(){
+const w=parseFloat(document.getElementById('tYldW').value)||0;
+const s=parseFloat(document.getElementById('tYldS').value)||1;
+const r=document.getElementById('tYldR');
+if(!w){r.innerHTML='Inserisci i dati...';return}
+const g=Math.round(w*s);
+const min=Math.round(g*0.8),max=Math.round(g*1.2);
+r.innerHTML=`Resa stimata: <span style="color:var(--nc);font-weight:700">${g}g</span> <span style="color:#666">(${min}–${max}g)</span>`;
+}
+function calcConv(){
+const v=parseFloat(document.getElementById('tConvV').value)||0;
+const f=document.getElementById('tConvF').value;
+const t=document.getElementById('tConvT').value;
+const r=document.getElementById('tConvR');
+if(!v){r.innerHTML='Inserisci i dati...';return}
+let g=v;
+if(f==='oz')g=v*28.3495;
+if(f==='lb')g=v*453.592;
+let res=g;
+if(t==='oz')res=g/28.3495;
+if(t==='lb')res=g/453.592;
+r.innerHTML=`<span style="color:var(--nc);font-weight:700">${res.toFixed(2)} ${t}</span>`;
+}
+function initTools(){}
+
+let strainFilter='all';
+function renderStrains(){
+let html=`<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gk" style="font-size:32px;margin-bottom:4px">Strains</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Catalogo varietà</p>
+</div>
+<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">
+${[{v:'all',l:'Tutti',c:'#fff'},{v:'Indica',l:'Indica',c:'var(--np)'},{v:'Sativa',l:'Sativa',c:'var(--nc)'},{v:'Hybrid',l:'Hybrid',c:'var(--ng)'}].map(f=>`<button onclick="setStrainFilter('${f.v}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainFilter===f.v?f.c:'#222'};background:${strainFilter===f.v?f.c+'20':'#111'};color:${strainFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">`;
+const filtered=strainFilter==='all'?strains:strains.filter(s=>s.type===strainFilter);
+filtered.forEach(s=>{
+const diffColor=s.difficulty==='Facile'?'var(--ng)':s.difficulty==='Media'?'var(--ny)':'var(--no)';
+html+=`<div class="strain-card">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+<div style="font-weight:700;font-size:16px;font-family:Orbitron">${esc(s.name)}</div>
+<span class="badge" style="background:${diffColor}20;color:${diffColor};border:1px solid ${diffColor}50">${s.difficulty}</span>
+</div>
+<div style="font-size:12px;color:#888;margin-bottom:10px;line-height:1.5">${esc(s.desc)}</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">THC</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.thc}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">CBD</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.cbd}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Fioritura</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.flowerTime}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Resa</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.yield}</div></div>
+</div>
+<div style="margin-top：10px">
+<span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${s.type}</span>
+</div>
+</div>`;
+});
+html+=`</div></div>`;
+return html;
+}
+function setStrainFilter(f){strainFilter=f;renderPage()}
+function initStrains(){}
+
+let timerInterval=null,timerSeconds=0,timerRunning=false;
+let chronoInterval=null,chronoElapsed=0,chronoRunning=false;
+
+function renderTimer(){
+const tRun=lsGet('timerRunning',false);
+const tSec=lsGet('timerSeconds',0);
+const cRun=lsGet('chronoRunning',false);
+const cEl=lsGet('chronoElapsed',0);
+if(tRun&&!timerRunning){timerRunning=true;timerSeconds=tSec;startTimerLoop()}
+if(cRun&&!chronoRunning){chronoRunning=true;chronoElapsed=cEl;startChronoLoop()}
+return `<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gy" style="font-size:32px;margin-bottom:4px">Timer</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Countdown & Cronometro</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div class="card gl-y" style="padding:24px">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px">⏱️ Countdown</div>
+<div class="timer-display" id="timerDisp" style="color:var(--ny);margin-bottom:16px">${fmtTime(timerSeconds||tSec)}</div>
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+<button onclick="setTimerPreset(24*3600)" class="btn" style="background:#222;color:#aaa;font-size:10px;padding:8px 12px">24h 💧</button>
+<button onclick="setTimerPreset(48*3600)" class="btn" style="background:#222;color:#aaa;font-size:10px;padding:8px 12px">48h 💧</button>
+<button onclick="setTimerPreset(18*3600)" class="btn" style="background:#222;color:#aaa;font-size:10px;padding:8px 12px">18h 💡</button>
+<button onclick="setTimerPreset(12*3600)" class="btn" style="background:#222;color:#aaa;font-size:10px;padding:8px 12px">12h 💡</button>
+<button onclick="setTimerPreset(72*3600)" class="btn" style="background:#222;color:#aaa;font-size:10px;padding:8px 12px">72h 💧</button>
+</div>
+<div style="display:flex;gap:10px">
+<button onclick="toggleTimer()" class="btn" style="flex:1;background:var(--ny);color:#000" id="timerBtn">${timerRunning?'Pausa':'Avvia'}</button>
+<button onclick="resetTimer()" class="btn" style="flex:1;background:#222;color:#888">Reset</button>
+</div>
+<div style="margin-top:12px"><div style="font-size:11px;color:#555;margin-bottom:4px">Custom (secondi)</div><input type="number" id="timerCustom" class="inp" placeholder="es. 3600" onchange="setTimerCustom()"></div>
+</div>
+<div class="card gl-y" style="padding:24px">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px">⏲️ Cronometro Grow</div>
+<div class="chrono-display" id="chronoDisp" style="color:var(--ny);margin-bottom:16px">${fmtChrono(chronoElapsed||cEl)}</div>
+<div style="display:flex;gap:10px">
+<button onclick="toggleChrono()" class="btn" style="flex:1;background:var(--ny);color:#000" id="chronoBtn">${chronoRunning?'Pausa':'Start'}</button>
+<button onclick="resetChrono()" class="btn" style="flex:1;background:#222;color:#888">Reset</button>
+</div>
+</div>
+</div>
+</div>`;
+}
+function fmtTime(s){
+const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+function fmtChrono(ms){
+const s=Math.floor(ms/1000);
+const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=s%60;
+return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+function setTimerPreset(s){timerSeconds=s;lsSet('timerSeconds',s);updateTimerDisp();}
+function setTimerCustom(){const v=parseInt(document.getElementById('timerCustom').value);if(v>0){timerSeconds=v;lsSet('timerSeconds',v);updateTimerDisp();}}
+function toggleTimer(){
+if(timerRunning){clearInterval(timerInterval);timerRunning=false;lsSet('timerRunning',false);}
+else{timerRunning=true;lsSet('timerRunning',true);startTimerLoop();}
+document.getElementById('timerBtn').textContent=timerRunning?'Pausa':'Avvia';
+}
+function startTimerLoop(){
+clearInterval(timerInterval);
+timerInterval=setInterval(()=>{
+if(timerSeconds>0){timerSeconds--;lsSet('timerSeconds',timerSeconds);updateTimerDisp();}
+else{clearInterval(timerInterval);timerRunning=false;lsSet('timerRunning',false);alert('Timer finito!');document.getElementById('timerBtn').textContent='Avvia';}
+},1000);
+}
+function updateTimerDisp(){const el=document.getElementById('timerDisp');if(el)el.textContent=fmtTime(timerSeconds);}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSeconds=0;lsSet('timerRunning',false);lsSet('timerSeconds',0);updateTimerDisp();document.getElementById('timerBtn').textContent='Avvia';}
+function toggleChrono(){
+if(chronoRunning){clearInterval(chronoInterval);chronoRunning=false;lsSet('chronoRunning',false);}
+else{chronoRunning=true;lsSet('chronoRunning',true);startChronoLoop();}
+document.getElementById('chronoBtn').textContent=chronoRunning?'Pausa':'Start';
+}
+function startChronoLoop(){
+clearInterval(chronoInterval);
+const start=Date.now()-chronoElapsed;
+chronoInterval=setInterval(()=>{
+chronoElapsed=Date.now()-start;
+lsSet('chronoElapsed',chronoElapsed);
+const el=document.getElementById('chronoDisp');if(el)el.textContent=fmtChrono(chronoElapsed);
+},100);
+}
+function resetChrono(){clearInterval(chronoInterval);chronoRunning=false;chronoElapsed=0;lsSet('chronoRunning',false);lsSet('chronoElapsed',0);const el=document.getElementById('chronoDisp');if(el)el.textContent='00:00:00';document.getElementById('chronoBtn').textContent='Start';}
+function initTimer(){}
+
+updateHeader();
+renderBottomNav();
+renderPage();
+</script>
+</body>
+</html>
