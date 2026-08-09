@@ -52,7 +52,9 @@ html,body{min-height:100vh;background:var(--d2)}
 .gl-o{box-shadow:0 0 15px rgba(255,102,0,.3),inset 0 0 15px rgba(255,102,0,.1)}
 .gl-c{box-shadow:0 0 15px rgba(0,255,255,.3),inset 0 0 15px rgba(0,255,255,.1)}
 .gl-k{box-shadow:0 0 15px rgba(255,20,147,.3),inset 0 0 15px rgba(255,20,147,.1)}
-.gl-y{box-shadow:0 0 15px rgba(240,232,0,.3),inset 0 0 15px rgba(240,232,0,.1)}
+.gl-y{box-shadow:0 0 15px rgba(240,232,0,.3),inset 0 0 15px rgba(240,232,0,.1)} 
+.gl-lib{box-shadow:0 0 15px rgba(196,163,90,.3),inset 0 0 15px rgba(196,163,90,.1)}
+.glib{color:#c4a35a;text-shadow:0 0 10px rgba(196,163,90,.5)}
 .header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.75);backdrop-filter:blur(20px);border-bottom:1px solid rgba(34,34,34,.6);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.8);backdrop-filter:blur(20px);border-top:1px solid rgba(34,34,34,.6);display:flex;padding:6px 8px}
 .menu-overlay{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);padding-top:80px;display:none;flex-direction:column;gap:4px}
@@ -100,7 +102,7 @@ body.stoner-mode .t-tech{letter-spacing:4px!important;text-shadow:0 0 10px rgba(
 body.stoner-mode .header{background:rgba(5,5,5,.65)!important;border-bottom-color:var(--ng)!important;box-shadow:0 0 25px rgba(57,255,20,.25)!important}
 body.stoner-mode .bottom-nav{background:rgba(5,5,5,.65)!important;border-top-color:var(--ng)!important;box-shadow:0 0 25px rgba(57,255,20,.25)!important}
 body.stoner-mode .nav-item.active{text-shadow:0 0 12px currentColor!important}
-body.stoner-mode .falling-bud{opacity:.75!important;filter:drop-shadow(0 0 14px rgba(191,0,255,.7))!important}
+
 body.stoner-mode .plant-glow{filter:blur(40px) brightness(1.8)!important}
 body.stoner-mode .plant-ring-progress{filter:drop-shadow(0 0 15px currentColor)!important}
 body.stoner-mode .btn{box-shadow:0 0 15px rgba(57,255,20,.35)!important}
@@ -108,6 +110,23 @@ body.stoner-mode .inp:focus{border-color:var(--np)!important;box-shadow:0 0 15px
 body.stoner-mode .hero-glow{background:radial-gradient(circle,rgba(191,0,255,.18) 0%,transparent 70%)!important}
 body.stoner-mode .scanline::before{background:rgba(255,20,147,.12)!important;box-shadow:0 0 15px rgba(255,20,147,.3)!important}
 .stoner-btn-active{color:#ff1493 !important;text-shadow:0 0 15px #ff1493,0 0 35px #ff1493;animation:neonFlicker .4s ease-in-out infinite}
+.joint-wrap{position:relative;width:40px;height:180px;margin:0 auto;overflow:visible;transform:rotate(-90deg)}
+.joint-wrap .joint-img{width:100%;height:100%;object-fit:cover;object-position:bottom;display:block;transition:clip-path .8s cubic-bezier(0.22,1,0.36,1);filter:drop-shadow(0 4px 8px rgba(0,0,0,.6))}
+.joint-smoke{position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:20px;height:40px;pointer-events:none;z-index:3;overflow:visible}
+.smoke-particle{position:absolute;bottom:0;left:50%;width:8px;height:8px;background:rgba(180,180,180,0.5);border-radius:50%;filter:blur(3px);animation:smokeRise 1.2s ease-out infinite;opacity:0;transform:translateX(-50%)}
+@keyframes smokeRise{0%{transform:translate(-50%,0) scale(0.4);opacity:0.7}100%{transform:translate(-50%,-35px) scale(1.8);opacity:0}}
+body.stoner-mode .joint-wrap .joint-img{filter:drop-shadow(0 0 15px rgba(191,0,255,.6))}
+/* Titoli affievoliti in stoner mode */
+body.stoner-mode h1.t-graffiti,
+body.stoner-mode h2.t-graffiti,
+body.stoner-mode #header-title {
+    text-shadow: 0 0 4px currentColor, 0 0 10px currentColor !important;
+    opacity: 0.92;
+}
+body.stoner-mode .page .t-tech {
+    letter-spacing: 2px !important;
+    text-shadow: 0 0 3px rgba(255,255,255,.12) !important;
+}
 </style>
 </head>
 <body>
@@ -135,6 +154,7 @@ body.stoner-mode .scanline::before{background:rgba(255,20,147,.12)!important;box
   <button class="menu-btn" onclick="go('tools')">🧮 Tools</button>
   <button class="menu-btn" onclick="go('strains')">🧬 Strains</button>
   <button class="menu-btn" onclick="go('timer')">⏱️ Timer</button>
+  <button class="menu-btn" onclick="go('library')">📚 Libreria</button>
 </div>
 <div id="app" style="padding-top:60px"></div>
 <div class="bottom-nav" id="bottomNav"></div>
@@ -169,9 +189,33 @@ const diagnosisData=[
 {category:"Parassiti",icon:"🐛",color:"#ff6600",issues:[{name:"Puntini su foglie + ragnatele",cause:"Ragnetto Rosso",fix:"Spray acqua + sapone Marsiglia ogni 3 giorni."},{name:"Moscerini neri nel terriccio",cause:"Fungus Gnat",fix:"Lascia asciugare terra. Trappole gialle. Sabbia fine."},{name:"Piccoli insetti verdi sotto foglie",cause:"Afidi",fix:"Olio di neem diluito ogni 3 giorni per 2 settimane."}]},
 {category:"Crescita",icon:"📏",color:"#00ffff",issues:[{name:"Piantina si allunga troppo",cause:"Etiolamento (luce scarsa)",fix:"Avvicina lampada. Minimo 200–300 PPFD."},{name:"Crescita bloccata",cause:"pH sbagliato o radici soffocate",fix:"Controlla pH e drenaggio. Trapianta se necessario."},{name:"Stelo sottile che crolla",cause:"Mancanza ventilazione",fix:"Aggiungi ventilatore leggero. Wind stress positivo."}]}
 ];
-
+function renderJointProgress(pct, size=400){
+    const burn = Math.min(pct * 0.92, 92);
+    const isStoner = lsGet('stoner-mode', false);
+    const src = isStoner ? 'assets/alienjoint.png' : 'assets/joint.png';
+    const jointSize = isStoner ? size * 2 : size;
+    const w = Math.round(jointSize * 0.15);
+    const smoking = pct > 0 && pct < 100;
+    let smokeHtml = '';
+    if(smoking){
+        smokeHtml = `<div class="joint-smoke">
+            <div class="smoke-particle" style="animation-delay:0s"></div>
+            <div class="smoke-particle" style="animation-delay:0.3s"></div>
+            <div class="smoke-particle" style="animation-delay:0.6s"></div>
+        </div>`;
+    }
+    return `<div style="display:inline-flex;align-items:center;justify-content:center;position:relative;width:${jointSize}px;height:${w}px">
+        <div class="joint-wrap" style="height:${jointSize}px;width:${w}px">
+            <img src="${src}" class="joint-img" style="clip-path:inset(${burn}% 0 0 0)">
+        </div>
+        ${smokeHtml}
+    </div>`;
+}
 function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function getActivePlantIndex(){const plants=lsGet('grow-plants',[]);let idx=lsGet('grow-active-plant',0);if(idx>=plants.length)idx=0;return idx}
+function setActivePlantIndex(idx){lsSet('grow-active-plant',idx);renderPage()}
+function getActivePlantProgress(){const plants=lsGet('grow-plants',[]);const idx=getActivePlantIndex();if(plants[idx]&&plants[idx].progress)return plants[idx].progress;return lsGet('grow-progress',{})}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 (function(){
 const canvas=document.getElementById('smoke');
@@ -207,26 +251,35 @@ function loop(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.update();p.draw()
 loop()
 })();
 
-(function(){
+function initBuds(){
 const container=document.getElementById('leaves');
 if(!container)return;
+container.innerHTML='';
 const buds=[
 "url('assets/bud-pixel-1.png')",
 "url('assets/bud-pixel-2.png')",
 "url('assets/bud-pixel-3.png')"];
-for(let i=0;i<14;i++){
+const isStoner=document.body.classList.contains('stoner-mode');
+const count=isStoner?42:14;
+const glowColors=['rgba(191,0,255,.75)','rgba(57,255,20,.65)','rgba(255,102,0,.65)'];
+for(let i=0;i<count;i++){
 const el=document.createElement('div');
 el.className='falling-bud';
 el.style.backgroundImage=buds[i%3];
 el.style.left=(Math.random()*100)+'%';
-el.style.animationDelay=(Math.random()*15)+'s';
-el.style.animationDuration=(Math.random()*12+18)+'s';
-const size=Math.random()*16+28;
+el.style.animationDelay=(Math.random()*10)+'s';
+const size=isStoner?(Math.random()*32+44):(Math.random()*16+28);
+const duration=isStoner?(Math.random()*5+6):(Math.random()*12+18);
+const opacity=isStoner?(0.55+Math.random()*0.35):0.55;
 el.style.width=size+'px';
 el.style.height=size+'px';
+el.style.animationDuration=duration+'s';
+el.style.opacity=opacity;
+const glow=glowColors[i%3];
+el.style.filter=`drop-shadow(0 0 ${isStoner?14:10}px ${glow})`;
 container.appendChild(el)
 }
-})();
+}
 let currentPage='home',currentStageIndex=0,lastStageIndex=-1;
 const navItems=[
 {id:'home',label:'Home',icon:'🏠',color:'var(--ng)'},
@@ -235,7 +288,8 @@ const navItems=[
 {id:'diagnosis',label:'Diagnosi',icon:'🔍',color:'var(--no)'},
 {id:'tools',label:'Tools',icon:'🧮',color:'var(--nc)'},
 {id:'strains',label:'Strains',icon:'🧬',color:'var(--nk)'},
-{id:'timer',label:'Timer',icon:'⏱️',color:'var(--ny)'}
+{id:'timer',label:'Timer',icon:'⏱️',color:'var(--ny)'},
+{id:'library',label:'Libreria',icon:'📚',color:'#c4a35a'}
 ];
 
 function toggleMenu(){document.getElementById('menu').classList.toggle('open')}
@@ -266,7 +320,8 @@ case'journal':html=renderJournal();break;
 case'diagnosis':html=renderDiagnosis();break;
 case'tools':html=renderTools();break;
 case'strains':html=renderStrains();break;
-case'timer':html=renderTimer();break;
+case'timer':html=renderTimer();break; 
+case'library':html=renderLibrary();break; 
 default:html=renderHome()
 }
 app.innerHTML=`<div class="page-bg" style="${getPageBg()}"></div><div class="page">${html}</div>`;
@@ -277,7 +332,8 @@ case'journal':initJournal();break;
 case'diagnosis':initDiagnosis();break;
 case'tools':initTools();break;
 case'strains':initStrains();break;
-case'timer':initTimer();break;
+case'timer':initTimer();break; 
+case'library':initLibrary();break; 
 default:initHome()
 }
 }
@@ -288,21 +344,24 @@ function toggleStonerMode(){            // ← FUORI, funzione globale
     lsSet('stoner-mode',active);
     const btn=document.getElementById('stonerBtn');
     if(btn){btn.classList.toggle('stoner-btn-active',active);btn.textContent=active?'🔥':'🌈';}
+       renderPage();
+    initBuds();
 }
-(function(){                            // ← FUORI, IIFE di inizializzazione
+(function(){
     if(lsGet('stoner-mode',false)){
         document.body.classList.add('stoner-mode');
         const btn=document.getElementById('stonerBtn');
         if(btn){btn.classList.add('stoner-btn-active');btn.textContent='🔥';}
     }
+    initBuds();
 })();
 function renderHome(){
-const progress=lsGet('grow-progress',{});
+const progress=getActivePlantProgress();
 const plants=lsGet('grow-plants',[]);
 const totalSteps=phases.reduce((a,p)=>a+p.steps.length,0);
 const completed=Object.values(progress).filter(Boolean).length;
 const overall=Math.round((completed/totalSteps)*100)||0;
-const active=plants[0];
+const active=plants[getActivePlantIndex()];
 const stageIndex=Math.min(Math.floor(overall/17),5);
 currentStageIndex=stageIndex;
 const stageColors=['#8fb87a','#6db56d','#4ea86a','#b8a84a','#c47a3a','#7a4ea8'];
@@ -335,22 +394,24 @@ let html=`<div style="position:relative">
 <div class="card gl-g" style="padding:24px;margin-bottom:20px;text-align:center;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(57,255,20,.25)">
 <div style="font-size:13px;color:#666;margin-bottom:8px;font-family:Orbitron;letter-spacing:2px;text-transform:uppercase">Progresso Totale</div>
 <div style="font-size:48px;font-weight:900;color:var(--ng);font-family:Orbitron;text-shadow:0 0 20px rgba(57,255,20,.4)">${overall}%</div>
-<div class="prog" style="margin-top:12px"><div class="prog-f" style="width:${overall}%;background:var(--ng);box-shadow:0 0 10px rgba(57,255,20,.8)"></div></div>
+<div class="prog" style="margin-top:16px"><div class="prog-f" style="width:${overall}%;background:var(--ng);box-shadow:0 0 12px rgba(57,255,20,.5)"></div></div>
 <div style="font-size:12px;color:#555;margin-top:8px">${completed} / ${totalSteps} step completati</div>
 </div>`;
 if(active){
 html+=`<div class="card gl-p" style="padding:20px;margin-bottom:20px;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(191,0,255,.25)">
 <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-<span style="font-size:32px"></span>
-<div>
+<span style="font-size:32px">🌿</span>
+<div style="flex:1">
 <div style="font-weight:700;font-size:16px">${esc(active.name)}</div>
 <div style="font-size:12px;color:#888">${esc(active.strain)} • Giorno ${active.day}</div>
 </div>
+<span style="font-size:11px;color:var(--ng);font-family:Orbitron">⭐ ATTIVA</span>
 </div>
-<div style="display:flex;gap:8px">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
 <span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${phases[active.phase]?.name||'Setup'}</span>
 <span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">${esc(active.type)}</span>
 </div>
+${plants.length>1?`<button onclick="showPlantSelector()" class="btn" style="width:100%;margin-top:12px;background:#111;color:#888;border:1px solid #333;font-size:11px;padding:8px">🌿 Cambia Pianta Attiva</button>`:''}
 </div>`;
 }
 const items=[
@@ -359,7 +420,8 @@ const items=[
 {label:'Diagnosi',icon:'🔍',color:'var(--no)',page:'diagnosis',desc:'Problemi'},
 {label:'Tools',icon:'🧮',color:'var(--nc)',page:'tools',desc:'Calcolatori'},
 {label:'Strains',icon:'🧬',color:'var(--nk)',page:'strains',desc:'Varietà'},
-{label:'Timer',icon:'⏱️',color:'var(--ny)',page:'timer',desc:'Countdown'}
+{label:'Timer',icon:'⏱️',color:'var(--ny)',page:'timer',desc:'Countdown'},
+{label:'Libreria',icon:'📚',color:'#c4a35a',page:'library',desc:'Knowledge'}
 ];
 html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">`;
 items.forEach(item=>{
@@ -392,14 +454,14 @@ container.appendChild(p)
 }
 lastStageIndex=currentStageIndex;
 }
-const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',timer:'assets/art7.jpg'};
+const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',timer:'assets/art7.jpg',library:'assets/bg-library.jpg'};
 function getPageBg(){const url=pageBgs[currentPage];return url?`background:linear-gradient(rgba(5,5,5,.55),rgba(5,5,5,.70)),url('${url}') center/cover no-repeat;`:''}
 const phaseIconFiles=['01_Setup.png','02_Germinazione.png','03_Seedling.png','04_Vegetativa.png','05_Pre-Fioritura.png','06_Fioritura.png','07_Flushing.png','08_Raccolta.png','09_Essiccazione.png','10_Curing.png'];
 let guideState={activePhase:0,tab:'steps'};
 
 function renderGuide(){
 const p=phases[guideState.activePhase];
-const progress=lsGet('grow-progress',{});
+const progress=getActivePlantProgress();
 const completed=p.steps.filter((_,i)=>progress[guideState.activePhase+'-'+i]).length;
 const pct=Math.round((completed/p.steps.length)*100);
 let html=`<div>
@@ -413,6 +475,13 @@ ${phases.map((ph,i)=>`<button onclick="setPhase(${i})" style="min-width:80px;pad
 </button>`).join('')}
 </div>
 <div class="card gl-g" style="padding:20px;margin-bottom:16px">
+${guideState.activePhase===3?`<div onclick="go('library');openLibraryItem(2)" style="cursor:pointer;margin-bottom:16px;padding:12px 16px;background:rgba(109,181,109,.1);border:1px solid rgba(109,181,109,.4);border-radius:10px;display:flex;align-items:center;gap:10px">
+<span style="font-size:20px">🌿</span>
+<div>
+<div style="font-family:Orbitron;font-size:11px;color:#6db56d;text-transform:uppercase;letter-spacing:1px">Approfondimento</div>
+<div style="font-size:13px;color:#aaa">Scopri la <strong style="color:#fff">Guida alla LST</strong> nella Libreria →</div>
+</div>
+</div>`:''}
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
 <div>
 <span class="badge" style="background:${p.color}20;color:${p.color};border:1px solid ${p.color}50;margin-bottom:8px;display:inline-flex">${p.tag}</span>
@@ -423,6 +492,7 @@ ${phases.map((ph,i)=>`<button onclick="setPhase(${i})" style="min-width:80px;pad
 <div style="font-size:13px;color:${p.color};font-weight:700;font-family:Orbitron">${p.duration}</div>
 </div>
 </div>
+<div style="display:flex;justify-content:center;margin:12px 0">${renderJointProgress(pct, 220)}</div>
 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
 ${[
 {icon:'💡',color:'#f0e800',label:'Luce',val:p.light},
@@ -502,10 +572,19 @@ return html;
 function setPhase(i){guideState.activePhase=i;renderPage()}
 function setTab(t){guideState.tab=t;renderPage()}
 function toggleStep(phase,step){
+const plants=lsGet('grow-plants',[]);
+const idx=getActivePlantIndex();
+if(plants[idx]){
+if(!plants[idx].progress)plants[idx].progress={};
+const key=phase+'-'+step;
+plants[idx].progress[key]=!plants[idx].progress[key];
+lsSet('grow-plants',plants);
+}else{
 const progress=lsGet('grow-progress',{});
 const key=phase+'-'+step;
 progress[key]=!progress[key];
 lsSet('grow-progress',progress);
+}
 renderPage();
 }
 function initGuide(){}
@@ -521,7 +600,7 @@ let html=`<div>
 <h1 class="t-graffiti gp" style="font-size:32px;margin-bottom:4px">Journal</h1>
 <p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Le tue piante</p>
 </div>
-<button onclick="newPlant()" class="btn" style="background:var(--np);color:#fff;font-size:11px;padding:10px 16px">＋ Nuova</button>
+<button onclick="newPlant()" class="btn" style="background:var(--np);color:#fff;font-size:11px;padding:10px 16px;${plants.length>=5?'opacity:.4;pointer-events:none;':''}">＋ Nuova ${plants.length>=5?'(Max 5)':''}</button>
 </div>`;
 if(!plants.length){
 html+=`<div style="text-align:center;padding:60px 20px">
@@ -535,10 +614,11 @@ html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
 plants.forEach((pl,idx)=>{
 const phaseName=phases[pl.phase]?.name||'Setup';
 const phaseColor=phases[pl.phase]?.color||'#39ff14';
-html+=`<div class="card" style="padding:16px;cursor:pointer;border-left:3px solid ${phaseColor}" onclick="openPlant(${idx})">
+const isActive=idx===getActivePlantIndex();
+html+=`<div class="card" style="padding:16px;border-left:3px solid ${phaseColor}${isActive?';box-shadow:0 0 15px rgba(57,255,20,.15)':''}">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
 <div>
-<div style="font-weight:700;font-size:16px">${esc(pl.name)}</div>
+<div style="font-weight:700;font-size:16px">${esc(pl.name)} ${isActive?'<span style="color:var(--ng);font-size:11px;font-family:Orbitron">⭐ ATTIVA</span>':''}</div>
 <div style="font-size:12px;color:#888">${esc(pl.strain)} • ${pl.type}</div>
 </div>
 <span class="badge" style="background:${phaseColor}20;color:${phaseColor};border:1px solid ${phaseColor}50">${phaseName}</span>
@@ -550,6 +630,10 @@ html+=`<div class="card" style="padding:16px;cursor:pointer;border-left:3px soli
 <div style="margin-top:10px">
 <div class="prog"><div class="prog-f" style="width:${Math.min((pl.phase/9)*100,100)}%;background:${phaseColor}"></div></div>
 </div>
+<div style="display:flex;gap:8px;margin-top:12px">
+${!isActive?`<button onclick="setActivePlantIndex(${idx})" class="btn" style="flex:1;background:#0a1a0a;color:var(--ng);border:1px solid #1a3a1a;font-size:10px;padding:8px 12px">⭐ Attiva</button>`:''}
+<button onclick="openPlant(${idx})" class="btn" style="flex:1;background:#222;color:#888;font-size:10px;padding:8px 12px">Dettagli →</button>
+</div>
 </div>`;
 });
 html+=`</div>`;
@@ -560,6 +644,20 @@ return html;
 
 function renderPlantForm(){
 const plants=lsGet('grow-plants',[]);
+if(journalEditId===null&&plants.length>=5){
+return `<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gp" style="font-size:28px;margin-bottom:4px">Limite Raggiunto</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Massimo 5 piantine consentite</p>
+</div>
+<div class="card" style="padding:40px;text-align:center">
+<div style="font-size:48px;margin-bottom:16px">🚫</div>
+<div style="font-family:Orbitron;font-size:16px;color:#666;margin-bottom:8px">Hai raggiunto il limite di 5 piantine</div>
+<div style="font-size:13px;color:#444;margin-bottom:24px">Elimina una piantina esistente per aggiungerne una nuova.</div>
+<button onclick="cancelPlant()" class="btn" style="background:#222;color:#888">Torna al Journal</button>
+</div>
+</div>`;
+}
 const edit=journalEditId!==null?plants[journalEditId]:null;
 let html=`<div>
 <div style="margin-bottom:20px">
@@ -622,8 +720,13 @@ let html=`<div>
 <span class="badge" style="background:rgba(0,255,255,.1);color:var(--nc)">Iniziata ${pl.startDate}</span>
 </div>
 </div>
-<div class="card" style="padding:20px;margin-bottom:16px">
-<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Parametri Attuali</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+${getActivePlantIndex()!==journalEditId?`<button onclick="setActivePlantIndex(${journalEditId})" class="btn" style="width:100%;background:#0a1a0a;color:var(--ng);border:1px solid #1a3a1a">⭐ Rendi Pianta Attiva</button>`:''}
+<button onclick="resetPlantProgress()" class="btn" style="width:100%;background:#1a0505;color:#c44;border:1px solid #331111">🔄 Reset Progressi</button>
+</div>
+<div class="card" style="padding:20px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Log Rapido</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
 ${[
 {icon:'💡',label:'Luce',val:phase.light},
@@ -677,17 +780,18 @@ const startDate=document.getElementById('pDate').value;
 const notes=document.getElementById('pNotes').value.trim();
 if(!name){alert('Inserisci un nome per la pianta');return}
 const plants=lsGet('grow-plants',[]);
-const data={name,strain,type,phase,day,startDate,notes,logs:[]};
-if(journalEditId!==null){data.logs=plants[journalEditId].logs||[];plants[journalEditId]=data}
-else{plants.push(data)}
-lsSet('grow-plants',plants);
-journalView='list';journalEditId=null;renderPage()
+if(journalEditId===null&&plants.length>=5){alert('Hai raggiunto il limite massimo di 5 piantine.');return}
+const data={name,strain,type,phase,day,startDate,notes,logs:[],progress:{}};
+if(journalEditId!==null){data.logs=plants[journalEditId].logs||[];data.progress=plants[journalEditId].progress||{};plants[journalEditId]=data;lsSet('grow-plants',plants);journalView='list';journalEditId=null;renderPage()}
+else{plants.push(data);lsSet('grow-plants',plants);journalView='list';journalEditId=null;if(plants.length>1){showPlantSelector()}else{setActivePlantIndex(0)}}
 }
 function deletePlant(){
 if(!confirm('Eliminare questa pianta?'))return;
 const plants=lsGet('grow-plants',[]);
+const wasActive=journalEditId===getActivePlantIndex();
 plants.splice(journalEditId,1);
 lsSet('grow-plants',plants);
+if(wasActive){lsSet('grow-active-plant',0)}
 journalView='list';journalEditId=null;renderPage()
 }
 function openPlant(idx){journalEditId=idx;journalView='detail';renderPage()}
@@ -743,7 +847,7 @@ return html;
 function setDiagFilter(i){diagFilter=i;renderPage()}
 function initDiagnosis(){}
 function renderTools(){
-return `<div class="page" style="${getPageBg()}">
+return `<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti gc" style="font-size:32px;margin-bottom:4px">Tools</h1>
 <p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Calcolatori grow</p>
@@ -851,6 +955,13 @@ let html=`<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti gk" style="font-size:32px;margin-bottom:4px">Strains</h1>
 <p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Catalogo varietà</p>
+</div>
+<div onclick="go('library');openLibraryItem(4)" style="cursor:pointer;margin-bottom:16px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
+<span style="font-size:20px">🧬</span>
+<div>
+<div style="font-family:Orbitron;font-size:11px;color:var(--np);text-transform:uppercase;letter-spacing:1px">Knowledge Base</div>
+<div style="font-size:13px;color:#aaa">Approfondisci: <strong style="color:#fff">Chemovar vs Indica/Sativa</strong> e <strong style="color:#fff">Profili Terpenici</strong> →</div>
+</div>
 </div>
 <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">
 ${[{v:'all',l:'Tutti',c:'#fff'},{v:'Indica',l:'Indica',c:'var(--np)'},{v:'Sativa',l:'Sativa',c:'var(--nc)'},{v:'Hybrid',l:'Hybrid',c:'var(--ng)'}].map(f=>`<button onclick="setStrainFilter('${f.v}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainFilter===f.v?f.c:'#222'};background:${strainFilter===f.v?f.c+'20':'#111'};color:${strainFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
@@ -966,7 +1077,639 @@ const el=document.getElementById('chronoDisp');if(el)el.textContent=fmtChrono(ch
 }
 function resetChrono(){clearInterval(chronoInterval);chronoRunning=false;chronoElapsed=0;lsSet('chronoRunning',false);lsSet('chronoElapsed',0);const el=document.getElementById('chronoDisp');if(el)el.textContent='00:00:00';document.getElementById('chronoBtn').textContent='Start';}
 function initTimer(){}
+/* ═══════════════════════════════════════════════
+   SEZIONE LIBRERIA — GROW 420
+   Inserire DOPO initTimer(){} e PRIMA di updateHeader();
+   ═══════════════════════════════════════════════ */
 
+function mdToHtml(md) {
+    if (!md) return '';
+    let html = esc(md);
+    html = html.replace(/```([\s\S]*?)```/g, '<pre style="background:#0a0a0a;border:1px solid #222;border-radius:8px;padding:12px;margin:12px 0;overflow-x:auto;font-family:monospace;font-size:12px;color:#aaa;line-height:1.6">$1</pre>');
+    html = html.replace(/`([^`]+)`/g, '<code style="background:#0a0a0a;border:1px solid #222;border-radius:4px;padding:2px 6px;font-family:monospace;font-size:12px;color:var(--nc)">$1</code>');
+    html = html.replace(/^&gt; (.*$)/gim, '<blockquote style="border-left:3px solid var(--ng);padding-left:12px;margin:12px 0;color:#999;font-style:italic;font-size:13px;line-height:1.6">$1</blockquote>');
+    html = html.replace(/^#### (.*$)/gim, '<h4 style="font-family:Orbitron;font-size:14px;color:var(--ng);margin:16px 0 8px;text-transform:uppercase;letter-spacing:1px">$1</h4>');
+    html = html.replace(/^### (.*$)/gim, '<h3 style="font-family:Orbitron;font-size:16px;color:var(--ng);margin:20px 0 10px;text-transform:uppercase;letter-spacing:1px">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 style="font-family:Orbitron;font-size:20px;color:var(--ng);margin:24px 0 12px;text-transform:uppercase;letter-spacing:2px">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 style="font-family:\'Permanent Marker\',cursive;font-size:28px;color:var(--ng);margin:28px 0 16px">$1</h1>');
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong style="color:#fff">$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em style="color:#bbb">$1</em>');
+    html = html.replace(/^---$/gim, '<hr style="border:none;border-top:1px solid #222;margin:20px 0">');
+    const paragraphs = html.split(/\n\s*\n/);
+    html = paragraphs.map(p => {
+        p = p.trim();
+        if (!p) return '';
+        if (p.startsWith('<')) return p;
+        return `<p style="color:#aaa;line-height:1.7;margin:10px 0;font-size:13px">${p}</p>`;
+    }).join('\n');
+    return html;
+}
+
+const libraryData = [
+    {
+        id: 0,
+        title: "Grow Guide Completo",
+        category: "guida",
+        icon: "🌱",
+        color: "#39ff14",
+        desc: "Guida passo-passo dalla germinazione al curing con tecniche avanzate.",
+        content: `# Grow Guide Completo
+
+## Germinazione Perfetta
+
+La germinazione è il momento più delicato. Un seme sano ha colore marrone scuro con venature tigre e si sente duro al tatto.
+
+**Metodo consigliato: Bicchiere + Carta**
+
+- Metti il seme in acqua a temperatura ambiente (20-25°C) per 12-24h
+- Quando affonda, passalo tra due fogli di carta bagnata
+- Inserisci in sacchetto zip chiuso, posto caldo e buio
+- Controlla ogni 12h. La radichetta deve essere 0.5-1cm prima di piantare
+
+> **Temperatura ideale:** 22-26°C | **Umidità:** 70-80%
+
+## Vegetativa: Costruisci la Struttura
+
+La fase vegetativa è dove decidi la forma finale della pianta.
+
+### LST (Low Stress Training)
+Piega i rami principali verso i lati del vaso. Usa fil di ferro rivestito o soft-ties. **Mai piegare a 90° netti** — curva dolce per non rompere il vaso.
+
+### Topping
+A 4-6 nodi, taglia la punta di crescita tra i nodi. La pianta dividerà l'energia in 2 rami principali. **Non fare topping su autofiorenti.**
+
+### Defoliazione Strategica
+Rimuovi solo foglie che:
+- Sono gialle o morte
+- Ombreggiano cime inferiori sane
+- Bloccano l'aria tra i rami
+
+## Fioritura: Massimizza la Resa
+
+### Settimane 1-3: Transizione
+- Cambia nutrienti a Bloom (PK alto)
+- Abbassa umidità al 45-50%
+- Avvicina la LED a 35-45cm
+
+### Settimane 4-6: Swelling
+Le cime si ingrossano. Aggiungi booster PK. **Non spruzzare acqua sulle cime.**
+
+### Settimane 7-9: Maturation
+Osserva i tricomi con lente 60x:
+- **Trasparenti** = troppo presto
+- **Lattiginosi** = effetto cerebrale (THC max)
+- **Ambrati** = effetto sedativo (CBN aumenta)
+
+## Flushing e Raccolta
+
+Il flush dura 7-14 giorni. Solo acqua pH 6.0-6.5. Le foglie ingialliscono — è normale.
+
+**Test dello stelo:** si spezza netto = pronto per curing.`
+    },
+    {
+        id: 1,
+        title: "LST: Low Stress Training",
+        category: "tecnica",
+        icon: "🌿",
+        color: "#6db56d",
+        desc: "Tecniche di training senza stress per massimizzare la resa.",
+        content: `# LST: Low Stress Training
+
+## Cos'è il LST?
+
+Il LST è la tecnica di piegare e legare i rami della cannabis per creare una pianta più bassa, larga e produttiva. A differenza del topping, **non ferisce la pianta** — stimola solo la crescita orizzontale.
+
+## Perché funziona
+
+La cima dominante (apical dominance) produce auxina, un ormone che inibisce la crescita dei rami laterali. Piegarla verso il basso distribuisce l'auxina in modo uniforme, facendo crescere tutti i rami come "cime principali".
+
+## Materiali necessari
+
+- Fil di ferro plastificato o soft-tie garden wire
+- Fori sul bordo del vaso o ganci
+- Forbici sterili (per eventuali legature)
+- Pazienza
+
+## Tecnica Base: Mainline
+
+1. **Aspetta 4-6 nodi** — la pianta deve essere robusta
+2. **Piega il fusto principale** verso il bordo del vaso, legandolo leggermente
+3. **Posiziona i rami laterali** verso l'alto usando fili separati
+4. **Ripeti ogni 2-3 giorni** man mano che crescono nuovi rami
+
+## Tecnica Avanzata: ScrOG
+
+Lo Screen of Green usa una rete (mesh) sopra la pianta:
+
+- Installa la rete a 20-30cm dal vaso
+- Piega i rami che superano la rete sotto i fori
+- Riempi tutta la superficie della rete con cime alla stessa altezza
+
+**Vantaggio:** Luce uniforme su tutte le cime = resa massima.
+
+## Timing
+
+| Fase | Azione |
+|------|--------|
+| Veg settimana 2-3 | Inizia LST |
+| Veg settimana 4-5 | Aggiusta rami, allunga legature |
+| Pre-fioritura | Stop LST, lascia crescere |
+| Fioritura | Solo supporto rami pesanti |
+
+## Errori comuni
+
+- **Piegare troppo presto** — stelo troppo sottile si spezza
+- **Legature troppo strette** — strangolano il flusso di linfa
+- **Toccare i fiori** durante fioritura — stress e rischio muffa`
+    },
+    {
+        id: 2,
+        title: "Botanica della Cannabis",
+        category: "scienza",
+        icon: "🔬",
+        color: "#00ffff",
+        desc: "Anatomia della pianta, fotosintesi e fisiologia avanzata.",
+        content: `# Botanica della Cannabis
+
+## Anatomia della Pianta
+
+### Radici
+Il sistema radicale della cannabis è **a fascio** — un taproot principale con radici secondarie. In 11L di terra sana, le radici possono occupare l'80% del volume in 4 settimane.
+
+**Segnali di radici sane:**
+- Bianche e carnose
+- Odore di terra fresca
+- Crescita esplosiva in veg
+
+**Segnali di radici soffocate:**
+- Crescita bloccata
+- Foglie arricciate verso il basso
+- Terra che non asciuga mai
+
+### Stelo e Nodi
+Lo stelo contiene il xilema (trasporta acqua e nutrienti dal basso verso l'alto) e il floema (trasporta zuccheri dalle foglie verso il resto della pianta).
+
+Ogni nodo è un punto di crescita potenziale. Tra nodo e nodo c'è l'internodo. **Internodi corti = luce intensa. Internodi lunghi = luce scarsa.**
+
+### Foglie
+- **Cotiledoni:** prime 2 foglie tonde, contengono nutrienti iniziali
+- **Foglie palmate:** 3-9 dita, principali fabbriche di zucchero
+- **Sugar leaves:** piccole foglie tra i fiori, ricche di tricomi
+
+## Fotosintesi e Luce
+
+La cannabis usa la **fotosintesi C3** — fissa CO2 direttamente durante il giorno. Il processo richiede:
+
+- **Fotoni** (luce) per attivare la clorofilla
+- **CO2** per costruire zuccheri
+- **Acqua** per idrolisi
+- **Nutrienti** per enzimi e strutture
+
+### Spettro Luminoso
+
+| Colore | Lunghezza | Effetto |
+|--------|-----------|---------|
+| Blu (400-500nm) | Veg | Compatto stelo, foglie dense |
+| Rosso (600-700nm) | Bloom | Fioritura, allungamento internodi |
+| UV-B | Finale | Stimola produzione tricomi |
+
+## Tricomi: Le Fabbriche di Resina
+
+I tricomi sono ghiandole epidermiche che producono:
+
+- **THC** — effetto psicoattivo
+- **CBD** — effetto rilassante non psicoattivo
+- **Terpeni** — aroma e effetto entourage
+- **Flavonoidi** — colore e antiossidanti
+
+**3 tipi di tricomi:**
+1. **Bulbosi** — piccoli, inutili (10-15 micron)
+2. **Capitati sessili** — medi, pochi cannabinoidi (25-50 micron)
+3. **Capitati peduncolati** — grandi, ricchi di resina (50-100 micron)
+
+## Ciclo di Vita
+
+La cannabis è una pianta **annuale** con ciclo determinato:
+1. **Germinazione** — attivazione ormoni
+2. **Seedling** — sviluppo radici e prime foglie
+3. **Vegetativa** — accumulo biomassa
+4. **Fioritura** — riproduzione (femmina = cime, maschio = polline)
+5. **Senescenza** — degradazione, pronta per raccolta`
+    },
+    {
+        id: 3,
+        title: "Tipologie: Indica, Sativa, Hybrid, Auto",
+        category: "varietà",
+        icon: "🧬",
+        color: "#bf00ff",
+        desc: "Differenze genetiche, effetti e caratteristiche di crescita.",
+        content: `# Tipologie di Cannabis
+
+## Indica
+
+**Origine:** Afghanistan, Pakistan, India (zone montuose)
+
+**Caratteristiche:**
+- Pianta bassa e compatta (60-120cm)
+- Foglie larghe e scure
+- Fioritura corta (6-9 settimane)
+- Cime dense e pesanti
+- Resa media-alta
+
+**Effetti:** Relax fisico, sedazione, "body high". Ideale per sera e dolore cronico.
+
+**Varietà famose:** Northern Lights, OG Kush, Granddaddy Purple
+
+## Sativa
+
+**Origine:** Thailandia, Colombia, Africa equatoriale
+
+**Caratteristiche:**
+- Pianta alta e slanciata (150-300cm+)
+- Foglie sottili e chiare
+- Fioritura lunga (10-14 settimane)
+- Cime allungate e ariose
+- Resa alta ma tempo lungo
+
+**Effetti:** Energia, creatività, euforia cerebrale. Ideale per giorno e depressione.
+
+**Varietà famose:** Haze, Durban Poison, Thai
+
+## Hybrid
+
+La maggior parte delle varietà moderne sono hybrid — incroci selezionati per combinare i tratti migliori.
+
+**Hybrid Indica-dominante:** 70% Indica / 30% Sativa
+- Effetto bilanciato con relax prevalente
+- Crescita media
+- Esempio: Blue Dream, Girl Scout Cookies
+
+**Hybrid Sativa-dominante:** 70% Sativa / 30% Indica
+- Energia con leggero relax
+- Crescita alta
+- Esempio: Amnesia Haze, Super Lemon Haze
+
+**Hybrid 50/50:** Equilibrio perfetto
+- Esempio: White Widow, AK-47
+
+## Autofiorenti (Ruderalis)
+
+**Origine:** Siberia, Russia (climi estremi)
+
+**Caratteristiche uniche:**
+- Ciclo fisso: 8-12 settimane dalla germinazione
+- **Non dipende dalla luce** per fiorire
+- Piccole e compatte (30-100cm)
+- Resa più bassa ma velocissima
+- Resistenti a freddo e muffa
+
+**Quando usarle:**
+- Prima volta che coltivi
+- Spazio limitato
+- Clima freddo
+- Vuoi raccolte rapide
+
+**Svantaggi:**
+- Non tollerano errori (tempo fisso)
+- Non recuperano da topping/LST aggressivo
+- Meno potenti in THC (ma migliorano ogni anno)
+
+## Come scegliere
+
+| Fattore | Consiglio |
+|---------|-----------|
+| Spazio | Auto o Indica per piccolo, Sativa per grande |
+| Tempo | Auto per veloce, Foto per qualità |
+| Esperienza | Auto o Hybrid facili per iniziare |
+| Effetto | Indica per relax, Sativa per energia |`
+    },
+    {
+        id: 4,
+        title: "Cannabinoidi e Terpeni",
+        category: "scienza",
+        icon: "🧪",
+        color: "#ff6600",
+        desc: "Guida completa ai composti attivi e all'effetto entourage.",
+        content: `# Cannabinoidi e Terpeni
+
+## I Principali Cannabinoidi
+
+### THC (Tetraidrocannabinolo)
+- **Effetto:** Psicoattivo, euforia, aumento appetito
+- **Benefici:** Dolore, nausea, depressione
+- **Effetti collaterali:** Ansia, tachicardia, secchezza bocca
+- **Range comune:** 15-30%
+
+### CBD (Cannabidiolo)
+- **Effetto:** Non psicoattivo, rilassante, antinfiammatorio
+- **Benefici:** Ansia, epilessia, infiammazione, dolore
+- **Range comune:** 0.1-20%
+
+### CBN (Cannabinolo)
+- **Formazione:** Degradazione THC (esposizione luce/ossigeno)
+- **Effetto:** Sedativo, sonnolenza
+- **Presente in:** Cannabis vecchia o mal conservata
+
+### CBG (Cannabigerolo)
+- **Precursore:** Da CBG si formano THC, CBD, CBC
+- **Effetto:** Antibatterico, neuroprotettivo
+- **Raro:** <1% nella maggior parte delle varietà
+
+## Gli 8 Terpeni Principali
+
+I terpeni sono composti aromatici che determinano sapore, odore e **modulano l'effetto** dei cannabinoidi (effetto entourage).
+
+### Myrcene
+- **Aroma:** Terra, mango, muschio
+- **Effetto:** Sedativo, rilassante muscolare
+- **Presente in:** OG Kush, Blue Dream
+
+### Limonene
+- **Aroma:** Limone, agrumi
+- **Effetto:** Energizzante, antidepressivo
+- **Presente in:** Super Lemon Haze, Durban Poison
+
+### Pinene
+- **Aroma:** Pino, bosco
+- **Effetto:** Alertness, memoria, antinfiammatorio
+- **Presente in:** Jack Herer, Blue Dream
+
+### Linalool
+- **Aroma:** Lavanda, fiori
+- **Effetto:** Antiansia, sedativo
+- **Presente in:** Amnesia Haze, LA Confidential
+
+### Caryophyllene
+- **Aroma:** Pepe, spezie
+- **Effetto:** Antinfiammatorio, analgesico
+- **Unico:** Interagisce con recettori CB2 (come un cannabinoide)
+- **Presente in:** Girl Scout Cookies, OG Kush
+
+### Terpinolene
+- **Aroma:** Pino, fiori, erbe
+- **Effetto:** Uplifting, antibatterico
+- **Presente in:** Jack Herer, Golden Pineapple
+
+### Humulene
+- **Aroma:** Luppolo, terra
+- **Effetto:** Sopprime appetito, antinfiammatorio
+- **Presente in:** White Widow, Headband
+
+### Ocimene
+- **Aroma:** Basilico, mango, fiori
+- **Effetto:** Antifungino, decongestionante
+- **Presente in:** Strawberry Cough, Golden Goat
+
+## Effetto Entourage
+
+L'effetto entourage è la **sinergia** tra cannabinoidi e terpeni. Non esiste solo il THC: la combinazione di tutti i composti crea l'esperienza unica di ogni varietà.
+
+**Esempio:** THC + Myrcene = sedazione intensa
+**Esempio:** THC + Limonene + Pinene = high cerebrale e creativo
+
+## Come massimizzare i terpeni
+
+1. **Curing lento** (4+ settimane) — sviluppa profili complessi
+2. **Temperatura notturna bassa** (3-5°C sotto giorno) — stimola produzione
+3. **No overfertilizzazione** — stress chimico riduce terpeni
+4. **Essiccazione lenta** — 10-14 giorni ideale
+5. **Conservazione in vetro** — barattoli ermetici al buio`
+    },
+    {
+        id: 5,
+        title: "Qualità: Curing e Conservazione",
+        category: "post-harvest",
+        icon: "🏆",
+        color: "#c4a35a",
+        desc: "Tecniche avanzate per curing perfetto e conservazione a lungo termine.",
+        content: `# Qualità: Curing e Conservazione
+
+## Perché il Curing è Fondamentale
+
+Il curing non è solo "essiccare". È un processo **biochimico** dove:
+- Clorofilla si degrada (meno sapore di erba/fieno)
+- Zuccheri si stabilizzano
+- Terpeni maturano e si complessificano
+- THC si converte parzialmente in CBN (effetto più morbido)
+
+**Cannabis ben curata vs mal curata:**
+- Sapore: dolce/terroso vs erboso/amaro
+- Effetto: morbido/lungo vs duro/breve
+- Fumo: liscio vs irritante
+
+## Curing in 4 Fasi
+
+### Fase 1: Essiccazione (Giorni 1-10)
+- Appendi rami a testa in giù
+- Buio totale, 15-20°C, 45-55% umidità
+- Ventilazione indiretta (mai diretta sui fiori)
+- **Test stelo:** si piega = umido, si spezza = pronto
+
+### Fase 2: Jar Burping (Settimane 1-2)
+- Barattoli di vetro riempiti a 3/4
+- Apri 1-2 volte al giorno per 15-30 minuti
+- Umidità target: 58-62%
+- **Odore ammoniacale?** Tieni aperto 2-4h, rischio muffa
+
+### Fase 3: Stabilizzazione (Settimane 3-4)
+- Burping ogni 2-3 giorni
+- Aromi si fissano
+- Consistenza migliora (fiori non troppo secchi/umidi)
+
+### Fase 4: Affinamento (Settimane 5-8+)
+- Burping settimanale
+- Sapori si complessificano enormemente
+- Dopo 8 settimane = qualità superiore
+
+## Conservazione a Lungo Termine
+
+### Barattoli di Vetro
+- Chiusura ermetica (swing-top o screw)
+- Al buio e fresco (18-22°C)
+- Con Boveda pack 62% per umidità stabile
+
+### Da Evitare
+- **Plastica** — carica statica, rovina tricomi
+- **Frigo** — sbalzi termici creano condensa
+- **Congelatore** — tricomi diventano fragili e si rompono
+- **Luce diretta** — degrada THC in CBN
+
+### Shelf Life
+| Metodo | Durata |
+|--------|--------|
+| Barattolo + Boveda | 6-12 mesi |
+| Sottovuoto + buio | 12-24 mesi |
+| Senza controllo umidità | 1-3 mesi |
+
+## Segnali di Cannabis Stale
+
+- Odore di fieno/erba secca (terpeni persi)
+- Fumo duro e irritante
+- Cime polverose al tatto
+- Sapore amaro o metallico
+
+Se trovi muffa: **butta tutto**. Non esiste "rimuovere la muffa visibile" — le tossine restano.`
+    }
+];
+
+let libraryView = 'list';
+let libraryFilter = 'all';
+let librarySearch = '';
+let libraryOpenId = null;
+
+function setLibraryFilter(f) { libraryFilter = f; renderPage(); }
+function setLibrarySearch(s) { librarySearch = s.toLowerCase(); renderPage(); }
+function openLibraryItem(id) {
+    libraryOpenId = id;
+    libraryView = 'detail';
+    if (currentPage !== 'library') {
+        currentPage = 'library';
+        updateHeader();
+        renderBottomNav();
+    }
+    renderPage();
+}
+function backToLibrary() {
+    libraryView = 'list';
+    libraryOpenId = null;
+    renderPage();
+}
+
+function renderLibrary() {
+    if (libraryView === 'detail' && libraryOpenId !== null) {
+        return renderLibraryDetail();
+    }
+    const cats = [
+        { v: 'all', l: 'Tutti', c: '#c4a35a' },
+        { v: 'guida', l: 'Guide', c: '#39ff14' },
+        { v: 'tecnica', l: 'Tecniche', c: '#6db56d' },
+        { v: 'scienza', l: 'Scienza', c: '#00ffff' },
+        { v: 'varietà', l: 'Varietà', c: '#bf00ff' },
+        { v: 'post-harvest', l: 'Post-Harvest', c: '#c4a35a' }
+    ];
+    let filtered = libraryData;
+    if (libraryFilter !== 'all') {
+        filtered = filtered.filter(d => d.category === libraryFilter);
+    }
+    if (librarySearch) {
+        filtered = filtered.filter(d =>
+            d.title.toLowerCase().includes(librarySearch) ||
+            d.desc.toLowerCase().includes(librarySearch) ||
+            d.content.toLowerCase().includes(librarySearch)
+        );
+    }
+    let html = `<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti glib" style="font-size:32px;margin-bottom:4px">Libreria</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Knowledge base grow</p>
+</div>
+<div style="margin-bottom:16px">
+<input type="text" class="inp" placeholder="Cerca nella libreria..." value="${esc(librarySearch)}" oninput="setLibrarySearch(this.value)" style="background:rgba(10,10,10,.5)">
+</div>
+<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:16px">
+${cats.map(cat => `<button onclick="setLibraryFilter('${cat.v}')" style="min-width:80px;padding:8px 14px;border-radius:12px;border:2px solid ${libraryFilter === cat.v ? cat.c : '#222'};background:${libraryFilter === cat.v ? cat.c + '20' : '#111'};color:${libraryFilter === cat.v ? cat.c : '#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${cat.l}</button>`).join('')}
+</div>`;
+    if (!filtered.length) {
+        html += `<div style="text-align:center;padding:40px 20px;color:#555">
+<div style="font-size:48px;margin-bottom:12px">🔍</div>
+<div style="font-family:Orbitron;font-size:14px">Nessun risultato</div>
+<div style="font-size:12px;margin-top:8px">Prova con altri termini</div>
+</div>`;
+    } else {
+        html += `<div style="display:flex;flex-direction:column;gap:12px">`;
+        filtered.forEach(item => {
+            html += `<div class="card gl-lib" style="padding:16px;cursor:pointer;border:1px solid rgba(196,163,90,.2);background:rgba(17,17,17,.55)" onclick="openLibraryItem(${item.id})">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+<span style="font-size:32px">${item.icon}</span>
+<div style="flex:1">
+<div style="font-weight:700;font-size:16px;font-family:Orbitron;color:${item.color}">${esc(item.title)}</div>
+<div style="font-size:11px;color:#888;margin-top:2px;text-transform:uppercase;letter-spacing:1px;font-family:Orbitron">${item.category}</div>
+</div>
+</div>
+<div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(item.desc)}</div>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span class="badge" style="background:${item.color}15;color:${item.color};border:1px solid ${item.color}40;font-size:10px">${item.icon} ${item.category}</span>
+<span style="font-size:11px;color:#666;font-family:Orbitron">Leggi →</span>
+</div>
+</div>`;
+        });
+        html += `</div>`;
+    }
+    html += `</div>`;
+    return html;
+}
+
+function renderLibraryDetail() {
+    const item = libraryData.find(d => d.id === libraryOpenId);
+    if (!item) {
+        backToLibrary();
+        return '';
+    }
+    return `<div>
+<div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+<button onclick="backToLibrary()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;font-family:Orbitron">← INDIETRO</button>
+<span class="badge" style="background:${item.color}15;color:${item.color};border:1px solid ${item.color}40">${item.icon} ${item.category}</span>
+</div>
+<div class="card gl-lib" style="padding:24px;background:rgba(17,17,17,.55);border:1px solid rgba(196,163,90,.25)">
+<div style="text-align:center;margin-bottom:20px">
+<span style="font-size:48px">${item.icon}</span>
+<h1 class="t-graffiti" style="font-size:28px;color:${item.color};margin:12px 0 4px">${esc(item.title)}</h1>
+<div style="font-size:12px;color:#888">${esc(item.desc)}</div>
+</div>
+<div style="border-top:1px solid #222;padding-top:20px">
+${mdToHtml(item.content)}
+</div>
+</div>
+</div>`;
+}
+
+function initLibrary() {}
+
+function resetPlantProgress(){
+if(!confirm('Cancellare tutti i progressi di questa piantina? Questa azione non può essere annullata.'))return;
+const plants=lsGet('grow-plants',[]);
+const idx=journalEditId!==null?journalEditId:getActivePlantIndex();
+if(plants[idx]){plants[idx].progress={};lsSet('grow-plants',plants);renderPage()}
+}
+function showPlantSelector(){
+const plants=lsGet('grow-plants',[]);
+const activeIndex=getActivePlantIndex();
+let html=`<div id="plantSelectorModal" style="position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;font-family:Inter,sans-serif;animation:fadeIn .3s ease">
+<div style="background:rgba(17,17,17,.95);border:1px solid rgba(57,255,20,.3);border-radius:20px;padding:24px;width:100%;max-width:420px;max-height:80vh;overflow-y:auto;box-shadow:0 0 40px rgba(57,255,20,.15)">
+<div style="text-align:center;margin-bottom:20px">
+<div style="font-family:'Orbitron',sans-serif;font-size:18px;color:var(--ng);margin-bottom:4px">🌿 Seleziona Pianta Attiva</div>
+<div style="font-size:12px;color:#666">Clicca una piantina per visualizzarla in Home</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">`;
+plants.forEach((pl,i)=>{
+const phase=phases[pl.phase]||phases[0];
+const isActive=i===activeIndex;
+html+=`<div onclick="selectPlantFromSelector(${i})" style="padding:14px;border-radius:12px;border:2px solid ${isActive?'var(--ng)':'#222'};background:${isActive?'rgba(57,255,20,.08)':'#111'};cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:12px">
+<span style="font-size:28px">${isActive?'✅':'🌱'}</span>
+<div style="flex:1">
+<div style="font-weight:700;font-size:14px;color:#fff;font-family:Orbitron">${esc(pl.name)}</div>
+<div style="font-size:11px;color:#888">${esc(pl.strain)} • Giorno ${pl.day} • ${phase.name}</div>
+</div>
+${isActive?'<span style="font-size:11px;color:var(--ng);font-family:Orbitron">ATTIVA</span>':'<span style="font-size:11px;color:#555;font-family:Orbitron">Seleziona →</span>'}
+</div>`;
+});
+html+=`</div>
+<button onclick="closePlantSelector()" style="width:100%;margin-top:16px;padding:12px;border-radius:10px;border:none;background:#222;color:#888;font-family:Orbitron;font-size:12px;cursor:pointer">Chiudi</button>
+</div>
+</div>`;
+const div=document.createElement('div');
+div.innerHTML=html;
+document.body.appendChild(div.firstElementChild);
+}
+function selectPlantFromSelector(idx){
+setActivePlantIndex(idx);
+closePlantSelector();
+if(currentPage!=='home'){go('home')}
+}
+function closePlantSelector(){
+const el=document.getElementById('plantSelectorModal');
+if(el)el.remove();
+}
 updateHeader();
 renderBottomNav();
 renderPage();
