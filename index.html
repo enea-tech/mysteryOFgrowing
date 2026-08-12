@@ -176,8 +176,6 @@ body.stoner-mode .page .t-tech {
 }
 </style>
 <base target="_self">
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
 <div class="grunge"></div>
@@ -230,11 +228,11 @@ try {
         settings: 'key'
     });
 } catch(e) {
-    console.warn('Dexie non caricato, app funziona in modalità localStorage');
+    console.warn('Dexie non caricato, alcune funzioni offline non saranno disponibili');
 }
 
 // ── 2. SUPABASE (standby) ─────────────────────────────────
-const SUPABASE_URL = 'sb_publishable_vO2xu_t4st6YUgA828ZYaA_iWXFJ3h_';
+const SUPABASE_URL = 'https://khrawcayqduqufiirntm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtocmF3Y2F5cWR1cXVmaWlybnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTE2MTksImV4cCI6MjEwMTg4NzYxOX0.HdoKw24zO4_rEPhSMSTKshtU3fSS8ykqZvJ5QIRPrng';
 let supabaseClient = null;
 if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY) {
@@ -436,34 +434,241 @@ async function addStructuredLog(plantId, text, metrics, photoFiles) {
 
     const phaseIconFiles=['01_Setup.png','02_Germinazione.png','03_Seedling.png','04_Vegetativa.png','05_Pre-Fioritura.png','06_Fioritura.png','07_Flushing.png','08_Raccolta.png','09_Essiccazione.png','10_Curing.png'];
 const phases=[
-{id:0,name:"Setup",subtitle:"Preparazione ambiente",emoji:'<img src="assets/"+phaseIconFiles[0]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"1–2 giorni",tag:"Pre-grow",color:"#39ff14",light:"—",temp:"18–25°C",humidity:"Qualsiasi",water:"—",nutrients:"Nessuno",steps:[{label:"Monta il grow tent",detail:"Assembla la tenda nel posto definitivo. Assicurati che il pavimento regga il peso."},{label:"Installa la lampada LED",detail:"Appendi la LED al centro del tent. Distanza iniziale: 50–60cm."},{label:"Collega ventilazione",detail:"Ventilatore in basso → aria fresca. Filtro carboni in alto → odori escono."},{label:"Posiziona igrometro/termometro",detail:"Metti il sensore all'altezza delle cime future, non vicino alla lampada."},{label:"Prepara il substrato",detail:"Terra leggera + 20% perlite. Riempi vasi da germinazione (0.5–1L)."},{label:"Testa il pH-metro",detail:"Calibra con soluzione inclusa. pH target acqua: 6.0–6.5."},{label:"Configura il timer",detail:"Imposta 18h luce / 6h buio per la fase veg."}],tips:["Fai girare il tent vuoto per 24h prima di mettere le piante.","Usa una presa multipla con protezione da sovratensione."],problems:[]},
-{id:1,name:"Germinazione",subtitle:"Il seme si sveglia",emoji:'<img src="assets/"+phaseIconFiles[1]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"3–7 giorni",tag:"Settimana 0",color:"#8fb87a",light:"Nessuna (o luce tenue)",temp:"22–26°C",humidity:"70–80%",water:"Pochissima",nutrients:"Zero",steps:[{label:"Metodo bicchiere d'acqua",detail:"Metti il seme in acqua a temperatura ambiente (pH 6.5) per 12–24h."},{label:"Metodo carta umida",detail:"Tra due fogli di carta bagnati, in sacchetto zip chiuso, posto caldo e buio."},{label:"Controlla ogni 12h",detail:"Tieni umida la carta senza inzupparla. Usa pinzette."},{label:"Aspetta la radichetta",detail:"Quando è lunga 0.5–1cm, è pronta per essere piantata."},{label:"Pianta nel substrato",detail:"Buchino da 1cm, radichetta verso il basso, copri leggermente."},{label:"Crea umidità alta",detail:"Copri con cupola di plastica. Togli 10 min al giorno per arieggiare."}],tips:["Non innaffiare il substrato — spruzza intorno al seme.","Il caldo accelera: un tappetino riscaldante aiuta."],problems:[{prob:"Seme non germina dopo 7 giorni",sol:"Prova acqua ossigenata diluita (3%) per 1h prima di ritentare."},{prob:"Radichetta bruna/nera",sol:"Troppa umidità o muffa. Ricomincia con seme nuovo."}]},
-{id:2,name:"Seedling",subtitle:"La piantina emerge",emoji:'<img src="assets/"+phaseIconFiles[2]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Settimane 1–2",color:"#6db56d",light:"18h ON / 6h OFF",temp:"22–26°C",humidity:"65–75%",water:"Minima, solo intorno alla piantina",nutrients:"Zero (la terra è sufficiente)",steps:[{label:"Aspetta la prima apertura",detail:"I cotiledoni escono entro 24–48h dalla piantagione."},{label:"Rimuovi la cupola gradualmente",detail:"Dopo 3–4 giorni apri per qualche ora, poi rimuovi al giorno 5–7."},{label:"Accendi la lampada a distanza",detail:"LED a 50–60cm. Le piantine sono delicate."},{label:"Irrigazione leggera",detail:"Innaffia in cerchio intorno, mai sopra. Terra leggermente umida."},{label:"Aspetta le prime foglie vere",detail:"Dopo i cotiledoni arrivano foglie dentellate. A 2–3 set la fase è finita."},{label:"Controlla il pH dell'acqua",detail:"Ogni annaffiatura: pH 6.0–6.5. Usa drops correttori."}],tips:["Non sovrainnaffiare — è l'errore #1 dei principianti.","Brezza lieve rinforza lo stelo."],problems:[{prob:"Piantina si allunga tantissimo",sol:"Troppo poca luce. Avvicina la lampada."},{prob:"Foglie cotiledoni gialle in fretta",sol:"Normale — le cotiledoni si consumano."},{prob:"Stelo sottilissimo che si piega",sol:"Troppo poca ventilazione. Aggiungi brezza delicata."}]},
-{id:3,name:"Vegetativa",subtitle:"Crescita esplosiva",emoji:'<img src="assets/"+phaseIconFiles[3]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"3–5 settimane",tag:"Settimane 3–7",color:"#4ea86a",light:"18h ON / 6h OFF",temp:"20–28°C",humidity:"50–65%",water:"Moderata, quando primi cm asciutti",nutrients:"Grow (N alto) — 50% dose",steps:[{label:"Trapianta in vaso più grande",detail:"Radici che fuoriescono = trapianta in 7–11L. Non disturbare la radice."},{label:"Inizia i nutrienti Grow",detail:"Dalla settimana 3, metà dose. Aumenta gradualmente."},{label:"Inizia LST",detail:"Piega il ramo principale verso il bordo del vaso. Fissalo con fil di ferro."},{label:"Topping (non per auto)",detail:"A 5–6 nodi, taglia la punta. La pianta farà 2 rami principali."},{label:"Mantieni le foglie pulite",detail:"Rimuovi foglie morte. Non toccare quelle sane."},{label:"Controlla ogni giorno",detail:"Osserva colore, forma, macchie. Prima rilevi, prima risolvi."},{label:"Trapianta in vaso finale",detail:"Verso la fine: vaso definitivo da 11–15L. Ultimo trapianto."}],tips:["Ruota il vaso di 90° ogni 2–3 giorni.","Test del dito: se umido a 3cm, non innaffiare.","Fotografa ogni 2–3 giorni per vedere i cambiamenti."],problems:[{prob:"Foglie con punte bruciate",sol:"Nutrient burn. Riduci dose del 30%, fai flush."},{prob:"Foglie gialle dal basso",sol:"Carenza azoto. Aumenta fertilizzante Grow."},{prob:"Crescita lenta",sol:"Controlla pH, luce e temperatura."}]},
-{id:4,name:"Pre-fioritura",subtitle:"La transizione",emoji:'<img src="assets/"+phaseIconFiles[4]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–10 giorni",tag:"Settimana 7–8",color:"#b8a84a",light:"12h ON / 12h OFF (foto) — Auto 18/6",temp:"20–26°C",humidity:"45–55%",water:"Moderata",nutrients:"Transizione: riduci N, aumenta P e K",steps:[{label:"Cambia il ciclo di luce",detail:"12h luce / 12h buio per fotoperiodo. Le auto lo fanno da sole."},{label:"Osserva i pre-fiori",detail:"Pistilli bianchi = femmina ✅ / Sacchetti = maschio ❌. Rimuovi maschi."},{label:"Fai il lollipopping",detail:"Rimuovi rami e foglie nella parte bassa (sotto i 2/3)."},{label:"Cambia i nutrienti",detail:"Passa da Grow (N alto) a Bloom (P e K alti, N basso)."},{label:"Abbassa l'umidità",detail:"Riduci verso il 45–55%. Alta umidità = rischio muffa."}],tips:["Nessuna luce durante le 12h di buio.","Fai l'ultima foto prima che i fiori arrivino."],problems:[{prob:"Pianta non fiorisce dopo 2 settimane",sol:"Controlla luce durante il buio. Ogni fessura del tent."},{prob:"Appare un maschio",sol:"Rimuovilo subito prima che apra i sacchi pollinici."}]},
-{id:5,name:"Fioritura",subtitle:"I fiori si formano",emoji:'<img src="assets/"+phaseIconFiles[5]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"6–9 settimane",tag:"Settimane 8–16",color:"#c47a3a",light:"12h/12h (foto) / 18–20h (auto)",temp:"18–25°C",humidity:"40–50%",water:"Abbondante",nutrients:"Bloom (PK alto) — piena dose",steps:[{label:"Osserva i fiori crescere",detail:"Le cime si formano sulle punte. Pistilli bianchi sempre più densi."},{label:"Avvicina la lampada",detail:"Abbassa LED a 35–45cm. Più luce = cime più dense."},{label:"Sostieni i rami pesanti",detail:"Tutori bambù o clip per rami che si piegano."},{label:"Nutrienti piena dose",detail:"Bloom a dose piena. Aggiungi booster PK nelle settimane di picco."},{label:"Controlla umidità ogni giorno",detail:"Fiori densi + umidità alta = Bud Rot. Mantieni sotto il 50%."},{label:"Defoliazione leggera",detail:"Rimuovi solo foglie grandi che ombrano le cime."},{label:"Tieni traccia delle settimane",detail:"Conta dalla prima comparsa dei fiori per capire quando raccogliere."}],tips:["Terpeni si sviluppano meglio con sbalzo termico notte/giorno (3–5°C).","Non spruzzare acqua sulle cime in fioritura.","Le cime in alto maturano prima di quelle in basso."],problems:[{prob:"Bud Rot (muffa grigia nei fiori)",sol:"Rimuovi subito con forbici sterilizzate. Abbassa umidità."},{prob:"Fiori pallidi e poco densi",sol:"Luce insufficiente. Avvicina la LED."},{prob:"Foglie arricciate verso il basso",sol:"Overwatering. Lascia asciugare di più."}]},
-{id:6,name:"Flushing",subtitle:"Pulizia finale",emoji:'<img src="assets/"+phaseIconFiles[6]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Ultime 1–2 settimane",color:"#4a8ab5",light:"Invariato",temp:"18–24°C",humidity:"40–45%",water:"Abbondante — solo acqua pH 6.0–6.5",nutrients:"ZERO — solo acqua pulita",steps:[{label:"Riconosci i segnali di maturità",detail:"Foglie che ingialliscono. Pistilli arrossati. Pianta che rallenta."},{label:"Controlla i tricomi",detail:"Lente 30–60x: trasparenti=immaturi / lattiginosi=pronti / ambrati=maturi."},{label:"Inizia il flush",detail:"Solo acqua pulita pH 6.0–6.5. L'acqua in eccesso porta via i sali."},{label:"Ripeti ogni 2–3 giorni",detail:"Per 7–14 giorni solo acqua. Le foglie ingialliscono, è normale."},{label:"Osserva il cambiamento",detail:"Tricomi ambrati aumentano. Aroma più intenso."}],tips:["Un buon flush migliora drasticamente il sapore.","Assaggia una foglia: amara = continua, neutra = pronto.","Ultime 48h al buio completo per più resina."],problems:[{prob:"Pianta perde foglie rapidamente",sol:"Normale durante il flush. I fiori devono restare sani."}]},
-{id:7,name:"Raccolta",subtitle:"Il momento della verità",emoji:'<img src="assets/"+phaseIconFiles[7]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"1 giorno",tag:"Harvest Day",color:"#c4823a",light:"Spegni tutto prima di tagliare",temp:"18–22°C",humidity:"50%",water:"Nessuna — ultima annaffiatura 2 giorni prima",nutrients:"Nessuno",steps:[{label:"Prepara il materiale",detail:"Forbici da trimming, vassoi, guanti in nitrile, filo per appendere."},{label:"Taglia alla base",detail:"Taglia la pianta allo stelo principale. Wet trim o dry trim."},{label:"Wet trim",detail:"Rimuovi fan leaves subito. Lascia sugar leaves per dopo."},{label:"Dividi in rami",detail:"Rami di 20–30cm per facilitare l'essiccazione."},{label:"Pesa il raccolto fresco",detail:"100g freschi = ~20–25g secchi. Annota il peso."},{label:"Appendi i rami a testa in giù",detail:"Stanza buia, circolazione d'aria ma senza correnti dirette."}],tips:["Indossa guanti: la resina si attacca alle dita.","Lavora in ambiente pulito.","Raccogli sugar leaves separatamente per hash/edibles."],problems:[{prob:"Fiori con odore di fieno dopo il taglio",sol:"Normale nelle prime ore. Se persiste = essiccazione troppo rapida."}]},
-{id:8,name:"Essiccazione",subtitle:"Pazienza è la chiave",emoji:'<img src="assets/"+phaseIconFiles[8]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"7–14 giorni",tag:"Post-harvest",color:"#8a7a4a",light:"Buio totale",temp:"15–20°C",humidity:"45–55%",water:"—",nutrients:"—",steps:[{label:"Imposta il posto",detail:"Buio, 15–20°C, umidità 45–55%. Ventilatore per circolazione, non diretto sui fiori."},{label:"Controlla ogni giorno",detail:"Niente fiori che si toccano. Odore ammoniacale = muffa."},{label:"Test dello stelo",detail:"Dopo 7 giorni: si flette = umido / si spezza = pronto per curing."},{label:"Dry trim",detail:"Rimuovi foglie rimaste con forbici piccole. Taglia fiori dai rami."},{label:"Non affrettare",detail:"Essiccazione rapida = sapore di fieno. Lenta e fresca = qualità superiore."}],tips:["Umidità troppo alta? Deumidificatore.","Troppo bassa? Ciotola d'acqua vicino ai rami.","Ideale: 10–14 giorni a 18°C / 50% umidità."],problems:[{prob:"Odore ammoniacale / muffa",sol:"Isola rami infetti. Aumenta ventilazione, abbassa umidità."},{prob:"Fiori secchi in 3–4 giorni",sol:"Troppo caldo/asciutto. Qualità compromessa."}]},
-{id:9,name:"Curing",subtitle:"La stagionatura che fa la differenza",emoji:'<img src="assets/"+phaseIconFiles[9]+"" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">',duration:"2–8 settimane",tag:"Finale",color:"#7a4ea8",light:"Buio totale (barattoli chiusi)",temp:"18–22°C",humidity:"58–65%",water:"—",nutrients:"—",steps:[{label:"Prepara i barattoli",detail:"Vetro a chiusura ermetica. Pulisci e asciuga perfettamente."},{label:"Riempi a ¾",detail:"Non pressare. Lascia respirare. 2/3–3/4 del barattolo."},{label:"Burping settimane 1–2",detail:"Apri 1–2 volte al giorno per 15–20 min. Odore ammoniacale = tieni aperti 2–4h."},{label:"Monitora umidità",detail:"Ideale 58–62%. Usa Boveda pack 62% per stabilità."},{label:"Burping settimane 3–4",detail:"Riduci a 1 volta ogni 2–3 giorni. Sapori si complessificano."},{label:"Curing lungo",detail:"Dopo 4 settimane è pronto. Fino a 8 settimane = qualità superiore."},{label:"Conservazione finale",detail:"Barattoli chiusi al buio e fresco. Dura 6–12 mesi."}],tips:["Il curing trasforma fiori mediocri in eccellenti.","Boveda pack 62% = curing perfetto senza pensarci.","Etichetta con varietà e data di inizio."],problems:[{prob:"Muffa nel barattolo",sol:"Rimuovi fiori infetti. Sterilizza. Più burping per i sani."},{prob:"Fiori troppo secchi",sol:"Boveda pack 62% — re-idrata in 2–3 giorni."},{prob:"Fiori troppo umidi (>70%)",sol:"Barattolo aperto alcune ore al giorno finché scende sotto 65%."}]}
+{id:0,name:"Setup",subtitle:"Preparazione ambiente",emoji:`<img src="assets/${phaseIconFiles[0]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"1–2 giorni",tag:"Pre-grow",color:"#39ff14",light:"—",temp:"18–25°C",humidity:"Qualsiasi",water:"—",nutrients:"Nessuno",steps:[{label:"Monta il grow tent",detail:"Assembla la tenda nel posto definitivo. Assicurati che il pavimento regga il peso."},{label:"Installa la lampada LED",detail:"Appendi la LED al centro del tent. Distanza iniziale: 50–60cm."},{label:"Collega ventilazione",detail:"Ventilatore in basso → aria fresca. Filtro carboni in alto → odori escono."},{label:"Posiziona igrometro/termometro",detail:"Metti il sensore all'altezza delle cime future, non vicino alla lampada."},{label:"Prepara il substrato",detail:"Terra leggera + 20% perlite. Riempi vasi da germinazione (0.5–1L)."},{label:"Testa il pH-metro",detail:"Calibra con soluzione inclusa. pH target acqua: 6.0–6.5."},{label:"Configura il timer",detail:"Imposta 18h luce / 6h buio per la fase veg."}],tips:["Fai girare il tent vuoto per 24h prima di mettere le piante.","Usa una presa multipla con protezione da sovratensione."],problems:[]},
+{id:1,name:"Germinazione",subtitle:"Il seme si sveglia",emoji:`<img src="assets/${phaseIconFiles[1]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"3–7 giorni",tag:"Settimana 0",color:"#8fb87a",light:"Nessuna (o luce tenue)",temp:"22–26°C",humidity:"70–80%",water:"Pochissima",nutrients:"Zero",steps:[{label:"Metodo bicchiere d'acqua",detail:"Metti il seme in acqua a temperatura ambiente (pH 6.5) per 12–24h."},{label:"Metodo carta umida",detail:"Tra due fogli di carta bagnati, in sacchetto zip chiuso, posto caldo e buio."},{label:"Controlla ogni 12h",detail:"Tieni umida la carta senza inzupparla. Usa pinzette."},{label:"Aspetta la radichetta",detail:"Quando è lunga 0.5–1cm, è pronta per essere piantata."},{label:"Pianta nel substrato",detail:"Buchino da 1cm, radichetta verso il basso, copri leggermente."},{label:"Crea umidità alta",detail:"Copri con cupola di plastica. Togli 10 min al giorno per arieggiare."}],tips:["Non innaffiare il substrato — spruzza intorno al seme.","Il caldo accelera: un tappetino riscaldante aiuta."],problems:[{prob:"Seme non germina dopo 7 giorni",sol:"Prova acqua ossigenata diluita (3%) per 1h prima di ritentare."},{prob:"Radichetta bruna/nera",sol:"Troppa umidità o muffa. Ricomincia con seme nuovo."}]},
+{id:2,name:"Seedling",subtitle:"La piantina emerge",emoji:`<img src="assets/${phaseIconFiles[2]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"7–14 giorni",tag:"Settimane 1–2",color:"#6db56d",light:"18h ON / 6h OFF",temp:"22–26°C",humidity:"65–75%",water:"Minima, solo intorno alla piantina",nutrients:"Zero (la terra è sufficiente)",steps:[{label:"Aspetta la prima apertura",detail:"I cotiledoni escono entro 24–48h dalla piantagione."},{label:"Rimuovi la cupola gradualmente",detail:"Dopo 3–4 giorni apri per qualche ora, poi rimuovi al giorno 5–7."},{label:"Accendi la lampada a distanza",detail:"LED a 50–60cm. Le piantine sono delicate."},{label:"Irrigazione leggera",detail:"Innaffia in cerchio intorno, mai sopra. Terra leggermente umida."},{label:"Aspetta le prime foglie vere",detail:"Dopo i cotiledoni arrivano foglie dentellate. A 2–3 set la fase è finita."},{label:"Controlla il pH dell'acqua",detail:"Ogni annaffiatura: pH 6.0–6.5. Usa drops correttori."}],tips:["Non sovrainnaffiare — è l'errore #1 dei principianti.","Brezza lieve rinforza lo stelo."],problems:[{prob:"Piantina si allunga tantissimo",sol:"Troppo poca luce. Avvicina la lampada."},{prob:"Foglie cotiledoni gialle in fretta",sol:"Normale — le cotiledoni si consumano."},{prob:"Stelo sottilissimo che si piega",sol:"Troppo poca ventilazione. Aggiungi brezza delicata."}]},
+{id:3,name:"Vegetativa",subtitle:"Crescita esplosiva",emoji:`<img src="assets/${phaseIconFiles[3]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"3–5 settimane",tag:"Settimane 3–7",color:"#4ea86a",light:"18h ON / 6h OFF",temp:"20–28°C",humidity:"50–65%",water:"Moderata, quando primi cm asciutti",nutrients:"Grow (N alto) — 50% dose",steps:[{label:"Trapianta in vaso più grande",detail:"Radici che fuoriescono = trapianta in 7–11L. Non disturbare la radice."},{label:"Inizia i nutrienti Grow",detail:"Dalla settimana 3, metà dose. Aumenta gradualmente."},{label:"Inizia LST",detail:"Piega il ramo principale verso il bordo del vaso. Fissalo con fil di ferro."},{label:"Topping (non per auto)",detail:"A 5–6 nodi, taglia la punta. La pianta farà 2 rami principali."},{label:"Mantieni le foglie pulite",detail:"Rimuovi foglie morte. Non toccare quelle sane."},{label:"Controlla ogni giorno",detail:"Osserva colore, forma, macchie. Prima rilevi, prima risolvi."},{label:"Trapianta in vaso finale",detail:"Verso la fine: vaso definitivo da 11–15L. Ultimo trapianto."}],tips:["Ruota il vaso di 90° ogni 2–3 giorni.","Test del dito: se umido a 3cm, non innaffiare.","Fotografa ogni 2–3 giorni per vedere i cambiamenti."],problems:[{prob:"Foglie con punte bruciate",sol:"Nutrient burn. Riduci dose del 30%, fai flush."},{prob:"Foglie gialle dal basso",sol:"Carenza azoto. Aumenta fertilizzante Grow."},{prob:"Crescita lenta",sol:"Controlla pH, luce e temperatura."}]},
+{id:4,name:"Pre-fioritura",subtitle:"La transizione",emoji:`<img src="assets/${phaseIconFiles[4]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"7–10 giorni",tag:"Settimana 7–8",color:"#b8a84a",light:"12h ON / 12h OFF (foto) — Auto 18/6",temp:"20–26°C",humidity:"45–55%",water:"Moderata",nutrients:"Transizione: riduci N, aumenta P e K",steps:[{label:"Cambia il ciclo di luce",detail:"12h luce / 12h buio per fotoperiodo. Le auto lo fanno da sole."},{label:"Osserva i pre-fiori",detail:"Pistilli bianchi = femmina ✅ / Sacchetti = maschio ❌. Rimuovi maschi."},{label:"Fai il lollipopping",detail:"Rimuovi rami e foglie nella parte bassa (sotto i 2/3)."},{label:"Cambia i nutrienti",detail:"Passa da Grow (N alto) a Bloom (P e K alti, N basso)."},{label:"Abbassa l'umidità",detail:"Riduci verso il 45–55%. Alta umidità = rischio muffa."}],tips:["Nessuna luce durante le 12h di buio.","Fai l'ultima foto prima che i fiori arrivino."],problems:[{prob:"Pianta non fiorisce dopo 2 settimane",sol:"Controlla luce durante il buio. Ogni fessura del tent."},{prob:"Appare un maschio",sol:"Rimuovilo subito prima che apra i sacchi pollinici."}]},
+{id:5,name:"Fioritura",subtitle:"I fiori si formano",emoji:`<img src="assets/${phaseIconFiles[5]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"6–9 settimane",tag:"Settimane 8–16",color:"#c47a3a",light:"12h/12h (foto) / 18–20h (auto)",temp:"18–25°C",humidity:"40–50%",water:"Abbondante",nutrients:"Bloom (PK alto) — piena dose",steps:[{label:"Osserva i fiori crescere",detail:"Le cime si formano sulle punte. Pistilli bianchi sempre più densi."},{label:"Avvicina la lampada",detail:"Abbassa LED a 35–45cm. Più luce = cime più dense."},{label:"Sostieni i rami pesanti",detail:"Tutori bambù o clip per rami che si piegano."},{label:"Nutrienti piena dose",detail:"Bloom a dose piena. Aggiungi booster PK nelle settimane di picco."},{label:"Controlla umidità ogni giorno",detail:"Fiori densi + umidità alta = Bud Rot. Mantieni sotto il 50%."},{label:"Defoliazione leggera",detail:"Rimuovi solo foglie grandi che ombrano le cime."},{label:"Tieni traccia delle settimane",detail:"Conta dalla prima comparsa dei fiori per capire quando raccogliere."}],tips:["Terpeni si sviluppano meglio con sbalzo termico notte/giorno (3–5°C).","Non spruzzare acqua sulle cime in fioritura.","Le cime in alto maturano prima di quelle in basso."],problems:[{prob:"Bud Rot (muffa grigia nei fiori)",sol:"Rimuovi subito con forbici sterilizzate. Abbassa umidità."},{prob:"Fiori pallidi e poco densi",sol:"Luce insufficiente. Avvicina la LED."},{prob:"Foglie arricciate verso il basso",sol:"Overwatering. Lascia asciugare di più."}]},
+{id:6,name:"Flushing",subtitle:"Pulizia finale",emoji:`<img src="assets/${phaseIconFiles[6]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"7–14 giorni",tag:"Ultime 1–2 settimane",color:"#4a8ab5",light:"Invariato",temp:"18–24°C",humidity:"40–45%",water:"Abbondante — solo acqua pH 6.0–6.5",nutrients:"ZERO — solo acqua pulita",steps:[{label:"Riconosci i segnali di maturità",detail:"Foglie che ingialliscono. Pistilli arrossati. Pianta che rallenta."},{label:"Controlla i tricomi",detail:"Lente 30–60x: trasparenti=immaturi / lattiginosi=pronti / ambrati=maturi."},{label:"Inizia il flush",detail:"Solo acqua pulita pH 6.0–6.5. L'acqua in eccesso porta via i sali."},{label:"Ripeti ogni 2–3 giorni",detail:"Per 7–14 giorni solo acqua. Le foglie ingialliscono, è normale."},{label:"Osserva il cambiamento",detail:"Tricomi ambrati aumentano. Aroma più intenso."}],tips:["Un buon flush migliora drasticamente il sapore.","Assaggia una foglia: amara = continua, neutra = pronto.","Ultime 48h al buio completo per più resina."],problems:[{prob:"Pianta perde foglie rapidamente",sol:"Normale durante il flush. I fiori devono restare sani."}]},
+{id:7,name:"Raccolta",subtitle:"Il momento della verità",emoji:`<img src="assets/${phaseIconFiles[7]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"1 giorno",tag:"Harvest Day",color:"#c4823a",light:"Spegni tutto prima di tagliare",temp:"18–22°C",humidity:"50%",water:"Nessuna — ultima annaffiatura 2 giorni prima",nutrients:"Nessuno",steps:[{label:"Prepara il materiale",detail:"Forbici da trimming, vassoi, guanti in nitrile, filo per appendere."},{label:"Taglia alla base",detail:"Taglia la pianta allo stelo principale. Wet trim o dry trim."},{label:"Wet trim",detail:"Rimuovi fan leaves subito. Lascia sugar leaves per dopo."},{label:"Dividi in rami",detail:"Rami di 20–30cm per facilitare l'essiccazione."},{label:"Pesa il raccolto fresco",detail:"100g freschi = ~20–25g secchi. Annota il peso."},{label:"Appendi i rami a testa in giù",detail:"Stanza buia, circolazione d'aria ma senza correnti dirette."}],tips:["Indossa guanti: la resina si attacca alle dita.","Lavora in ambiente pulito.","Raccogli sugar leaves separatamente per hash/edibles."],problems:[{prob:"Fiori con odore di fieno dopo il taglio",sol:"Normale nelle prime ore. Se persiste = essiccazione troppo rapida."}]},
+{id:8,name:"Essiccazione",subtitle:"Pazienza è la chiave",emoji:`<img src="assets/${phaseIconFiles[8]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"7–14 giorni",tag:"Post-harvest",color:"#8a7a4a",light:"Buio totale",temp:"15–20°C",humidity:"45–55%",water:"—",nutrients:"—",steps:[{label:"Imposta il posto",detail:"Buio, 15–20°C, umidità 45–55%. Ventilatore per circolazione, non diretto sui fiori."},{label:"Controlla ogni giorno",detail:"Niente fiori che si toccano. Odore ammoniacale = muffa."},{label:"Test dello stelo",detail:"Dopo 7 giorni: si flette = umido / si spezza = pronto per curing."},{label:"Dry trim",detail:"Rimuovi foglie rimaste con forbici piccole. Taglia fiori dai rami."},{label:"Non affrettare",detail:"Essiccazione rapida = sapore di fieno. Lenta e fresca = qualità superiore."}],tips:["Umidità troppo alta? Deumidificatore.","Troppo bassa? Ciotola d'acqua vicino ai rami.","Ideale: 10–14 giorni a 18°C / 50% umidità."],problems:[{prob:"Odore ammoniacale / muffa",sol:"Isola rami infetti. Aumenta ventilazione, abbassa umidità."},{prob:"Fiori secchi in 3–4 giorni",sol:"Troppo caldo/asciutto. Qualità compromessa."}]},
+{id:9,name:"Curing",subtitle:"La stagionatura che fa la differenza",emoji:`<img src="assets/${phaseIconFiles[9]}" style="width:20px;height:20px;object-fit:cover;display:inline-block;vertical-align:middle;image-rendering:pixelated;flex-shrink:0;border-radius:2px">`,duration:"2–8 settimane",tag:"Finale",color:"#7a4ea8",light:"Buio totale (barattoli chiusi)",temp:"18–22°C",humidity:"58–65%",water:"—",nutrients:"—",steps:[{label:"Prepara i barattoli",detail:"Vetro a chiusura ermetica. Pulisci e asciuga perfettamente."},{label:"Riempi a ¾",detail:"Non pressare. Lascia respirare. 2/3–3/4 del barattolo."},{label:"Burping settimane 1–2",detail:"Apri 1–2 volte al giorno per 15–20 min. Odore ammoniacale = tieni aperti 2–4h."},{label:"Monitora umidità",detail:"Ideale 58–62%. Usa Boveda pack 62% per stabilità."},{label:"Burping settimane 3–4",detail:"Riduci a 1 volta ogni 2–3 giorni. Sapori si complessificano."},{label:"Curing lungo",detail:"Dopo 4 settimane è pronto. Fino a 8 settimane = qualità superiore."},{label:"Conservazione finale",detail:"Barattoli chiusi al buio e fresco. Dura 6–12 mesi."}],tips:["Il curing trasforma fiori mediocri in eccellenti.","Boveda pack 62% = curing perfetto senza pensarci.","Etichetta con varietà e data di inizio."],problems:[{prob:"Muffa nel barattolo",sol:"Rimuovi fiori infetti. Sterilizza. Più burping per i sani."},{prob:"Fiori troppo secchi",sol:"Boveda pack 62% — re-idrata in 2–3 giorni."},{prob:"Fiori troppo umidi (>70%)",sol:"Barattolo aperto alcune ore al giorno finché scende sotto 65%."}]}
 ];
-const strains=[{name:"White Widow",type:"Hybrid",thc:"18–25%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Facile",desc:"Leggenda olandese. Euforia cerebrale e relax fisico."},
-{name:"Amnesia Haze",type:"Sativa",thc:"20–25%",cbd:"<1%",flowerTime:"10–12 settimane",yield:"500–600g/m²",difficulty:"Media",desc:"Sativa energizzante citrica. Richiede spazio e pazienza."},
-{name:"OG Kush",type:"Hybrid",thc:"19–26%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"350–450g/m²",difficulty:"Media",desc:"Icona californiana. Profumo pino e agrumi. Effetto potente."},
-{name:"Girl Scout Cookies",type:"Hybrid",thc:"20–28%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Dolce e terrosa. Euforia cerebrale poi relax profondo."},
-{name:"Blue Dream",type:"Hybrid",thc:"17–24%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"500–600g/m²",difficulty:"Facile",desc:"Crescita vigorosa, resa alta. Sapore mirtilli dolci."},
-{name:"Gorilla Glue #4",type:"Hybrid",thc:"25–30%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Media",desc:"THC sky-high. Effetto pesante. Resina abbondante."},
-{name:"Zkittlez",type:"Indica",thc:"19–23%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"Esplosione frutta tropicale dolce. Relax senza sedazione."},
-{name:"Runtz",type:"Hybrid",thc:"23–29%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Croce Zkittlez x Gelato. Dolce fruttato, potente e bilanciato."},
-{name:"Critical + 2.0",type:"Indica",thc:"18–22%",cbd:"<1%",flowerTime:"6–7 settimane",yield:"600–700g/m²",difficulty:"Facile",desc:"Resa mostruosa in tempi record. Ideale per principianti."}
+// ── EVIDENCE LEVEL SYSTEM ─────────────────────────────────
+const evidenceLevels={
+    lab:{icon:"🟢",label:"Dato Lab",short:"Lab",color:"#39ff14",desc:"Verificato da analisi di laboratorio (COA) o misurazione diretta."},
+    study:{icon:"🟡",label:"Studio Scientifico",short:"Studio",color:"#f0e800",desc:"Supportato da letteratura scientifica o studi pubblicati/peer-reviewed."},
+    source:{icon:"🟠",label:"Fonte Tecnica",short:"Fonte",color:"#ff6600",desc:"Da fonte tecnica di settore (breeder, seed bank, guide specializzate), non peer-reviewed."},
+    community:{icon:"⚪",label:"Esperienza Community",short:"Community",color:"#aaaaaa",desc:"Basato su esperienza aneddotica e consenso della community grower."}
+};
+function renderEvidenceBadge(level,opts){
+    const e=evidenceLevels[level];
+    if(!e)return'';
+    opts=opts||{};
+    const compact=opts.compact;
+    return `<span class="evidence-badge" title="${esc(e.desc)}" style="display:inline-flex;align-items:center;gap:5px;padding:${compact?'3px 8px':'4px 11px'};border-radius:99px;background:${e.color}15;border:1px solid ${e.color}55;color:${e.color};font-family:Orbitron;font-size:${compact?'9px':'10px'};text-transform:uppercase;letter-spacing:.5px;cursor:help;white-space:nowrap">${e.icon} ${compact?e.short:e.label}</span>`;
+}
+function renderEvidenceFilterBar(current,onClickFn){
+    const all=`<button onclick="${onClickFn}(null)" style="min-width:60px;padding:8px 14px;border-radius:12px;border:2px solid ${current===null?'#fff':'#222'};background:${current===null?'#ffffff15':'#111'};color:${current===null?'#fff':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">Tutti</button>`;
+    const btns=Object.keys(evidenceLevels).map(k=>{
+        const e=evidenceLevels[k];
+        return `<button onclick="${onClickFn}('${k}')" style="min-width:70px;padding:8px 14px;border-radius:12px;border:2px solid ${current===k?e.color:'#222'};background:${current===k?e.color+'20':'#111'};color:${current===k?e.color:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;display:flex;align-items:center;gap:6px;flex-shrink:0">${e.icon} ${e.short}</button>`;
+    }).join('');
+    return `<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:8px">${all}${btns}</div>`;
+}
+const chemotypeInfo={
+    type1:{label:"Type I — THC-dominante",short:"Type I",desc:"Rapporto THC:CBD elevato (>5:1). La maggior parte delle varietà ricreative moderne."},
+    type2:{label:"Type II — Bilanciato",short:"Type II",desc:"Rapporto THC:CBD vicino a 1:1. Effetto psicoattivo attenuato dal CBD."},
+    type3:{label:"Type III — CBD-dominante",short:"Type III",desc:"Rapporto CBD:THC elevato (>5:1). Effetto perlopiù non psicoattivo."}
+};
+const strains=[
+{name:"White Widow",type:"Hybrid",chemotype:"type1",thc:"18–25%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Facile",desc:"Leggenda olandese. Euforia cerebrale e relax fisico.",claims:{thc_range:[18,25],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[450,550],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Caryophyllene"],genetics:"Brazilian Sativa landrace x South Indian Indica landrace",effects:["Euforia","Relax fisico"],flavors:["Terra","Pino"],growNotes:"Resistente a muffa. Supportare rami in bloom.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"},{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"Amnesia Haze",type:"Sativa",chemotype:"type1",thc:"20–25%",cbd:"<1%",flowerTime:"10–12 settimane",yield:"500–600g/m²",difficulty:"Media",desc:"Sativa energizzante citrica. Richiede spazio e pazienza.",claims:{thc_range:[20,25],cbd_range:[0,1],flower_days:[70,84],yield_g_m2:[500,600],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Limonene","Terpinolene"],genetics:"Landrace Haze x linee Thai/Afghani",effects:["Energia","Creatività"],flavors:["Agrumi","Pino"],growNotes:"Richiede spazio verticale. LST consigliato.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"},{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"OG Kush",type:"Hybrid",chemotype:"type1",thc:"19–26%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"350–450g/m²",difficulty:"Media",desc:"Icona californiana. Profumo pino e agrumi. Effetto potente.",claims:{thc_range:[19,26],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[350,450],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Limonene","Caryophyllene"],genetics:"Chemdawg x Lemon Thai x Pakistani Kush (lignaggio contestato dai breeder)",effects:["Relax","Euforia"],flavors:["Pino","Agrumi"],growNotes:"Sensibile a muffa. Buona aerazione essenziale.",evidence:"source",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"},{label:"Grow Weed Easy",url:"https://www.growweedeasy.com",type:"source"}]},
+{name:"Girl Scout Cookies",type:"Hybrid",chemotype:"type1",thc:"20–28%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Dolce e terrosa. Euforia cerebrale poi relax profondo.",claims:{thc_range:[20,28],cbd_range:[0,1],flower_days:[63,70],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Caryophyllene","Limonene","Humulene"],genetics:"OG Kush x Durban Poison",effects:["Euforia","Relax profondo"],flavors:["Dolce","Terroso"],growNotes:"Resistente. Ottima per training.",evidence:"community",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"Blue Dream",type:"Hybrid",chemotype:"type1",thc:"17–24%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"500–600g/m²",difficulty:"Facile",desc:"Crescita vigorosa, resa alta. Sapore mirtilli dolci.",claims:{thc_range:[17,24],cbd_range:[0,1],flower_days:[63,70],yield_g_m2:[500,600],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Pinene"],genetics:"Blueberry x Haze",effects:["Relax","Euforia leggera"],flavors:["Mirtillo","Dolce"],growNotes:"Vigorosa. Supportare rami pesanti.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"},{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"Gorilla Glue #4",type:"Hybrid",chemotype:"type1",thc:"25–30%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Media",desc:"THC sky-high. Effetto pesante. Resina abbondante.",claims:{thc_range:[25,30],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[450,550],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Caryophyllene","Limonene","Myrcene"],genetics:"Chem's Sister x Sour Dubb x Chocolate Diesel",effects:["Pesante","Sedazione"],flavors:["Terra","Diesel"],growNotes:"Resina molto abbondante. Difficile da trimmare.",evidence:"lab",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"},{label:"Grow Weed Easy",url:"https://www.growweedeasy.com",type:"source"}]},
+{name:"Zkittlez",type:"Indica",chemotype:"type1",thc:"19–23%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"Esplosione frutta tropicale dolce. Relax senza sedazione.",claims:{thc_range:[19,23],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Humulene"],genetics:"Grape Ape x Grapefruit",effects:["Relax","Felicità"],flavors:["Frutta tropicale","Dolce"],growNotes:"Compatta. Ideale per SOG.",evidence:"community",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"Runtz",type:"Hybrid",chemotype:"type1",thc:"23–29%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Croce Zkittlez x Gelato. Dolce fruttato, potente e bilanciato.",claims:{thc_range:[23,29],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Limonene","Caryophyllene"],genetics:"Zkittlez x Gelato",effects:["Euforia","Relax"],flavors:["Dolce","Fruttato"],growNotes:"Equilibrata. Buona per principianti intermedi.",evidence:"lab",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
+{name:"Critical + 2.0",type:"Indica",chemotype:"type1",thc:"18–22%",cbd:"<1%",flowerTime:"6–7 settimane",yield:"600–700g/m²",difficulty:"Facile",desc:"Resa mostruosa in tempi record. Ideale per principianti.",claims:{thc_range:[18,22],cbd_range:[0,1],flower_days:[42,49],yield_g_m2:[600,700],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Limonene"],genetics:"Critical Mass x Northern Light selezionata",effects:["Relax","Sonno"],flavors:["Limone","Pino"],growNotes:"Molto resistente. Ottima per outdoor.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"}]}
 ];
 
-const diagnosisData=[
-{category:"Foglie",icon:"🍃",color:"#39ff14",issues:[{name:"Foglie gialle dal basso",cause:"Carenza Azoto (N)",fix:"Aumenta fertilizzante Grow. Controlla pH."},{name:"Punte bruciate marroni",cause:"Nutrient Burn",fix:"Riduci dose del 30%. Fai flush con acqua pulita."},{name:"Foglie viola/rosse",cause:"Carenza Fosforo o freddo",fix:"Temp notturne >15°C. Aggiungi Bloom."},{name:"Chiazze gialle irregolari",cause:"pH sbagliato o carenza Cal/Mag",fix:"pH 6.0–6.5. Aggiungi CalMag se necessario."},{name:"Foglie arricciate verso il basso",cause:"Overwatering",fix:"Lascia asciugare la terra. Riduci frequenza."},{name:"Foglie secche e croccanti",cause:"Underwatering o umidità bassa",fix:"Aumenta umidità. Innaffia più spesso."}]},
-{category:"Cime/Fiori",icon:"🌸",color:"#ff1493",issues:[{name:"Muffa grigia dentro i fiori",cause:"Bud Rot (Botrytis)",fix:"Rimuovi SUBITO. Abbassa umidità sotto 45%."},{name:"Fiori pallidi e poco densi",cause:"Luce insufficiente",fix:"Avvicina LED a 35–45cm. Controlla watt."},{name:"Polvere bianca sui fiori",cause:"Powdery Mildew",fix:"Spray bicarbonato (1 cucchiaio/litro)."}]},
-{category:"Parassiti",icon:"🐛",color:"#ff6600",issues:[{name:"Puntini su foglie + ragnatele",cause:"Ragnetto Rosso",fix:"Spray acqua + sapone Marsiglia ogni 3 giorni."},{name:"Moscerini neri nel terriccio",cause:"Fungus Gnat",fix:"Lascia asciugare terra. Trappole gialle. Sabbia fine."},{name:"Piccoli insetti verdi sotto foglie",cause:"Afidi",fix:"Olio di neem diluito ogni 3 giorni per 2 settimane."}]},
-{category:"Crescita",icon:"📏",color:"#00ffff",issues:[{name:"Piantina si allunga troppo",cause:"Etiolamento (luce scarsa)",fix:"Avvicina lampada. Minimo 200–300 PPFD."},{name:"Crescita bloccata",cause:"pH sbagliato o radici soffocate",fix:"Controlla pH e drenaggio. Trapianta se necessario."},{name:"Stelo sottile che crolla",cause:"Mancanza ventilazione",fix:"Aggiungi ventilatore leggero. Wind stress positivo."}]}
-];
+const diagnosisEngine={
+collect:{
+symptom:"",
+distribution:"",
+timeline:"",
+metrics:{ph:null,ec:null,temp:null,humidity:null},
+photos:[],
+stage:""
+},
+hypotheses:[
+{
+id:"n_deficiency",
+name:"Carenza Azoto (N)",
+confidence:0,
+evidence:"study",
+required_metrics:["ph"],
+rules:[
+{field:"distribution",value:"vecchie",weight:30},
+{field:"stage",value:"veg",weight:20},
+{field:"metrics.ph",min:6.0,max:6.5,weight:15}
+],
+fix:[
+{action:"Aumenta fertilizzante Grow (N alto)",evidence:"source"},
+{action:"Verifica pH in range 6.0-6.5",evidence:"study"}
+],
+disclaimer:"Escludere prima lockout da pH errato"
+},
+{
+id:"ph_lockout",
+name:"Lockout nutrizionale (pH)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"metrics.ph",outside:[6.0,6.5],weight:40},
+{field:"distribution",value:"uniforme",weight:20}
+],
+fix:[
+{action:"Correggi pH dell'acqua",evidence:"study"},
+{action:"Se pH terra < 5.5: flush leggero",evidence:"source"}
+]
+},
+{
+id:"nutrient_burn",
+name:"Nutrient Burn (eccesso)",
+confidence:0,
+evidence:"source",
+rules:[
+{field:"distribution",value:"punte",weight:35},
+{field:"metrics.ec",min:2.5,weight:30}
+],
+fix:[
+{action:"Riduci dose fertilizzante del 30%",evidence:"source"},
+{action:"Flush con acqua pulita pH 6.0-6.5",evidence:"source"}
+]
+},
+{
+id:"overwatering",
+name:"Overwatering",
+confidence:0,
+evidence:"community",
+rules:[
+{field:"distribution",value:"uniforme",weight:25},
+{field:"timeline",value:"dopo innaffio",weight:30}
+],
+fix:[
+{action:"Lascia asciugare il substrato prima del prossimo ciclo",evidence:"community"},
+{action:"Verifica drenaggio del vaso",evidence:"source"}
+]
+},
+{
+id:"bud_rot",
+name:"Bud Rot (Botrytis)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"symptom",value:"muffa",weight:50},
+{field:"metrics.humidity",min:55,weight:30}
+],
+fix:[
+{action:"Rimuovi immediatamente le parti infette",evidence:"study"},
+{action:"Abbassa umidità sotto il 45%",evidence:"study"}
+],
+disclaimer:"Irreversibile se esteso. Non consumare fiori infetti."
+},
+{
+id:"spider_mites",
+name:"Ragnetto Rosso",
+confidence:0,
+evidence:"community",
+rules:[
+{field:"symptom",value:"puntini",weight:40},
+{field:"distribution",value:"vecchie",weight:15}
+],
+fix:[
+{action:"Spray acqua + sapone di Marsiglia ogni 3 giorni",evidence:"community"},
+{action:"Aumenta umidità temporaneamente",evidence:"source"}
+]
+},
+{
+id:"fungus_gnat",
+name:"Fungus Gnat",
+confidence:0,
+evidence:"source",
+rules:[
+{field:"symptom",value:"puntini",weight:20},
+{field:"timeline",value:"dopo innaffio",weight:25}
+],
+fix:[
+{action:"Lascia asciugare terra. Trappole gialle.",evidence:"source"},
+{action:"Sabbia fine sul substrato",evidence:"community"}
+]
+},
+{
+id:"etiolation",
+name:"Etiolamento (luce scarsa)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"symptom",value:"allungamento",weight:45},
+{field:"stage",value:"seedling",weight:20}
+],
+fix:[
+{action:"Avvicina lampada LED. Minimo 200-300 PPFD.",evidence:"study"},
+{action:"Riduci distanza luce-pianta",evidence:"source"}
+]
+},
+{
+id:"cal_mag_deficiency",
+name:"Carenza Cal/Mag",
+confidence:0,
+evidence:"source",
+rules:[
+{field:"distribution",value:"nuove",weight:30},
+{field:"metrics.ph",min:6.0,max:6.5,weight:10}
+],
+fix:[
+{action:"Aggiungi CalMag alla prossima annaffiatura",evidence:"source"},
+{action:"Verifica pH in range 6.0-6.5",evidence:"study"}
+]
+},
+{
+id:"p_deficiency",
+name:"Carenza Fosforo (P)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"distribution",value:"vecchie",weight:25},
+{field:"stage",value:"bloom",weight:25}
+],
+fix:[
+{action:"Aumenta fertilizzante Bloom (PK alto)",evidence:"source"},
+{action:"Temperatura notturna >15°C",evidence:"study"}
+]
+}
+],
+evaluate(input){
+if(!input)return [];
+const results=this.hypotheses.map(h=>{
+let score=0;
+h.rules.forEach(r=>{
+if(r.field==="distribution"&&input.distribution===r.value)score+=r.weight;
+if(r.field==="stage"&&input.stage===r.value)score+=r.weight;
+if(r.field==="symptom"&&input.symptom===r.value)score+=r.weight;
+if(r.field==="timeline"&&input.timeline===r.value)score+=r.weight;
+if(r.field==="metrics.ph"&&input.metrics&&input.metrics.ph!==null&&input.metrics.ph!==""){
+const ph=parseFloat(input.metrics.ph);
+if(!isNaN(ph)){
+if(r.min!==undefined&&r.max!==undefined&&ph>=r.min&&ph<=r.max)score+=r.weight;
+if(r.outside&&Array.isArray(r.outside)&&(ph<r.outside[0]||ph>r.outside[1]))score+=r.weight;
+}
+}
+if(r.field==="metrics.ec"&&input.metrics&&input.metrics.ec!==null&&input.metrics.ec!==""){
+const ec=parseFloat(input.metrics.ec);
+if(!isNaN(ec)&&r.min!==undefined&&ec>=r.min)score+=r.weight;
+}
+if(r.field==="metrics.humidity"&&input.metrics&&input.metrics.humidity!==null&&input.metrics.humidity!==""){
+const hum=parseFloat(input.metrics.humidity);
+if(!isNaN(hum)&&r.min!==undefined&&hum>=r.min)score+=r.weight;
+}
+});
+return{...h,confidence:Math.min(score,95)};
+});
+return results.sort((a,b)=>b.confidence-a.confidence);
+}
+};
 function renderJointProgress(pct, size=400){
     const burn = Math.min(pct * 0.92, 92);
     const isStoner = lsGet('stoner-mode', false);
@@ -1199,42 +1404,87 @@ async function uploadPlantPhotos(){
 }
 
 let diagFilter=null;
+let diagInput={symptom:"",distribution:"",timeline:"",metrics:{ph:"",ec:"",temp:"",humidity:""},stage:""};
+let diagResults=[];
+
 function renderDiagnosis(){
 let html=`<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti go" style="font-size:32px;margin-bottom:4px">Diagnosi</h1>
-<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Trova il problema e la cura</p>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Motore differenziale a step</p>
 </div>
-<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:16px">
-<button onclick="setDiagFilter(null)" style="min-width:70px;padding:10px 14px;border-radius:12px;border:2px solid ${diagFilter===null?'var(--no)':'#222'};background:${diagFilter===null?'#ff660020':'#111'};color:${diagFilter===null?'var(--no)':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">Tutti</button>
-${diagnosisData.map((cat,i)=>`<button onclick="setDiagFilter(${i})" style="min-width:90px;padding:10px 14px;border-radius:12px;border:2px solid ${diagFilter===i?cat.color:'#222'};background:${diagFilter===i?cat.color+'20':'#111'};color:${diagFilter===i?cat.color:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;display:flex;align-items:center;gap:6px;flex-shrink:0">
-<span style="font-size:16px">${cat.icon}</span><span>${cat.category}</span>
-</button>`).join('')}
+
+<div class="card" style="padding:16px;margin-bottom:16px;border:1px solid rgba(255,102,0,.3)">
+<div style="font-family:Orbitron;font-size:11px;color:var(--no);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Step 1 — Dati raccolta</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<select class="inp" onchange="diagInput.symptom=this.value;runDiagnosis()">
+<option value="">Sintomo principale...</option>
+<option value="ingiallimento">🍃 Ingiallimento fogliare</option>
+<option value="muffa">🌸 Muffa su fiori</option>
+<option value="puntini">🐛 Puntini / ragnatele</option>
+<option value="allungamento">📏 Allungamento eccessivo</option>
+</select>
+<select class="inp" onchange="diagInput.distribution=this.value;runDiagnosis()">
+<option value="">Distribuzione...</option>
+<option value="vecchie">Foglie vecchie / basse</option>
+<option value="nuove">Foglie nuove / apicali</option>
+<option value="uniforme">Uniforme su tutta la pianta</option>
+<option value="punte">Solo punte / bordi</option>
+</select>
+<select class="inp" onchange="diagInput.timeline=this.value;runDiagnosis()">
+<option value="">Timeline...</option>
+<option value="improvviso">Improvviso (1-2 giorni)</option>
+<option value="graduale">Graduale (settimane)</option>
+<option value="dopo innaffio">Dopo cambio / innaffio</option>
+</select>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+<input type="number" class="inp" placeholder="pH" step="0.1" onchange="diagInput.metrics.ph=this.value;runDiagnosis()">
+<input type="number" class="inp" placeholder="EC" step="0.1" onchange="diagInput.metrics.ec=this.value;runDiagnosis()">
+<input type="number" class="inp" placeholder="Temp °C" step="0.1" onchange="diagInput.metrics.temp=this.value;runDiagnosis()">
+<input type="number" class="inp" placeholder="Umid %" step="1" onchange="diagInput.metrics.humidity=this.value;runDiagnosis()">
 </div>
-<div style="display:flex;flex-direction:column;gap:12px">`;
-const cats=diagFilter!==null?[diagnosisData[diagFilter]]:diagnosisData;
-cats.forEach(cat=>{
-html+=`<div style="margin-bottom:4px">
-<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-<span style="font-size:20px">${cat.icon}</span>
-<span style="font-family:Orbitron;font-size:13px;color:${cat.color};text-transform:uppercase;letter-spacing:2px">${cat.category}</span>
-</div>
-<div style="display:flex;flex-direction:column;gap:8px">`;
-cat.issues.forEach(iss=>{
-html+=`<div class="card" style="padding:16px;background:#111;border:1px solid #222">
-<div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:6px">${esc(iss.name)}</div>
-<div style="display:flex;flex-direction:column;gap:4px">
-<div style="font-size:11px;color:#888"><span style="color:var(--no);font-family:Orbitron;font-size:10px">CAUSA:</span> ${esc(iss.cause)}</div>
-<div style="font-size:11px;color:#888"><span style="color:var(--ng);font-family:Orbitron;font-size:10px">FIX:</span> ${esc(iss.fix)}</div>
+<select class="inp" onchange="diagInput.stage=this.value;runDiagnosis()">
+<option value="">Fase...</option>
+<option value="veg">Vegetativa</option>
+<option value="bloom">Fioritura</option>
+<option value="seedling">Seedling</option>
+</select>
 </div>
 </div>`;
+
+if(diagResults.length){
+html+=`<div style="font-family:Orbitron;font-size:11px;color:#555;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Step 2 — Ipotesi differenziali</div>`;
+html+=`<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">`;
+diagResults.forEach((h,idx)=>{
+const confColor=h.confidence>=70?'var(--no)':h.confidence>=40?'var(--ny)':'#555';
+html+=`<div class="card" style="padding:14px;background:rgba(17,17,17,.55);border:1px solid ${idx===0?confColor+'60':'#222'}">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+<div style="font-weight:700;font-size:14px;color:#fff">${esc(h.name)}</div>
+<div style="font-family:Orbitron;font-size:12px;color:${confColor}">${h.confidence}% conf.</div>
+</div>
+${h.disclaimer?`<div style="font-size:10px;color:#666;margin-bottom:6px;font-style:italic">⚠️ ${esc(h.disclaimer)}</div>`:''}
+<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">
+${h.fix.map(f=>`<div style="font-size:11px;color:#888"><span style="color:var(--ng)">FIX:</span> ${esc(f.action)} ${renderEvidenceBadge(f.evidence,{compact:true})}</div>`).join('')}
+</div>
+${renderEvidenceBadge(h.evidence,{compact:true})}
+</div>`;
 });
-html+=`</div></div>`;
-});
-html+=`</div></div>`;
+html+=`</div>`;
+}
+
+html+=`<div style="text-align:center;padding:20px;color:#444;font-size:11px">
+Inserisci i dati per vedere le ipotesi ordinate per confidenza.<br>
+Nessuna diagnosi è certa senza contesto e metriche.
+</div>`;
+
+html+=`</div>`;
 return html;
 }
-function setDiagFilter(i){diagFilter=i;renderPage()}
+
+function runDiagnosis(){
+diagResults=diagnosisEngine.evaluate(diagInput);
+renderPage();
+}
 function initDiagnosis(){}
 function renderTools(){
 return `<div>
@@ -1340,11 +1590,19 @@ r.innerHTML=`<span style="color:var(--nc);font-weight:700">${res.toFixed(2)} ${t
 function initTools(){}
 
 let strainFilter='all';
+let strainEvidenceFilter=null;
+let strainDifficultyFilter=null;
+let strainChemotypeFilter=null;
+let strainTerpeneFilter=null;
+let strainSearch='';
+function getAllTerpenes(){
+    return [...new Set(strains.flatMap(s=>s.terpenes||[]))].sort();
+}
 function renderStrains(){
 let html=`<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti gk" style="font-size:32px;margin-bottom:4px">Strains</h1>
-<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Catalogo varietà</p>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Cultivar Explorer</p>
 </div>
 <div onclick="go('library');openLibraryItem(4)" style="cursor:pointer;margin-bottom:16px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
 <span style="font-size:20px">🧬</span>
@@ -1353,17 +1611,64 @@ let html=`<div>
 <div style="font-size:13px;color:#aaa">Approfondisci: <strong style="color:#fff">Chemovar vs Indica/Sativa</strong> e <strong style="color:#fff">Profili Terpenici</strong> →</div>
 </div>
 </div>
-<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">
+<div style="margin-bottom:16px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
+<span style="font-size:20px">⚠️</span>
+<div>
+<div style="font-family:Orbitron;font-size:11px;color:var(--np);text-transform:uppercase;letter-spacing:1px">Nota Epistemologica</div>
+<div style="font-size:12px;color:#aaa"><strong style="color:#fff">Indica/Sativa/Hybrid</strong> sono etichette <em>vernacolari</em> di mercato. Non prevedono automaticamente effetto, chemotype o profilo terpenico. Per dati certi: <span style="color:var(--nc)">COA di laboratorio</span>.</div>
+</div>
+</div>
+<div style="margin-bottom:14px">
+<input type="text" class="inp" placeholder="Cerca per nome o genetica (es. Gelato, OG Kush)..." value="${esc(strainSearch)}" oninput="setStrainSearch(this.value)" style="background:rgba(10,10,10,.5)">
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Tipo</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
 ${[{v:'all',l:'Tutti',c:'#fff'},{v:'Indica',l:'Indica',c:'var(--np)'},{v:'Sativa',l:'Sativa',c:'var(--nc)'},{v:'Hybrid',l:'Hybrid',c:'var(--ng)'}].map(f=>`<button onclick="setStrainFilter('${f.v}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainFilter===f.v?f.c:'#222'};background:${strainFilter===f.v?f.c+'20':'#111'};color:${strainFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
 </div>
-<div style="display:flex;flex-direction:column;gap:12px">`;
-const filtered=strainFilter==='all'?strains:strains.filter(s=>s.type===strainFilter);
-filtered.forEach(s=>{
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Difficoltà</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
+${[{v:null,l:'Tutte',c:'#fff'},{v:'Facile',l:'Facile',c:'var(--ng)'},{v:'Media',l:'Media',c:'var(--ny)'},{v:'Difficile',l:'Difficile',c:'var(--no)'}].map(f=>`<button onclick="setStrainDifficultyFilter(${f.v?`'${f.v}'`:'null'})" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainDifficultyFilter===f.v?f.c:'#222'};background:${strainDifficultyFilter===f.v?f.c+'20':'#111'};color:${strainDifficultyFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Chemotype (THC:CBD)</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
+<button onclick="setStrainChemotypeFilter(null)" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainChemotypeFilter===null?'#fff':'#222'};background:${strainChemotypeFilter===null?'#ffffff15':'#111'};color:${strainChemotypeFilter===null?'#fff':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">Tutti</button>
+${Object.keys(chemotypeInfo).map(k=>`<button onclick="setStrainChemotypeFilter('${k}')" title="${esc(chemotypeInfo[k].desc)}" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainChemotypeFilter===k?'var(--nk)':'#222'};background:${strainChemotypeFilter===k?'var(--nk)20':'#111'};color:${strainChemotypeFilter===k?'var(--nk)':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${chemotypeInfo[k].short}</button>`).join('')}
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Terpene dominante</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
+<button onclick="setStrainTerpeneFilter(null)" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainTerpeneFilter===null?'#fff':'#222'};background:${strainTerpeneFilter===null?'#ffffff15':'#111'};color:${strainTerpeneFilter===null?'#fff':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">Tutti</button>
+${getAllTerpenes().map(t=>`<button onclick="setStrainTerpeneFilter('${t}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainTerpeneFilter===t?'var(--no)':'#222'};background:${strainTerpeneFilter===t?'var(--no)20':'#111'};color:${strainTerpeneFilter===t?'var(--no)':'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${t}</button>`).join('')}
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Livello di evidenza</div>
+${renderEvidenceFilterBar(strainEvidenceFilter,'setStrainEvidenceFilter')}
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">`;
+let filtered=strainFilter==='all'?strains:strains.filter(s=>s.type===strainFilter);
+if(strainEvidenceFilter)filtered=filtered.filter(s=>s.evidence===strainEvidenceFilter);
+if(strainDifficultyFilter)filtered=filtered.filter(s=>s.difficulty===strainDifficultyFilter);
+if(strainChemotypeFilter)filtered=filtered.filter(s=>s.chemotype===strainChemotypeFilter);
+if(strainTerpeneFilter)filtered=filtered.filter(s=>(s.terpenes||[]).includes(strainTerpeneFilter));
+if(strainSearch){
+    const q=strainSearch.toLowerCase();
+    filtered=filtered.filter(s=>s.name.toLowerCase().includes(q)||(s.genetics||'').toLowerCase().includes(q)||s.desc.toLowerCase().includes(q));
+}
+if(!filtered.length){
+html+=`<div style="text-align:center;padding:40px 20px;color:#555">
+<div style="font-size:48px;margin-bottom:12px">🔍</div>
+<div style="font-family:Orbitron;font-size:14px">Nessuna strain trovata</div>
+<div style="font-size:12px;margin-top:8px">Prova a cambiare o rimuovere qualche filtro</div>
+</div>`;
+}
+filtered.forEach((s,idx)=>{
 const diffColor=s.difficulty==='Facile'?'var(--ng)':s.difficulty==='Media'?'var(--ny)':'var(--no)';
+const sIdx=strains.indexOf(s);
 html+=`<div class="strain-card">
-<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px">
 <div style="font-weight:700;font-size:16px;font-family:Orbitron">${esc(s.name)}</div>
 <span class="badge" style="background:${diffColor}20;color:${diffColor};border:1px solid ${diffColor}50">${s.difficulty}</span>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+${s.evidence?renderEvidenceBadge(s.evidence):''}
+${s.chemotype&&chemotypeInfo[s.chemotype]?`<span class="badge" style="background:rgba(255,20,147,.1);color:var(--nk);border:1px solid rgba(255,20,147,.4);font-size:10px" title="${esc(chemotypeInfo[s.chemotype].desc)}">${chemotypeInfo[s.chemotype].short}</span>`:''}
 </div>
 <div style="font-size:12px;color:#888;margin-bottom:10px;line-height:1.5">${esc(s.desc)}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
@@ -1372,15 +1677,28 @@ html+=`<div class="strain-card">
 <div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Fioritura</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.flowerTime}</div></div>
 <div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Resa</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.yield}</div></div>
 </div>
-<div style="margin-top:10px">
+${s.terpenes&&s.terpenes.length?`<div style="margin-top:10px">
+<div style="font-size:9px;color:#555;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px">🌸 Terpeni dominanti</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap">${s.terpenes.map(t=>`<button onclick="setStrainTerpeneFilter('${t}')" style="background:rgba(255,102,0,.1);color:var(--no);border:1px solid rgba(255,102,0,.35);border-radius:99px;padding:3px 10px;font-size:10px;font-family:Orbitron;cursor:pointer">${t}</button>`).join('')}</div>
+</div>`:''}
+${s.genetics?`<div style="margin-top:10px;font-size:11px;color:#777"><span style="color:#555;font-family:Orbitron;font-size:9px;text-transform:uppercase;letter-spacing:1px">🧬 Genetica:</span> ${esc(s.genetics)}</div>`:''}
+<div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
 <span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${s.type}</span>
+<button onclick="openStrainCompare(${sIdx})" class="btn" style="background:#1a1a1a;color:var(--nk);border:1px solid #333;font-size:10px;padding:8px 12px">⚖️ Confronta</button>
 </div>
+${s.verifiedSources&&s.verifiedSources.length?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid #1a1a1a;font-size:10px;color:#555">📚 Fonti: ${s.verifiedSources.map(src=>`<a href="${esc(src.url)}" target="_blank" rel="noopener" style="color:var(--nc);text-decoration:none">${esc(src.label)}</a>`).join(' • ')}</div>`:''}
 </div>`;
 });
 html+=`</div></div>`;
 return html;
 }
 function setStrainFilter(f){strainFilter=f;renderPage()}
+function setStrainEvidenceFilter(v){strainEvidenceFilter=v;renderPage()}
+function setStrainDifficultyFilter(v){strainDifficultyFilter=v;renderPage()}
+function setStrainChemotypeFilter(v){strainChemotypeFilter=v;renderPage()}
+function setStrainTerpeneFilter(v){strainTerpeneFilter=v;renderPage()}
+function setStrainSearch(v){strainSearch=v;renderPage()}
+function openStrainCompare(idx){ /* placeholder: hook per il Comparatore Cultivar (#12) */ alert('Il Comparatore Cultivar arriva nel prossimo step (#12) — per ora puoi usare i filtri per confrontare le strain manualmente.'); }
 function initStrains(){}
 
 let timerInterval=null,timerSeconds=0,timerRunning=false;
@@ -1503,6 +1821,7 @@ const libraryData = [
         icon: "🌱",
         color: "#39ff14",
         desc: "Guida passo-passo dalla germinazione al curing con tecniche avanzate.",
+        evidence: "source",
         content: `# Grow Guide Completo
 
 ## Germinazione Perfetta
@@ -1563,6 +1882,7 @@ Il flush dura 7-14 giorni. Solo acqua pH 6.0-6.5. Le foglie ingialliscono — è
         icon: "🌿",
         color: "#6db56d",
         desc: "Tecniche di training senza stress per massimizzare la resa.",
+        evidence: "source",
         meta: {
             author: "GROW 420 Team",
             revised: "2024-08-09",
@@ -1627,6 +1947,7 @@ Lo Screen of Green usa una rete (mesh) sopra la pianta:
         icon: "🔬",
         color: "#00ffff",
         desc: "Anatomia della pianta, fotosintesi e fisiologia avanzata.",
+        evidence: "study",
         meta: {
             author: "GROW 420 Team",
             revised: "2024-08-09",
@@ -1709,6 +2030,7 @@ La cannabis è una pianta **annuale** con ciclo determinato:
         icon: "🧬",
         color: "#bf00ff",
         desc: "Differenze genetiche, effetti e caratteristiche di crescita.",
+        evidence: "community",
         meta: {
             author: "GROW 420 Team",
             revised: "2024-08-09",
@@ -1804,6 +2126,7 @@ La maggior parte delle varietà moderne sono hybrid — incroci selezionati per 
         icon: "🧪",
         color: "#ff6600",
         desc: "Guida completa ai composti attivi e all'effetto entourage.",
+        evidence: "study",
         meta: {
             author: "GROW 420 Team",
             revised: "2024-08-09",
@@ -1904,6 +2227,7 @@ L'effetto entourage è la **sinergia** tra cannabinoidi e terpeni. Non esiste so
         icon: "🏆",
         color: "#c4a35a",
         desc: "Tecniche avanzate per curing perfetto e conservazione a lungo termine.",
+        evidence: "source",
         meta: {
             author: "GROW 420 Team",
             revised: "2024-08-09",
@@ -1979,15 +2303,75 @@ Il curing non è solo "essiccare". È un processo **biochimico** dove:
 - Sapore amaro o metallico
 
 Se trovi muffa: **butta tutto**. Non esiste "rimuovere la muffa visibile" — le tossine restano.`
+
+    }
+    
+,
+    {
+        id: 6,
+        title: "Leggere un COA: Guida per Grower",
+        category: "scienza",
+        icon: "📋",
+        color: "#00ffff",
+        desc: "Come interpretare un Certificate of Analysis: THCA vs THC, LOQ/LOD, RSD, water activity e accreditamento ISO 17025.",
+        evidence: "lab",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-12",
+            sources: [
+                {label: "ASTM D8334", url: "https://webstore.ansi.org/standards/astm/astmd8334d8334m20"},
+                {label: "AOAC Cannabis", url: "https://members.aoac.org/AOAC/AOAC/Item_Detail.aspx?iProductCode=QAES_CH05"}
+            ]
+        },
+        content: `# Leggere un COA: Guida per Grower\n\n## THCA vs Δ9-THC\nIl COA riporta spesso **THCA** e **Δ9-THC** separati. Il THC totale si stima con:\n\`THC totale = Δ9-THC + (THCA × 0.877)\`\nIl fattore 0.877 deriva dalla perdita di CO₂ durante la decarbossilazione.\n\n## LOQ vs LOD\n- **LOD** (Limit of Detection): il valore più basso rilevabile dallo strumento. Sotto questo livello il composto è "non rilevato".\n- **LOQ** (Limit of Quantification): il valore più basso **affidabile** per una misurazione quantitativa. Tra LOD e LOQ il dato esiste ma con incertezza alta.\n\n> Se il COA riporta "<LOQ", non significa zero: significa "presente ma sotto la soglia di quantificazione affidabile".\n\n## RSD (Repeatability)\nL'**RSD%** indica la variabilità della misura. Se >5%, il dato è poco affidabile. Un buon laboratorio accreditato ISO 17025 mantiene RSD <3% su cannabinoidi maggiori.\n\n## Water Activity (aw)\n- **aw < 0.65**: sicuro, rischio muffa minimale\n- **aw > 0.70**: pericolo muffa e batteri\n\n## Checklist COA\n- [ ] Laboratorio accreditato ISO 17025?\n- [ ] Metodo analitico dichiarato (HPLC-DAD / GC-FID)?\n- [ ] Data di campionamento e analisi?\n- [ ] LOQ/LOD riportati per ogni analita?\n- [ ] RSD < 5%?\n- [ ] Water activity < 0.65?\n- [ ] Pannello esteso (pesticidi, metalli, micotossine) disponibile?`
+    },
+    {
+        id: 7,
+        title: "Miti e Realtà: Flushing, 48h Buio, Entourage",
+        category: "guida",
+        icon: "🧯",
+        color: "#ff6600",
+        desc: "Flushing, buio pre-raccolta e entourage effect: cosa dice la letteratura e cosa è solo community lore.",
+        evidence: "study",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-12",
+            sources: [
+                {label: "S8 — Elevated root-zone P", url: "https://pubmed.ncbi.nlm.nih.gov/40051879/"},
+                {label: "S5 — Entourage Review", url: "https://pubmed.ncbi.nlm.nih.gov/39598452/"},
+                {label: "S6 — Entourage 2026", url: "https://pubmed.ncbi.nlm.nih.gov/42484389/"}
+            ]
+        },
+        content: `# Miti e Realtà\n\n## Flushing\n**Mito:** "Più nutrienti = più resina / più yield."\n**Realtà:** Lo studio S8 (2025) dimostra che elevati livelli di P e nutrienti **non aumentano** yield né cannabinoidi.\n**Pratica tecnica:** Il flushing come *lavaggio finale* per rimuovere eccessi di sali è supportato dall'esperienza tecnica, ma il suo impatto sul sapore finale è **oggetto di dibattito** e non dimostrato clinicamente come universale.\n\n## 48h di buio\n**Mito:** "Due giorni al buio aumentano la resina."\n**Realtà:** **Zero studi peer-reviewed** lo confermano. È un claim esclusivamente *community*.\nLabel nel sito: **⚪ Community only — nessuna evidenza scientifica**.\n\n## Entourage Effect\n**Mito:** "I terpeni potenziano sempre il THC in modo prevedibile."\n**Realtà:** S5/S6 (2024-2026) confermano che l'entourage effect è un'**ipotesi plausibile** con evidenza preclinica, ma **nessun trial RCT definitivo** su umani ne ha stabilito le regole.\nFormulazione corretta: *"potrebbe modulare"* l'effetto, non *"modula"*.\n\n## Indica = Sedativo?\n**Falso.** Il profilo chimico (chemotype + terpeni) conta, non il nome vernacolare. Una "Indica" può avere profilo terpenico energizzante e viceversa.`
+    },
+    {
+        id: 8,
+        title: "Coltivazione Type III (CBD-Rich): Guida Legale e Tecnica",
+        category: "varietà",
+        icon: "⚖️",
+        color: "#bf00ff",
+        desc: "Legge italiana THC<0.5%, strain Type III consigliate, rischi hermaphroditism e test di campo.",
+        evidence: "source",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-12",
+            sources: [
+                {label: "D.Lgs. 242/2016", url: "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2016-12-09;242"},
+                {label: "Circolare Min. Salute 2019", url: "https://www.salute.gov.it"}
+            ]
+        },
+        content: `# Coltivazione Type III (CBD-Rich)\n\n## Cosa è il Type III\n- **Type I**: THC-dominante (>5:1 THC:CBD)\n- **Type II**: Bilanciato (~1:1)\n- **Type III**: CBD-dominante (>5:1 CBD:THC) — comunemente chiamata *cannabis light*\n\n## Quadro Legale Italia 2024-2026\n- **D.Lgs. 242/2016**: consente la coltivazione di canapa sativa con THC < 0.6% in campo (limite coltivazione).\n- **Circolare Ministero della Salute 2019**: il prodotto finito destinato al consumo (fiore, estratto) deve avere **THC < 0.5%**.\n- **EU**: limite generale THC < 0.3% per canapa industriale.\n\n> ⚠️ **Attenzione:** i limiti si riferiscono al **THC totale** (Δ9-THC + THCA × 0.877). Un COA che mostra solo Δ9-THC basso può essere fuorviante se il THCA è alto.\n\n## Strain Type III consigliate\n| Strain | CBD tipico | Note |\n|--------|-----------|------|\n| Charlotte's Web | 15-20% | Storica, stabile |\n| ACDC | 14-20% | Type II/III borderline |\n| Sour Tsunami | 10-15% | Genetica affidabile |\n\n## Test in campo\n- **Kit reattivi**: indicativi, non legalmente vincolanti. Utile per screening pre-raccolta.\n- **Lab accreditato**: unico documento valido per contestazioni.\n\n## Rischio principale: Hermaphroditism\nSemi femminizzati (colloidal silver) hanno tasso hermie **5-15%** vs <1% semi regolari femmina. Se una pianta Type III diventa ermafrodita e impollina una Type I vicina, i fiori della Type I possono **aumentare di THC** nelle vicinanze (sviluppo di semi = stress + potenziale aumento cannabinoidi).`
     }
 ];
 
 let libraryView = 'list';
 let libraryFilter = 'all';
+let libraryEvidenceFilter = null;
 let librarySearch = '';
 let libraryOpenId = null;
 
 function setLibraryFilter(f) { libraryFilter = f; renderPage(); }
+function setLibraryEvidenceFilter(v) { libraryEvidenceFilter = v; renderPage(); }
 function setLibrarySearch(s) { librarySearch = s.toLowerCase(); renderPage(); }
 function openLibraryItem(id) {
     libraryOpenId = id;
@@ -2078,6 +2462,9 @@ function renderLibrary() {
     if (libraryFilter !== 'all') {
         filtered = filtered.filter(d => d.category === libraryFilter);
     }
+    if (libraryEvidenceFilter) {
+        filtered = filtered.filter(d => d.evidence === libraryEvidenceFilter);
+    }
     if (librarySearch) {
         filtered = filtered.filter(d =>
             d.title.toLowerCase().includes(librarySearch) ||
@@ -2093,9 +2480,12 @@ function renderLibrary() {
 <div style="margin-bottom:16px">
 <input type="text" class="inp" placeholder="Cerca nella libreria..." value="${esc(librarySearch)}" oninput="setLibrarySearch(this.value)" style="background:rgba(10,10,10,.5)">
 </div>
-<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:16px">
+<div style="display:flex;overflow-x:auto;gap:8px;padding-bottom:12px;margin-bottom:12px">
 ${cats.map(cat => `<button onclick="setLibraryFilter('${cat.v}')" style="min-width:80px;padding:8px 14px;border-radius:12px;border:2px solid ${libraryFilter === cat.v ? cat.c : '#222'};background:${libraryFilter === cat.v ? cat.c + '20' : '#111'};color:${libraryFilter === cat.v ? cat.c : '#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${cat.l}</button>`).join('')}
-</div>`;
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Livello di evidenza</div>
+${renderEvidenceFilterBar(libraryEvidenceFilter,'setLibraryEvidenceFilter')}
+<div style="margin-top:16px">`;
     if (!filtered.length) {
         html += `<div style="text-align:center;padding:40px 20px;color:#555">
 <div style="font-size:48px;margin-bottom:12px">🔍</div>
@@ -2114,15 +2504,18 @@ ${cats.map(cat => `<button onclick="setLibraryFilter('${cat.v}')" style="min-wid
 </div>
 </div>
 <div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(item.desc)}</div>
-<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+<div style="display:flex;gap:6px;flex-wrap:wrap">
 <span class="badge" style="background:${item.color}15;color:${item.color};border:1px solid ${item.color}40;font-size:10px">${item.icon} ${item.category}</span>
+${item.evidence ? renderEvidenceBadge(item.evidence, {compact:true}) : ''}
+</div>
 <span style="font-size:11px;color:#666;font-family:Orbitron">Leggi →</span>
 </div>
 </div>`;
         });
         html += `</div>`;
     }
-    html += `</div>`;
+    html += `</div></div>`;
     return html;
 }
 
@@ -2141,7 +2534,8 @@ function renderLibraryDetail() {
 <div style="text-align:center;margin-bottom:20px">
 <span style="font-size:48px">${item.icon}</span>
 <h1 class="t-graffiti" style="font-size:28px;color:${item.color};margin:12px 0 4px">${esc(item.title)}</h1>
-<div style="font-size:12px;color:#888">${esc(item.desc)}</div>
+<div style="font-size:12px;color:#888;margin-bottom:10px">${esc(item.desc)}</div>
+${item.evidence ? `<div style="display:flex;justify-content:center">${renderEvidenceBadge(item.evidence)}</div>` : ''}
 </div>
 <div style="border-top:1px solid #222;padding-top:20px">
 ${parseGlossary(mdToHtml(item.content))}
@@ -2165,6 +2559,8 @@ function parseMetricValue(v){
     const n=parseFloat(String(v).replace(/[^0-9.\-]/g,''));
     return isNaN(n)?null:n;
 }
+let growChart=null;
+let growBarChart=null;
 function initCharts(){
     if(typeof Chart==='undefined'){
         const c=document.getElementById('chartContainer');
