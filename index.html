@@ -51,6 +51,53 @@
 .data-table tr:hover td{background:rgba(57,255,20,.04)}
 .metric-row-6{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 @media(min-width:600px){.metric-row-6{grid-template-columns:repeat(6,1fr)}}
+
+/* ═══ FASE 2: TIMELINE VERTICALE ═══ */
+.timeline-wrap{position:relative;padding-left:28px}
+.timeline-line{position:absolute;left:10px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom, var(--ng) 0%, var(--np) 50%, var(--no) 100%);opacity:.35;border-radius:2px}
+.timeline-item{position:relative;margin-bottom:20px;animation:fadeIn .4s ease}
+.timeline-dot{position:absolute;left:-24px;top:14px;width:14px;height:14px;border-radius:50%;background:var(--dk);border:3px solid var(--ng);box-shadow:0 0 10px rgba(57,255,20,.3);z-index:2}
+.timeline-dot.problem{border-color:var(--no);box-shadow:0 0 10px rgba(255,102,0,.4)}
+.timeline-card{background:rgba(17,17,17,.65);border:1px solid rgba(34,34,34,.6);border-radius:14px;padding:16px;margin-left:8px;transition:all .2s}
+.timeline-card:hover{border-color:rgba(57,255,20,.2)}
+.timeline-date{font-family:Orbitron;font-size:10px;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.timeline-text{font-size:13px;color:#ccc;line-height:1.6}
+.timeline-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.timeline-metrics{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid rgba(34,34,34,.5)}
+.timeline-metric{font-size:10px;color:#888;font-family:Orbitron;background:rgba(10,10,10,.5);padding:4px 10px;border-radius:6px;border:1px solid #1a1a1a}
+.timeline-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.timeline-photo{width:100%;aspect-ratio:1;border-radius:8px;object-fit:cover;border:1px solid #222;background:#0a0a0a;cursor:pointer;transition:transform .2s}
+.timeline-photo:hover{transform:scale(1.05)}
+.timeline-problem-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;background:rgba(255,102,0,.12);color:var(--no);font-size:10px;font-family:Orbitron;margin-top:8px;border:1px solid rgba(255,102,0,.3)}
+
+/* ═══ FASE 2: PROBLEM TIMELINE GRAFICO ═══ */
+.problem-chart-wrap{position:relative;height:220px;width:100%;margin-top:8px}
+.problem-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:#888}
+.problem-legend span{display:flex;align-items:center;gap:5px}
+
+/* ═══ FASE 2: DASHBOARD ═══ */
+.dashboard-grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:600px){.dashboard-grid{grid-template-columns:1fr 1fr}}
+.dash-card{padding:18px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:14px}
+.dash-value{font-family:Orbitron;font-size:32px;font-weight:900;margin:8px 0}
+.dash-label{font-size:10px;color:#555;font-family:Orbitron;text-transform:uppercase;letter-spacing:1.5px}
+.dash-sub{font-size:12px;color:#666;margin-top:4px}
+.dash-bar{height:4px;background:#1a1a1a;border-radius:99px;margin-top:10px;overflow:hidden}
+.dash-bar-fill{height:100%;border-radius:99px;transition:width .6s ease}
+.dash-compare{display:flex;align-items:center;gap:8px;margin-top:8px}
+.dash-compare-item{flex:1;text-align:center;padding:10px;background:rgba(10,10,10,.4);border-radius:8px}
+.dash-compare-val{font-family:Orbitron;font-size:18px;font-weight:700;color:#fff}
+.dash-compare-lab{font-size:9px;color:#555;font-family:Orbitron;text-transform:uppercase;margin-top:4px}
+.dash-problem-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.dash-problem-item{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(26,10,10,.4);border-radius:8px;border-left:3px solid var(--no)}
+.dash-problem-date{font-size:9px;color:#555;font-family:Orbitron;white-space:nowrap}
+.dash-problem-text{font-size:12px;color:#aaa;flex:1}
+
+/* ═══ FASE 2: TOGGLE PROBLEMA NEL FORM ═══ */
+.problem-toggle{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,102,0,.08);border:1px solid rgba(255,102,0,.25);border-radius:10px;cursor:pointer;transition:all .2s;margin-top:8px}
+.problem-toggle:hover{background:rgba(255,102,0,.12)}
+.problem-toggle input{width:18px;height:18px;accent-color:var(--no);cursor:pointer}
+.problem-toggle label{cursor:pointer;font-size:12px;color:var(--no);font-family:Orbitron;text-transform:uppercase;letter-spacing:1px}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,13 +245,20 @@ body.stoner-mode .page .t-tech {
 
 <div class="menu-overlay" id="menu">
   <button class="menu-btn" onclick="go('home')">🏠 Home</button>
+  <button class="menu-btn" onclick="go('dashboard')">📊 Dashboard</button>
   <button class="menu-btn" onclick="go('guide')">📖 Guida</button>
   <button class="menu-btn" onclick="go('journal')">📓 Journal</button>
   <button class="menu-btn" onclick="go('diagnosis')">🔍 Diagnosi</button>
   <button class="menu-btn" onclick="go('tools')">🧮 Tools</button>
   <button class="menu-btn" onclick="go('strains')">🧬 Strains</button>
+  <button class="menu-btn" onclick="go('compare')">⚖️ Confronta</button>
+  <button class="menu-btn" onclick="go('coa')">📋 COA</button>
+  <button class="menu-btn" onclick="go('community')">💬 Community</button>
+  <button class="menu-btn" onclick="go('entities')">🏢 Entità</button>
   <button class="menu-btn" onclick="go('timer')">⏱️ Timer</button>
   <button class="menu-btn" onclick="go('reminders')">⏰ Promemoria</button>
+  <button class="menu-btn" onclick="go('iot')">📡 Sensori</button>
+  <button class="menu-btn" onclick="go('shop')">🛒 Attrezzatura</button>
   <button class="menu-btn" onclick="go('library')">📚 Libreria</button>
 </div>
 <div id="app" style="padding-top:60px"></div>
@@ -226,6 +280,10 @@ try {
         photos: '++id, plantId, logId, data, createdAt',
         reminders: '++id, title, datetime, repeat, active, createdAt',
         settings: 'key'
+    });
+    // FASE 2 — v2: aggiunge indice isProblem ai logs (upgrade non distruttivo per chi ha già dati)
+    db.version(2).stores({
+        logs: '++id, plantId, date, text, tags, isProblem, *photos, [plantId+date]'
     });
 } catch(e) {
     console.warn('Dexie non caricato, alcune funzioni offline non saranno disponibili');
@@ -255,9 +313,14 @@ window.addEventListener('online',updateOnlineStatus);window.addEventListener('of
 // ── 6. GLOSSARY DB ────────────────────────────────────────
 const glossaryDB={"LST":"Low Stress Training — piegatura dolce dei rami per aumentare l'esposizione alla luce senza ferire la pianta.","flush":"Lavaggio del substrato con acqua pulita (pH corretto) per eliminare sali in eccesso prima della raccolta.","tricomi":"Ghiandole resinose su fiori e foglie che producono cannabinoidi, terpeni e flavonoidi.","topping":"Tecnica di potatura apicale per dividere la crescita dominante in 2+ rami principali.","defoliazione":"Rimozione selettiva di foglie per migliorare l'aerazione e l'esposizione luminosa.","cotiledoni":"Prime foglie tonde che emergono dal seme, contengono nutrienti iniziali per la piantina.","internodi":"Distanza tra due nodi (punti di crescita) sullo stelo. Corti = luce intensa.","auxina":"Ormone vegetale che regola l'apical dominance. Distribuirla uniformemente = più cime.","chemotype":"Profilo chimico della pianta (rapporto THC:CBD e terpeni dominanti), indipendente dalla genetica Indica/Sativa.","COA":"Certificate of Analysis — certificato di analisi di laboratorio che attesta THC, CBD, terpeni e assenza di contaminanti.","Boveda":"Pack umidificante a due vie che mantiene l'umidità costante (es. 62%) nei barattoli di curing.","VPD":"Vapor Pressure Deficit — differenza tra umidità attuale e saturazione. Ottimale 0.8-1.2 kPa in veg, 1.2-1.6 in bloom.","PAR":"Photosynthetically Active Radiation — radiazione 400-700nm usata dalla pianta per la fotosintesi.","DLI":"Daily Light Integral — quantità totale di luce (mol/m²/die). Target: 20-40 in veg, 40-65 in bloom.","nutrient burn":"Bruciatura da eccesso di fertilizzante. Si manifesta con punte marroni e ricurve delle foglie.","overwatering":"Eccesso di acqua che soffoca le radici. Sintomo: foglie arricciate verso il basso, crescita bloccata.","underwatering":"Mancanza d'acqua. Foglie flaccide e appassite che non recuperano al tocco.","Bud Rot":"Muffa grigia (Botrytis) che attacca i fiori in condizioni di alta umidità. Irreversibile.","Powdery Mildew":"Oidio bianco polveroso sulle foglie. Trattabile con bicarbonato o olio di neem.","Ragnetto Rosso":"Acaro microscopico che causa puntini gialli e ragnatele sotto le foglie.","Fungus Gnat":"Moscerino del terriccio. Larve mangiano radici giovani. Controllare con siccità e sabbia.","Afidi":"Insetti verdi che succhiano linfa e secernono melata. Trattabili con olio di neem.","lollipopping":"Rimozione di rami e foglie nella parte bassa della pianta per concentrare l'energia sulle cime superiori.","ScrOG":"Screen of Green — tecnica con rete orizzontale per uniformare l'altezza delle cime.","mainline":"Tecnica di training che crea 8-16 cime principali di uguale altezza partendo da un manifold.","manifold":"Struttura a Y creata con topping mirati per distribuire uniformemente la linfa.","terpeni":"Composti aromatici che determinano sapore, odore e modulano l'effetto dei cannabinoidi (entourage effect).","cannabinoidi":"Composti attivi della cannabis: THC, CBD, CBG, CBN e altri 100+ molecole.","THC":"Tetraidrocannabinolo — principale cannabinoide psicoattivo.","CBD":"Cannabidiolo — cannabinoide non psicoattivo con effetti rilassanti e antinfiammatori.","CBN":"Cannabinolo — derivato dalla degradazione del THC, effetto sedativo.","CBG":"Cannabigerolo — precursore di THC e CBD, con proprietà antibatteriche.","myrcene":"Terpeno con aroma terroso e mango. Effetto sedativo e potenziatore del THC.","limonene":"Terpeno citrico. Effetto energizzante, antidepressivo e antifungino.","pinene":"Terpeno con aroma di pino. Migliora la concentrazione e la memoria.","linalool":"Terpeno floreale (lavanda). Effetto antiansia e sedativo.","caryophyllene":"Terpeno piccante. Unico ad interagire con i recettori CB2 (come un cannabinoide).","curing":"Processo di stagionatura in barattolo che migliora sapore, effetto e conservazione.","essiccazione":"Fase di asciugatura dei fiori prima del curing. Deve essere lenta (10-14 giorni).","wet trim":"Potatura dei fiori freschi, subito dopo la raccolta.","dry trim":"Potatura dei fiori dopo l'essiccazione, prima del curing.","sugar leaves":"Foglie piccole che spuntano dai fiori, ricche di tricomi. Usate per hash edibles.","fan leaves":"Foglie grandi e palmate. Poche tricomi, usate per infusi o compost.","pistilli":"Pelini bianchi/rossi che emergono dai calici. Indicano sesso femminile e maturazione.","calici":"Strutture che racchiudono gli ovuli. Si gonfiano formando le cime.","bract":"Foglia modificata che racchiude il fiore. Parte più resinosa della pianta.","apical dominance":"Dominanza della punta di crescita. L'auxina inibisce i rami laterali. Il LST la supera.","fotoperiodo":"Pianta che fiorisce in base al rapporto luce/buio (12/12).","autofiorente":"Pianta che fiorisce automaticamente dopo 2-4 settimane, indipendentemente dalla luce.","ruderalis":"Sottospecie di cannabis originaria della Siberia. Genetica base delle autofiorenti.","indica":"Sottospecie bassa e compatta, effetto rilassante. Origine montagne asiatiche.","sativa":"Sottospecie alta e slanciata, effetto energizzante. Origine zone equatoriali.","hybrid":"Incrocio tra Indica e Sativa per combinare i tratti migliori.","genetica":"Patrimonio ereditario della pianta. Determina struttura, resa, aroma e effetto.","fenotipo":"Espressione fisica osservabile di una genetica (colore, struttura, aroma).","chemovar":"Classificazione basata sul profilo chimico (cannabinoidi + terpeni) invece che sulla morfologia.","substrato":"Materiale in cui crescono le radici (terra, cocco, rockwool, idroponico).","perlite":"Materiale vulcanico espanso che migliora drenaggio e aerazione del substrato.","vermiculite":"Minerale espanso che trattiene acqua e nutrienti. Utile in miscela con perlite.","pH":"Scala di acidità. Per cannabis in terra: 6.0-6.5. In idroponica: 5.5-6.0.","EC":"Electrical Conductivity — misura la concentrazione di sali nutritivi nell'acqua (mS/cm).","PPM":"Parts Per Million — alternativa all'EC per misurare la concentrazione di nutrienti.","NPK":"Rapporto Azoto-Fosforo-Potassio nei fertilizzanti. Grow = alto N, Bloom = alto P e K.","CalMag":"Integratore di Calcio e Magnesio. Essenziale in acqua demineralizzata o RO.","root rot":"Marciume radicale causato da anaerobiosi (troppa acqua). Odore di uovo marcio.","drenaggio":"Capacità del substrato di far defluire l'acqua in eccesso. Fondamentale per radici sane.","aerazione":"Circolazione d'aria nel substrato. Radici hanno bisogno di ossigeno.","transpirazione":"Processo di evaporazione dell'acqua dalle foglie. Regola temperatura e assorbimento.","stomata":"Porzi epidermici sulle foglie che regolano scambio gas e transpirazione.","clorofilla":"Pigmento verde responsabile della fotosintesi. Si degrada durante il curing.","carotenoidi":"Pigmenti gialli/arancioni che emergono quando la clorofilla si degrada (autunno).","antocianine":"Pigmenti viola/rossi prodotti in risposta a stress termico (freddo notturno).","UV-B":"Ultravioletto B. Stress positivo che stimola la produzione di tricomi (difesa della pianta).","IR":"Infrarosso. Calore emesso dalle lampade. Gestire con ventilazione.","PPFD":"Photosynthetic Photon Flux Density — intensità luminosa utile (μmol/m²/s).","umidità relativa":"Percentuale di vapore acqueo nell'aria rispetto alla saturazione. Target: 50-65% veg, 40-50% bloom.","deumidificatore":"Apparecchio che rimuove umidità dall'aria. Essenziale in fioritura.","umidificatore":"Apparecchio che aggiunge umidità. Utile in germinazione e seedling.","carbon filter":"Filtro a carboni attivi che elimina gli odori dall'aria estratta.","inline fan":"Ventilatore in linea per estrazione aria calda e umida dal grow tent.","oscillating fan":"Ventilatore oscillante per creare brezza sulle piante (wind stress positivo).","timer":"Temporizzatore per gestire i cicli di luce (18/6 in veg, 12/12 in bloom).","thermohygrometer":"Strumento che misura temperatura e umidità. Indispensabile in ogni grow.","lux meter":"Misuratore di luce visibile. Approssimativo per LED (meglio PAR/PPFD meter).","pH meter":"Misuratore digitale dell'acidità. Va calibrato regolarmente.","TDS meter":"Misuratore di solidi disciolti. Utile per controllare EC/PPM dell'acqua.","lente":"Lente di ingrandimento 30-60x per osservare i tricomi e determinare la maturazione.","microscopio USB":"Microscopio digitale per foto dettagliate dei tricomi.","dry room":"Stanza dedicata all'essiccazione. Buio, 15-20°C, 45-55% umidità.","grow tent":"Tenda riflettente per creare un ambiente di coltivazione controllato.","LED":"Light Emitting Diode — tecnologia di illuminazione efficiente e a spettro completo.","HPS":"High Pressure Sodium — lampada ad alogenuri metallici, calda e intensa.","CMH":"Ceramic Metal Halide — lampada ceramica con spettro bilanciato.","ballast":"Alimentatore per lampade HPS/CMH. Può essere magnetico o digitale (dimmerabile).","reflector":"Riflettore che indirizza la luce verso le piante. Riduce perdite.","dimmer":"Dispositivo per regolare l'intensità luminosa. Utile in seedling.","CO2 enrichment":"Aggiunta di anidride carbonica per aumentare la fotosintesi (1500ppm target).","sealed room":"Grow room sigillata con supplemento CO2 e climatizzazione attiva.","IPM":"Integrated Pest Management — gestione integrata dei parassiti (prevenzione + trattamento).","neem oil":"Olio di neem — insetticida naturale contro afidi, ragnetti e funghi.","potassium bicarbonate":"Bicarbonato di potassio — fungicida contro oidio e muffe.","beneficial insects":"Insetti utili (es. ladybugs) che mangiano parassiti senza chimica.","companion planting":"Piantumazione associata (es. basilico) per respingere parassiti.","pruning":"Potatura generica per rimuovere parti non necessarie alla pianta.","fimming":"Tecnica simile al topping ma meno precisa (FIM = Fuck I Missed).","supercropping":"Piegatura aggressiva del ramo fino a quasi spezzarlo per stimolare la crescita.","monster cropping":"Tecnica di clonazione da pianta in fioritura per ottenere struttura bush-like.","cloning":"Riproduzione asessuata per talea. Mantiene identica la genetica madre.","mother plant":"Pianta madre mantenuta in vegetativa per produrre cloni.","talea":"Frammento di ramo radicato per clonazione. Richiede umidità alta e luce tenue.","rooting hormone":"Ormone radicante (IBA) che accelera l'emissione di radici nelle talee.","dome":"Cupola di plastica per mantenere umidità alta su talee o seedling.","heat mat":"Tappetino riscaldante per mantenere 22-26°C in germinazione e rooting.","propagation":"Fase di propagazione: germinazione, seedling e rooting di talee.","veg":"Abbreviazione di Vegetativa — fase di crescita strutturale.","bloom":"Abbreviazione di Fioritura — fase riproduttiva.","stretch":"Allungamento rapido dei rami nelle prime 2-3 settimane di bloom.","swelling":"Fase di ingrossamento delle cime (settimane 4-6 di bloom).","ripening":"Fase finale di maturazione dove i tricomi cambiano colore.","senescenza":"Invecchiamento naturale della pianta. Foglie gialle e degradazione.","hermaphroditism":"Ermafroditismo — comparsa di fiori maschili su pianta femmina per stress.","bananas":"Strutture maschili (nanners) che emergono dai fiori femminili. Pericolo polline.","seeds":"Semi. Formati quando una femmina viene impollinata da un maschio o hermie.","feminized":"Semi femminizzati — ottenuti forzando una femmina a produrre polline (colloidal silver).","regular":"Semi regolari — 50% maschi, 50% femmine. Necessari per breeding.","auto":"Abbreviazione di autofiorente.","foto":"Abbreviazione di fotoperiodo.","pheno hunt":"Ricerca del fenotipo migliore tra semi della stessa genetica.","keeper":"Fenotipo eccezionale che si decide di conservare/clonare.","breeding":"Incrocio controllato tra genitori per creare nuove varietà.","backcross":"Incrocio di un ibrido con uno dei genitori per stabilizzare tratti.","IBL":"Inbred Line — linea consanguinea, genetica altamente stabilizzata.","F1":"Prima generazione di incrocio tra due linee pure. Ibrido vigoroso.","F2":"Seconda generazione. Maggiore variabilità fenotipica.","landrace":"Varietà autoctona, adattata a un ambiente specifico per generazioni.","heirloom":"Varietà tradizionale non ibridata, preservata nel tempo.","entourage effect":"Effetto entourage — sinergia tra cannabinoidi e terpeni che modula l'effetto complessivo.","bioavailability":"Biodisponibilità — percentuale di sostanza attiva che raggiunge la circolazione.","decarboxylation":"Decarbossilazione — riscaldamento che trasforma THCA in THC attivo.","rosin":"Concentrato ottenuto per pressione termica senza solventi.","BHO":"Butane Hash Oil — concentrato ottenuto con solvente butano.","hash":"Resina compressa ottenuta separando i tricomi dalla materia vegetale.","kief":"Polvere di tricomi raccolta dal grinder. Base per hash edibles.","edibles":"Prodotti commestibili a base di cannabis (brownies, gummy, oli).","tincture":"Tintura — estratto alcolico o glicerico per uso sublinguale.","topical":"Prodotto per uso cutaneo (creme, balsami) con effetto locale.","sublingual":"Assorbimento sotto la lingua. Effetto in 15-30 minuti.","inhalation":"Inalazione — effetto in 2-5 minuti, durata 1-3 ore.","oral":"Via orale — effetto in 30-90 minuti, durata 4-8 ore.","tolerance":"Tolleranza — necessità di dosi crescenti per ottenere lo stesso effetto.","t-break":"Tolerance break — pausa volontaria per resettare la tolleranza.","strain":"Varietà / cultivar — una specifica genetica di cannabis.","cultivar":"Cultivar — cultivar (cultivated variety). Termine botanico più corretto di 'strain'.","genotype":"Genotipo — sequenza genetica ereditata, non osservabile direttamente.","soma":"Tutto il corpo della pianta esclusi i gameti (cellule diploidi).","meristem":"Tessuto meristematico — zone di divisione cellulare attiva (apici, gemme).","xylem":"Vasi del legno — trasportano acqua e minerali dalle radici alle foglie.","phloem":"Liber — trasporta zuccheri dalle foglie al resto della pianta.","cambium":"Strato di cellule tra xilema e floema che produce nuovi vasi.","callus":"Callo — tessuto di cicatrizzazione che si forma su ferite da potatura.","hormone":"Ormone vegetale — sostanza che regola crescita e sviluppo (auxina, citochinina, giberellina).","cytokinin":"Citochinina — ormone che stimola la divisione cellulare e la germinazione.","gibberellin":"Giberellina — ormone che regola allungamento dello stelo e fioritura.","ethylene":"Etilene — ormone gassoso che regola maturazione e senescenza.","abscisic acid":"Acido abscissico — ormone dello stress che induce dormienza e chiusura stomi.","photoperiodism":"Fotoperiodismo — risposta biologica alla durata del giorno (12h buio = fioritura).","circadian rhythm":"Ritmo circadiano — ciclo biologico di 24h che regola processi cellulari.","phototropism":"Fototropismo — crescita verso la luce.","gravitropism":"Gravitropismo — crescita in risposta alla gravità (radici giù, stelo su).","thigmotropism":"Tigmotropismo — risposta al tocco (piante che si attorcigliano).","hydrotropism":"Idrotropismo — crescita delle radici verso l'acqua.","Mycorrhizae":"Micorrize — simbiosi funghi-radici che aumentano l'assorbimento di acqua e nutrienti.","rhizosphere":"Rizosfera — zona intorno alle radici ricca di microrganismi benefici.","beneficial bacteria":"Batteri benefici (es. Bacillus subtilis) che proteggono dalle malattie.","trichoderma":"Fungo benefico che colonizza il substrato e combatte patogeni.","compost tea":"Compost tea — estratto aerato di compost usato come fertilizzante biologico.","worm casting":"Letame di lombrico — fertilizzante organico ricco di microrganismi.","bat guano":"Guano di pipistrello — fertilizzante naturale ricco di N, P e K.","fish emulsion":"Emulsione di pesce — fertilizzante organico ad azione rapida.","kelp":"Alga kelp — fonte naturale di citochinine e micronutrienti.","molasses":"Melassa — fonte di carboidrati per i microrganismi del suolo.","silica":"Silice — rinforza le pareti cellulari, aumenta resistenza a parassiti e caldo.","humic acid":"Acido umico — migliora la cessione di nutrienti e la struttura del suolo.","fulvic acid":"Acido fulvico — trasporta nutrienti nelle cellule vegetali.","chelated":"Chelato — nutriente legato a una molecola organica per migliorarne l'assorbimento.","macronutrients":"Macronutrienti — N, P, K (azoto, fosforo, potassio).","micronutrients":"Micronutrienti — Fe, Mn, Zn, Cu, B, Mo, Cl (ferro, manganese, zinco, rame, boro, molibdeno, cloro).","mobile nutrients":"Nutrienti mobili — si spostano nella pianta. Carenza visibile sulle foglie vecchie (N, P, K, Mg).","immobile nutrients":"Nutrienti immobili — restano dove arrivano. Carenza sulle foglie nuove (Ca, Fe, S, Mn).","nitrogen":"Azoto (N) — macronutriente per la crescita vegetativa e la clorofilla.","phosphorus":"Fosforo (P) — essenziale per il trasferimento di energia, fioritura e radici.","potassium":"Potassio (K) — regola l'acqua, la fotosintesi e la resistenza alle malattie.","magnesium":"Magnesio (Mg) — centro atomico della clorofilla. Carenza = foglie gialle tra le vene.","calcium":"Calcio (Ca) — struttura delle pareti cellulari. Carenza = punta delle foglie brune e ricurve.","iron":"Ferro (Fe) — sintesi della clorofilla. Carenza = foglie giovani gialle con vene verdi.","sulfur":"Zolfo (S) — componente di aminoacidi e proteine. Carenza = foglie giovali gialle uniformi.","zinc":"Zinco (Zn) — sintesi di auxina e enzimi. Carenza = foglie piccole e accartocciate.","manganese":"Manganese (Mn) — fotosintesi e respirazione. Carenza = macchie marroni tra le vene.","boron":"Boro (B) — divisione cellulare e trasporto di zuccheri. Carenza = stelo fragile, aborto meristematico.","copper":"Rame (Cu) — respirazione e lignificazione. Carenza = foglie bluastre e arricciate.","molybdenum":"Molibdeno (Mo) — fissazione dell'azoto. Raro in terra, comune in idroponica.","chlorine":"Cloro — fotosintesi osmotica. Raramente carente.","nickel":"Nichel — attivazione di alcuni enzimi. Micronutriente rarissimo.","silicon":"Silicio — rinforzo meccanico e resistenza agli stress abiotici.","cobalt":"Cobalto — necessario per la fissazione simbiotica dell'azoto (leguminose)."};
 
+let glossaryTermsCache = null;
 function parseGlossary(html) {
     if (!html) return html;
-    const terms = Object.keys(glossaryDB).sort((a,b) => b.length - a.length);
+    if(!glossaryTermsCache){
+        glossaryTermsCache = Object.keys(glossaryDB)
+            .sort((a,b)=>b.length-a.length);
+    }
+    const terms = glossaryTermsCache;
     let result = html;
     terms.forEach(term => {
         const regex = new RegExp(`(?<![\w#])(${term})(?![\w])`, 'gi');
@@ -329,11 +392,60 @@ async function toggleReminder(id, active) { await db.reminders.update(id, { acti
 
 // ── 8. PHOTO SYSTEM (IndexedDB) ───────────────────────────
 async function addPhoto(plantId, file) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = async (e) => {
-            const id = await db.photos.add({ plantId, logId: null, data: e.target.result, createdAt: new Date().toISOString() });
-            resolve(id);
+        reader.onerror = () => reject(reader.error);
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = async () => {
+                try {
+                    const MAX_SIZE = 1600;
+                    const scale = Math.min(
+                        1,
+                        MAX_SIZE / Math.max(
+                            img.naturalWidth,
+                            img.naturalHeight
+                        )
+                    );
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(
+                        1,
+                        Math.round(img.naturalWidth * scale)
+                    );
+                    canvas.height = Math.max(
+                        1,
+                        Math.round(img.naturalHeight * scale)
+                    );
+                    const ctx = canvas.getContext(
+                        '2d',
+                        { alpha:false }
+                    );
+                    ctx.drawImage(
+                        img,
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
+                    );
+                    const data = canvas.toDataURL(
+                        'image/jpeg',
+                        0.82
+                    );
+                    const id = await db.photos.add({
+                        plantId,
+                        logId: null,
+                        data,
+                        createdAt: new Date().toISOString()
+                    });
+                    resolve(id);
+                } catch(err) {
+                    reject(err);
+                }
+            };
+            img.onerror = () => {
+                reject(new Error('Immagine non valida'));
+            };
+            img.src = reader.result;
         };
         reader.readAsDataURL(file);
     });
@@ -726,9 +838,37 @@ g.addColorStop(1,'rgba(150,150,150,0)');
 ctx.fillStyle=g;ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill()
 }
 }
-for(let i=0;i<25;i++)particles.push(new Particle());
-function loop(){ctx.clearRect(0,0,w,h);particles.forEach(p=>{p.update();p.draw()});requestAnimationFrame(loop)}
-loop()
+const PARTICLE_COUNT = window.innerWidth < 700 ? 12 : 18;
+let animationId = null;
+for(let i=0;i<PARTICLE_COUNT;i++)particles.push(new Particle());
+function loop(){
+    if(document.hidden){
+        animationId=null;
+        return;
+    }
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+        p.update();
+        p.draw();
+    });
+    animationId=requestAnimationFrame(loop);
+}
+function startSmokeLoop(){
+    if(animationId===null){
+        animationId=requestAnimationFrame(loop);
+    }
+}
+document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){
+        if(animationId!==null){
+            cancelAnimationFrame(animationId);
+        }
+        animationId=null;
+    }else{
+        startSmokeLoop();
+    }
+});
+startSmokeLoop();
 })();
 
 function initBuds(){
@@ -740,8 +880,15 @@ const buds=[
 "url('assets/bud-pixel-2.png')",
 "url('assets/bud-pixel-3.png')"];
 const isStoner=document.body.classList.contains('stoner-mode');
-const count=isStoner?42:14;
-const glowColors=['rgba(191,0,255,.75)','rgba(57,255,20,.65)','rgba(255,102,0,.65)'];
+const smallScreen=window.innerWidth<700;
+const count=smallScreen
+    ? (isStoner ? 18 : 8)
+    : (isStoner ? 32 : 12);
+const glowColors=[
+    'rgba(191,0,255,.75)',
+    'rgba(57,255,20,.65)',
+    'rgba(255,102,0,.65)'
+];
 for(let i=0;i<count;i++){
 const el=document.createElement('div');
 el.className='falling-bud';
@@ -756,20 +903,29 @@ el.style.height=size+'px';
 el.style.animationDuration=duration+'s';
 el.style.opacity=opacity;
 const glow=glowColors[i%3];
-el.style.filter=`drop-shadow(0 0 ${isStoner?14:10}px ${glow})`;
+if(!smallScreen){
+    el.style.filter=`drop-shadow(0 0 ${isStoner?12:8}px ${glow})`;
+}
 container.appendChild(el)
 }
 }
 let currentPage='home',currentStageIndex=0,lastStageIndex=-1;
 const navItems=[
 {id:'home',label:'Home',icon:'🏠',color:'var(--ng)'},
+{id:'dashboard',label:'Dashboard',icon:'📊',color:'var(--nc)'},
 {id:'guide',label:'Guida',icon:'📖',color:'var(--ng)'},
 {id:'journal',label:'Journal',icon:'📓',color:'var(--np)'},
 {id:'diagnosis',label:'Diagnosi',icon:'🔍',color:'var(--no)'},
 {id:'tools',label:'Tools',icon:'🧮',color:'var(--nc)'},
 {id:'strains',label:'Strains',icon:'🧬',color:'var(--nk)'},
+{id:'compare',label:'Confronta',icon:'⚖️',color:'var(--nc)'},
+{id:'coa',label:'COA',icon:'📋',color:'var(--nc)'},
+{id:'community',label:'Community',icon:'💬',color:'var(--ny)'},
+{id:'entities',label:'Entità',icon:'🏢',color:'var(--np)'},
 {id:'timer',label:'Timer',icon:'⏱️',color:'var(--ny)'},
 {id:'reminders',label:'Promemoria',icon:'⏰',color:'var(--ny)'},
+{id:'iot',label:'Sensori',icon:'📡',color:'var(--nc)'},
+{id:'shop',label:'Attrezzatura',icon:'🛒',color:'var(--ng)'},
 {id:'library',label:'Libreria',icon:'📚',color:'#c4a35a'}
 ];
 
@@ -796,6 +952,7 @@ const app=document.getElementById('app');
 let html='';
 switch(currentPage){
 case'home':html=renderHome();break;
+case'dashboard':html=renderDashboard();break;
 case'guide':html=renderGuide();break;
 case'journal':html=renderJournal();break;
 case'diagnosis':html=renderDiagnosis();break;
@@ -804,11 +961,18 @@ case'strains':html=renderStrains();break;
 case'timer':html=renderTimer();break; 
 case'reminders':html=renderReminders();break;
 case'library':html=renderLibrary();break; 
+case'compare':html=renderCompare();break;
+case'coa':html=renderCOA();break;
+case'community':html=renderCommunity();break;
+case'entities':html=renderEntities();break;
+case'iot':html=renderIoT();break;
+case'shop':html=renderShop();break;
 default:html=renderHome()
 }
 app.innerHTML=`<div class="page-bg" style="${getPageBg()}"></div><div class="page">${html}</div>`;
 switch(currentPage){
 case'home':initHome();break;
+case'dashboard':initDashboard();break;
 case'guide':initGuide();break;
 case'journal':initJournal();break;
 case'diagnosis':initDiagnosis();break;
@@ -817,6 +981,12 @@ case'strains':initStrains();break;
 case'timer':initTimer();break; 
 case'reminders':initReminders();break;
 case'library':initLibrary();break; 
+case'compare':initCompare();break;
+case'coa':initCOA();break;
+case'community':initCommunity();break;
+case'entities':initEntities();break;
+case'iot':initIoT();break;
+case'shop':initShop();break;
 default:initHome()
 }
 }
@@ -914,7 +1084,7 @@ html+=`<button class="card" onclick="go('${item.page}')" style="padding:20px;tex
 <span style="font-size:11px;color:#666">${item.desc}</span>
 </button>`;
 });
-html+=`</div></div>`;
+html+=`</div><div style="text-align:center;margin-top:16px">${renderCloudStatus()}</div></div>`;
 return html;
 }
 function initHome(){
@@ -937,7 +1107,7 @@ container.appendChild(p)
 }
 lastStageIndex=currentStageIndex;
 }
-const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',timer:'assets/art7.jpg',library:'assets/bg-library.jpg'};
+const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',dashboard:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',compare:'assets/art6.jpg',coa:'assets/art4.jpg',community:'assets/art2.jpg',entities:'assets/art5.jpg',timer:'assets/art7.jpg',reminders:'assets/art7.jpg',iot:'assets/art3.jpg',shop:'assets/art5.jpg',library:'assets/bg-library.jpg'};
 function getPageBg(){const url=pageBgs[currentPage];return url?`background:linear-gradient(rgba(5,5,5,.55),rgba(5,5,5,.70)),url('${url}') center/cover no-repeat;`:''}
 // phaseIconFiles spostato sopra phases per fix dependency
 let guideState={activePhase:0,tab:'steps'};
@@ -1092,7 +1262,10 @@ let html=`<div>
 📤 Import Backup
 <input type="file" accept=".json" onchange="const f=this.files[0];if(f)importData(f);this.value=''" style="display:none">
 </label>
-</div>`;
+<button onclick="syncToCloud()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">☁️ Sync su Cloud</button>
+<button onclick="syncFromCloud()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">⬇️ Scarica da Cloud</button>
+</div>
+<div style="text-align:right;margin-bottom:16px">${renderCloudStatus()}</div>`;
 if(!plants.length){
 html+=`<div style="text-align:center;padding:60px 20px">
 <div style="font-size:64px;margin-bottom:16px">🌱</div>
@@ -1273,7 +1446,7 @@ ${[
 </div>
 </div>
 
-<div class="card" style="padding:20px">
+<div class="card" style="padding:20px;margin-bottom:16px">
 <div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Log Strutturato</div>
 <div style="display:flex;gap:8px;margin-bottom:12px">
 <input type="text" id="logInput" class="inp" placeholder="Aggiungi un log... Usa #tag per categorizzare" style="flex:1">
@@ -1290,23 +1463,27 @@ ${[
 <div><div class="metric-label">Peso Secco g</div><input type="number" id="logDry" class="metric-inp" placeholder="0" step="0.1"></div>
 </div>
 </div>
-<div id="logList" style="display:flex;flex-direction:column;gap:8px">`;
-const logs=pl.logs||[];
-if(!logs.length){
-html+=`<div style="font-size:12px;color:#444;text-align:center;padding:12px">Nessun log ancora</div>`;
-}else{
-logs.slice().reverse().forEach(log=>{
-const tags = (log.tags || []).map(t => `<span class="log-tag">#${esc(t)}</span>`).join('');
-const metrics = log.metrics ? `<div class="log-metrics">${Object.entries(log.metrics).filter(([k,v])=>v).map(([k,v])=>`<span class="log-metric-item">${k.toUpperCase()}: ${v}</span>`).join('')}</div>` : '';
-html+=`<div style="background:rgba(10,10,10,.45);border:1px solid rgba(26,26,26,.5);border-radius:8px;padding:10px 12px">
-<div style="font-size:10px;color:#444;margin-bottom:4px;font-family:Orbitron">${log.date}</div>
-<div style="font-size:12px;color:#bbb">${esc(log.text)}</div>
-${tags}
-${metrics}
+<label class="problem-toggle">
+<input type="checkbox" id="logProblem">
+<span>⚠️ Segnala un problema su questa pianta</span>
+</label>
+</div>
+
+<div class="card" style="padding:20px;margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;text-transform:uppercase;letter-spacing:2px">📉 Problem Timeline</div>
+${(pl.logs||[]).some(l=>l.isProblem)?`<span class="badge" style="background:rgba(255,102,0,.15);color:var(--no);border:1px solid var(--no)">${(pl.logs||[]).filter(l=>l.isProblem).length} problemi</span>`:''}
+</div>
+<div id="problemChartContainer">${renderProblemChartHTML(pl)}</div>
+</div>
+
+<div class="card" style="padding:20px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:16px;text-transform:uppercase;letter-spacing:2px">📅 Timeline Grow</div>
+<div class="timeline-wrap" id="logTimeline">
+${renderTimelineHTML(pl)}
+</div>
+</div>
 </div>`;
-});
-}
-html+=`</div></div></div>`;
 return html;
 }
 
@@ -1341,6 +1518,7 @@ async function addLog(){
 const input=document.getElementById('logInput');
 const text=input.value.trim();
 if(!text)return;
+const isProblem = document.getElementById('logProblem')?.checked || false;
 const metrics = {};
 const ph = document.getElementById('logPH')?.value;
 const ec = document.getElementById('logEC')?.value;
@@ -1357,7 +1535,7 @@ if(dry) metrics.dry = parseFloat(dry);
 const plants=lsGet('grow-plants',[]);
 if(!plants[journalEditId])return;
 if(!plants[journalEditId].logs)plants[journalEditId].logs=[];
-const logEntry = {date:new Date().toLocaleString('it-IT'),text};
+const logEntry = {date:new Date().toLocaleString('it-IT'),text,isProblem};
 // Estrai tag
 const tagMatches = text.match(/#(\\w+)/g);
 if(tagMatches) logEntry.tags = tagMatches.map(t => t.slice(1));
@@ -1367,7 +1545,7 @@ lsSet('grow-plants',plants);
 // Salva anche in IndexedDB per Fase 2+
 try {
     const plantId = plants[journalEditId].id || journalEditId;
-    await db.logs.add({plantId, date: logEntry.date, text, tags: logEntry.tags || [], metrics, photos: []});
+    await db.logs.add({plantId, date: logEntry.date, text, tags: logEntry.tags || [], metrics, isProblem: isProblem ? 1 : 0, photos: []});
 } catch(e) {}
 input.value='';
 document.getElementById('logPH').value='';
@@ -1376,8 +1554,155 @@ document.getElementById('logTemp').value='';
 document.getElementById('logHum').value='';
 document.getElementById('logFresh').value='';
 document.getElementById('logDry').value='';
+const probCheck = document.getElementById('logProblem');
+if(probCheck) probCheck.checked = false;
 renderPage();
 }
+// ═══════════════════════════════════════════════════════════
+// FASE 2 — TIMELINE VERTICALE + PROBLEM TIMELINE + DASHBOARD
+// ═══════════════════════════════════════════════════════════
+
+function renderTimelineHTML(pl) {
+    const logs = (pl.logs || []).slice().reverse();
+    if (!logs.length) {
+        return `<div style="text-align:center;padding:20px;color:#444;font-size:12px">Nessun log ancora.<br>Inizia a tracciare il tuo grow!</div>`;
+    }
+    let html = `<div class="timeline-line"></div>`;
+    logs.forEach((log, i) => {
+        const isProblem = log.isProblem;
+        const tags = (log.tags || []).map(t => `<span class="log-tag">#${esc(t)}</span>`).join('');
+        const metrics = log.metrics ? Object.entries(log.metrics).filter(([k, v]) => v !== undefined && v !== null && v !== '').map(([k, v]) => {
+            let color = '#888';
+            if (k === 'ph') color = 'var(--nc)';
+            if (k === 'ec') color = 'var(--np)';
+            if (k === 'temp') color = 'var(--no)';
+            if (k === 'humidity') color = 'var(--ng)';
+            return `<span class="timeline-metric" style="color:${color};border-color:${color}30">${k.toUpperCase()}: ${v}</span>`;
+        }).join('') : '';
+
+        html += `<div class="timeline-item">
+<div class="timeline-dot ${isProblem ? 'problem' : ''}"></div>
+<div class="timeline-card">
+<div class="timeline-date">${esc(log.date)} ${isProblem ? '<span style="color:var(--no);margin-left:8px">⚠️ PROBLEMA</span>' : ''}</div>
+<div class="timeline-text">${esc(log.text)}</div>
+${tags ? `<div class="timeline-tags">${tags}</div>` : ''}
+${metrics ? `<div class="timeline-metrics">${metrics}</div>` : ''}
+${isProblem ? `<div class="timeline-problem-badge">🔍 Problema segnalato</div>` : ''}
+</div>
+</div>`;
+    });
+    return html;
+}
+
+function renderProblemChartHTML(pl) {
+    const hasProblems = (pl.logs || []).some(l => l.isProblem && l.metrics);
+    if (!hasProblems) {
+        return `<div style="text-align:center;padding:20px;color:#555;font-size:12px">📊 Nessun problema con metriche registrate.<br>Segnala un problema con metriche ambientali per vedere il grafico.</div>`;
+    }
+    return `<div class="problem-legend">
+<span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--no)"></span> Problema</span>
+<span><span style="display:inline-block;width:20px;height:3px;background:var(--nc);border-radius:2px"></span> pH</span>
+<span><span style="display:inline-block;width:20px;height:3px;background:var(--ng);border-radius:2px"></span> Umidità %</span>
+<span><span style="display:inline-block;width:20px;height:3px;background:var(--no);border-radius:2px"></span> Temp °C</span>
+</div>
+<div class="problem-chart-wrap"><canvas id="problemChart"></canvas></div>`;
+}
+
+let growProblemChart = null;
+function initProblemChart(pl) {
+    if (typeof Chart === 'undefined') return;
+    const canvas = document.getElementById('problemChart');
+    if (!canvas) return;
+
+    const logsWithMetrics = (pl.logs || []).filter(l => l.metrics && (l.metrics.temp || l.metrics.humidity || l.metrics.ph));
+    if (!logsWithMetrics.length) return;
+
+    const labels = logsWithMetrics.map(l => l.date.split(',')[0]);
+    const tempData = logsWithMetrics.map(l => parseMetricValue(l.metrics.temp));
+    const humData = logsWithMetrics.map(l => parseMetricValue(l.metrics.humidity));
+    const phData = logsWithMetrics.map(l => parseMetricValue(l.metrics.ph));
+
+    // Marker problemi: punto rosso grande dove isProblem=true
+    const problemPoints = logsWithMetrics.map(l => l.isProblem ? 8 : 0);
+    const problemColors = logsWithMetrics.map(l => l.isProblem ? 'var(--no)' : 'transparent');
+
+    if (growProblemChart) { growProblemChart.destroy(); growProblemChart = null; }
+
+    growProblemChart = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Temp °C',
+                    data: tempData,
+                    borderColor: 'var(--no)',
+                    backgroundColor: 'rgba(255,102,0,0.08)',
+                    yAxisID: 'y',
+                    tension: 0.3,
+                    pointRadius: 3,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Umidità %',
+                    data: humData,
+                    borderColor: 'var(--ng)',
+                    backgroundColor: 'rgba(57,255,20,0.08)',
+                    yAxisID: 'y1',
+                    tension: 0.3,
+                    pointRadius: 3,
+                    borderWidth: 2
+                },
+                {
+                    label: 'pH',
+                    data: phData,
+                    borderColor: 'var(--nc)',
+                    backgroundColor: 'rgba(0,255,255,0.08)',
+                    yAxisID: 'y2',
+                    tension: 0.3,
+                    pointRadius: 3,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Problemi',
+                    data: logsWithMetrics.map(l => l.isProblem ? (parseMetricValue(l.metrics.temp) || parseMetricValue(l.metrics.humidity) || 20) : null),
+                    borderColor: 'transparent',
+                    backgroundColor: 'var(--no)',
+                    pointRadius: problemPoints,
+                    pointHoverRadius: 10,
+                    pointBackgroundColor: problemColors,
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    yAxisID: 'y',
+                    showLine: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(ctx) {
+                            if (ctx.dataset.label === 'Problemi') return '⚠️ Problema segnalato';
+                            return ctx.dataset.label + ': ' + (ctx.parsed.y !== null ? ctx.parsed.y : '-');
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888', font: { family: 'Inter', size: 9 } } },
+                y: { type: 'linear', display: true, position: 'left', title: { display: true, text: 'Temp °C', color: 'var(--no)' }, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } },
+                y1: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'Umid %', color: 'var(--ng)' }, grid: { drawOnChartArea: false }, ticks: { color: '#888' } },
+                y2: { type: 'linear', display: true, position: 'right', title: { display: true, text: 'pH', color: 'var(--nc)' }, grid: { drawOnChartArea: false }, ticks: { color: '#888' }, min: 0, max: 14 }
+            }
+        }
+    });
+}
+
 async function initJournal(){
     initCharts();
     // Carica foto nella grid se siamo in detail view
@@ -1386,6 +1711,7 @@ async function initJournal(){
         const plants = lsGet('grow-plants',[]);
         const plant = plants[journalEditId];
         if(plant){
+            initProblemChart(plant);
             const photos = await getPlantPhotos(journalEditId);
             grid.innerHTML = photos.map(p => `<img src="${p.data}" class="photo-thumb" onclick="if(confirm('Eliminare questa foto?')){deletePhoto(${p.id}).then(()=>renderPage())}">`).join('');
             if(!photos.length) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#444;font-size:12px;padding:12px">Nessuna foto ancora</div>';
@@ -1665,6 +1991,7 @@ html+=`<div class="strain-card">
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px">
 <div style="font-weight:700;font-size:16px;font-family:Orbitron">${esc(s.name)}</div>
 <span class="badge" style="background:${diffColor}20;color:${diffColor};border:1px solid ${diffColor}50">${s.difficulty}</span>
+${compareSelection.includes(sIdx)?`<span class="badge" style="background:rgba(0,255,255,.15);color:var(--nc);border:1px solid var(--nc);font-size:9px">✓ IN CONFRONTO</span>`:''}
 </div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
 ${s.evidence?renderEvidenceBadge(s.evidence):''}
@@ -1698,7 +2025,16 @@ function setStrainDifficultyFilter(v){strainDifficultyFilter=v;renderPage()}
 function setStrainChemotypeFilter(v){strainChemotypeFilter=v;renderPage()}
 function setStrainTerpeneFilter(v){strainTerpeneFilter=v;renderPage()}
 function setStrainSearch(v){strainSearch=v;renderPage()}
-function openStrainCompare(idx){ /* placeholder: hook per il Comparatore Cultivar (#12) */ alert('Il Comparatore Cultivar arriva nel prossimo step (#12) — per ora puoi usare i filtri per confrontare le strain manualmente.'); }
+function openStrainCompare(idx){
+    if(compareSelection.includes(idx)){
+        compareSelection = compareSelection.filter(i=>i!==idx);
+    } else {
+        if(compareSelection.length>=3){alert('Massimo 3 strain confrontabili');return;}
+        compareSelection.push(idx);
+    }
+    if(compareSelection.length>=2){go('compare');}
+    else{renderPage();}
+}
 function initStrains(){}
 
 let timerInterval=null,timerSeconds=0,timerRunning=false;
@@ -1873,7 +2209,11 @@ Osserva i tricomi con lente 60x:
 
 Il flush dura 7-14 giorni. Solo acqua pH 6.0-6.5. Le foglie ingialliscono — è normale.
 
-**Test dello stelo:** si spezza netto = pronto per curing.`
+**Test dello stelo:** si spezza netto = pronto per curing.`,
+        versions: [
+            {date:"2024-01-15",author:"GROW 420 Team",content:"# Grow Guide Completo\n\n## Germinazione\n\nMetti il seme in acqua per 24h, poi in carta umida fino alla radichetta.\n\n## Vegetativa\n\nDai luce e nutrienti, la pianta cresce.\n\n## Fioritura\n\nCambia il fotoperiodo e aspetta la maturazione dei tricomi.\n\n## Raccolta\n\nTaglia quando i tricomi sono pronti."},
+            {date:"2024-08-09",author:"GROW 420 Team",content:"# Grow Guide Completo\n\n## Germinazione Perfetta\n\nLa germinazione è il momento più delicato. Un seme sano ha colore marrone scuro con venature tigre e si sente duro al tatto.\n\n**Metodo consigliato: Bicchiere + Carta**\n\n- Metti il seme in acqua a temperatura ambiente (20-25°C) per 12-24h\n- Quando affonda, passalo tra due fogli di carta bagnata\n- Inserisci in sacchetto zip chiuso, posto caldo e buio\n- Controlla ogni 12h. La radichetta deve essere 0.5-1cm prima di piantare\n\n## Vegetativa: Costruisci la Struttura\n\nLa fase vegetativa è dove decidi la forma finale della pianta.\n\n## Flushing e Raccolta\n\nIl flush dura 7-14 giorni. Solo acqua pH 6.0-6.5. Le foglie ingialliscono — è normale.\n\n**Test dello stelo:** si spezza netto = pronto per curing."}
+        ]
     },
     {
         id: 1,
@@ -2369,6 +2709,13 @@ let libraryFilter = 'all';
 let libraryEvidenceFilter = null;
 let librarySearch = '';
 let libraryOpenId = null;
+let compareSelection = [];
+let coaData = lsGet('grow-coa', []);
+let communityPosts = lsGet('grow-community', []);
+let iotConnected = lsGet('grow-iot-connected', false);
+let iotSensor = lsGet('grow-iot-sensor', 'custom');
+let cloudSyncStatus = lsGet('grow-cloud-status', 'offline');
+let shopCart = lsGet('grow-shop-cart', []);
 
 function setLibraryFilter(f) { libraryFilter = f; renderPage(); }
 function setLibraryEvidenceFilter(v) { libraryEvidenceFilter = v; renderPage(); }
@@ -2547,11 +2894,150 @@ ${item.meta ? `<div class="versioning-bar">
 </div>
 <div style="margin-top:8px">📚 <strong>Fonti:</strong> ${(item.meta.sources || []).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label)}</a>`).join(' • ')}</div>
 </div>` : ''}
+${renderVersionHistory(item)}
 </div>
 </div>`;
 }
 
 function initLibrary() {}
+
+// ═══════════════════════════════════════════════════════════
+// FASE 2 — DASHBOARD PERSONALE
+// ═══════════════════════════════════════════════════════════
+
+function renderDashboard(){
+    const plants = lsGet('grow-plants',[]);
+    if(!plants.length){
+        return `<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Dashboard</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Panoramica del tuo grow</p>
+</div>
+<div style="text-align:center;padding:60px 20px">
+<div style="font-size:64px;margin-bottom:16px">📊</div>
+<div style="font-family:Orbitron;font-size:16px;color:#666;margin-bottom:8px">Nessuna pianta da analizzare</div>
+<div style="font-size:13px;color:#444;margin-bottom:24px">Aggiungi piante nel Journal per vedere le statistiche</div>
+<button onclick="go('journal');newPlant()" class="btn" style="background:var(--np);color:#fff">Aggiungi Pianta</button>
+</div>
+</div>`;
+    }
+
+    // Calcoli aggregati
+    const totalPlants = plants.length;
+    const totalProblems = plants.reduce((sum, p) => sum + (p.logs || []).filter(l => l.isProblem).length, 0);
+    const totalLogs = plants.reduce((sum, p) => sum + (p.logs || []).length, 0);
+
+    // Resa totale stimata vs reale
+    let totalFresh = 0, totalDry = 0;
+    plants.forEach(p => {
+        (p.logs || []).forEach(l => {
+            if(l.metrics?.fresh) totalFresh += parseFloat(l.metrics.fresh);
+            if(l.metrics?.dry) totalDry += parseFloat(l.metrics.dry);
+        });
+    });
+    const yieldPct = totalFresh > 0 ? ((totalDry / totalFresh) * 100).toFixed(1) : 0;
+
+    // Durata media fase
+    const avgPhase = totalPlants > 0 ? (plants.reduce((s, p) => s + (p.phase || 0), 0) / totalPlants).toFixed(1) : 0;
+
+    let html = `<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Dashboard</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Panoramica del tuo grow</p>
+</div>
+<div class="dashboard-grid">
+<div class="dash-card gl-g">
+<div class="dash-label">Piante Totali</div>
+<div class="dash-value gn" style="color:var(--ng)">${totalPlants}</div>
+<div class="dash-sub">${plants.filter(p=>p.phase>=5).length} in fioritura/harvest</div>
+</div>
+<div class="dash-card gl-o">
+<div class="dash-label">Problemi Rilevati</div>
+<div class="dash-value go" style="color:var(--no)">${totalProblems}</div>
+<div class="dash-sub">${totalLogs > 0 ? ((totalProblems/totalLogs)*100).toFixed(1) : 0}% dei log</div>
+</div>
+<div class="dash-card gl-c">
+<div class="dash-label">Resa Totale</div>
+<div class="dash-value gc" style="color:var(--nc)">${totalDry > 0 ? totalDry.toFixed(1) : '0'}g</div>
+<div class="dash-sub">${totalFresh > 0 ? 'da ' + totalFresh.toFixed(1) + 'g freschi' : 'Nessun dato peso'}</div>
+${totalFresh > 0 ? `<div class="dash-bar"><div class="dash-bar-fill" style="width:${Math.min(yieldPct,100)}%;background:var(--nc)"></div></div><div style="font-size:10px;color:#555;margin-top:4px;font-family:Orbitron">${yieldPct}% resa</div>` : ''}
+</div>
+<div class="dash-card gl-p">
+<div class="dash-label">Fase Media</div>
+<div class="dash-value gp" style="color:var(--np)">${phases[Math.floor(avgPhase)]?.name || 'Setup'}</div>
+<div class="dash-sub">Giorno medio: ${Math.round(plants.reduce((s,p)=>s+(p.day||0),0)/totalPlants)}</div>
+</div>
+</div>
+
+<div class="card" style="padding:20px;margin-top:16px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:16px;text-transform:uppercase;letter-spacing:2px">📊 Confronto Piante</div>
+<div style="display:flex;flex-direction:column;gap:12px">`;
+
+    plants.forEach((pl, idx) => {
+        const phase = phases[pl.phase] || phases[0];
+        const plogs = pl.logs || [];
+        const pProblems = plogs.filter(l => l.isProblem).length;
+        const pFresh = plogs.reduce((s, l) => s + (parseFloat(l.metrics?.fresh) || 0), 0);
+        const pDry = plogs.reduce((s, l) => s + (parseFloat(l.metrics?.dry) || 0), 0);
+        const pYield = pFresh > 0 ? ((pDry / pFresh) * 100).toFixed(1) : 0;
+
+        html += `<div class="card" style="padding:14px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<div style="font-weight:700;font-size:14px;font-family:Orbitron">${esc(pl.name)}</div>
+<span class="badge" style="background:${phase.color}20;color:${phase.color};border:1px solid ${phase.color}50;font-size:10px">${phase.name}</span>
+</div>
+<div class="dash-compare">
+<div class="dash-compare-item">
+<div class="dash-compare-val" style="color:var(--ng)">${pl.day}</div>
+<div class="dash-compare-lab">Giorno</div>
+</div>
+<div class="dash-compare-item">
+<div class="dash-compare-val" style="color:var(--no)">${pProblems}</div>
+<div class="dash-compare-lab">Problemi</div>
+</div>
+<div class="dash-compare-item">
+<div class="dash-compare-val" style="color:var(--nc)">${plogs.length}</div>
+<div class="dash-compare-lab">Log</div>
+</div>
+<div class="dash-compare-item">
+<div class="dash-compare-val" style="color:var(--np)">${pDry > 0 ? pDry.toFixed(1) + 'g' : '-'}</div>
+<div class="dash-compare-lab">Resa</div>
+</div>
+</div>
+${pYield > 0 ? `<div class="dash-bar" style="margin-top:10px"><div class="dash-bar-fill" style="width:${Math.min(pYield,100)}%;background:var(--nc)"></div></div><div style="font-size:9px;color:#555;margin-top:4px;font-family:Orbitron;text-align:right">${pYield}% resa</div>` : ''}
+</div>`;
+    });
+
+    html += `</div></div>`;
+
+    // Ultimi problemi
+    const allProblems = [];
+    plants.forEach((p, idx) => {
+        (p.logs || []).forEach(l => {
+            if(l.isProblem) allProblems.push({...l, plantName: p.name, plantIdx: idx});
+        });
+    });
+    allProblems.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    if(allProblems.length){
+        html += `<div class="card" style="padding:20px;margin-top:16px">
+<div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:16px;text-transform:uppercase;letter-spacing:2px">⚠️ Ultimi Problemi</div>
+<div class="dash-problem-list">`;
+        allProblems.slice(0, 5).forEach(prob => {
+            html += `<div class="dash-problem-item" onclick="journalEditId=${prob.plantIdx};journalView='detail';go('journal')" style="cursor:pointer">
+<div class="dash-problem-date">${prob.date.split(',')[0]}</div>
+<div class="dash-problem-text"><strong style="color:#fff">${esc(prob.plantName)}:</strong> ${esc(prob.text.substring(0, 60))}${prob.text.length > 60 ? '...' : ''}</div>
+<span style="font-size:11px;color:var(--no)">→</span>
+</div>`;
+        });
+        html += `</div></div>`;
+    }
+
+    html += `</div>`;
+    return html;
+}
+
+function initDashboard(){}
 
 
 function parseMetricValue(v){
@@ -2702,6 +3188,304 @@ function closePlantSelector(){
 const el=document.getElementById('plantSelectorModal');
 if(el)el.remove();
 }
+
+// ═══════════════════════════════════════════════════════════
+// COMPARATORE CULTIVAR (#12)
+// ═══════════════════════════════════════════════════════════
+function renderCompare(){
+    if(compareSelection.length<2){
+        return `<div><div style="margin-bottom:20px"><h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Confronta</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Seleziona 2-3 strain da Strains</p></div><div style="text-align:center;padding:40px;color:#555"><div style="font-size:48px;margin-bottom:12px">⚖️</div><div style="font-family:Orbitron;font-size:14px">Seleziona almeno 2 strain</div></div></div>`;
+    }
+    const selected = compareSelection.map(i=>strains[i]).filter(Boolean);
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Confronta</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">${selected.length} cultivar selezionate</p></div><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;font-family:Inter"><thead><tr style="border-bottom:2px solid #333"><th style="text-align:left;padding:10px;color:#888;font-family:Orbitron;font-size:10px;text-transform:uppercase">Parametro</th>${selected.map(s=>`<th style="text-align:center;padding:10px;color:${s.evidence==='lab'?'var(--ng)':s.evidence==='study'?'var(--ny)':'#aaa'};font-family:Orbitron;font-size:11px">${esc(s.name)}</th>`).join('')}</tr></thead><tbody>`;
+    const rows=[
+        {label:'Tipo',key:'type'},
+        {label:'Chemotype',key:'chemotype',fmt:v=>chemotypeInfo[v]?.short||v},
+        {label:'THC',key:'thc'},
+        {label:'CBD',key:'cbd'},
+        {label:'Fioritura',key:'flowerTime'},
+        {label:'Resa',key:'yield'},
+        {label:'Difficoltà',key:'difficulty'},
+        {label:'Genetica',key:'genetics'},
+        {label:'Terpeni',key:'terpenes',fmt:v=>(v||[]).join(', ')}
+    ];
+    rows.forEach((r,i)=>{
+        html+=`<tr style="border-bottom:1px solid ${i%2===0?'#1a1a1a':'#111'}"><td style="padding:10px;color:#666;font-family:Orbitron;font-size:10px;text-transform:uppercase">${r.label}</td>${selected.map(s=>`<td style="padding:10px;text-align:center;color:#ccc">${esc(r.fmt?r.fmt(s[r.key]):s[r.key]||'-')}</td>`).join('')}</tr>`;
+    });
+    html+=`</tbody></table></div><div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">${selected.map((s,i)=>`<button onclick="openStrainCompare(${compareSelection[i]})" class="btn" style="background:#1a1a1a;color:#888;border:1px solid #333;font-size:10px;padding:8px 12px">❌ Rimuovi ${esc(s.name)}</button>`).join('')}<button onclick="compareSelection=[];renderPage();" class="btn" style="background:#1a0505;color:#c44;border:1px solid #331111;font-size:10px;padding:8px 12px">🗑 Svuota</button></div></div>`;
+    return html;
+}
+function initCompare(){}
+
+// ═══════════════════════════════════════════════════════════
+// COA UPLOADER / VIEWER (#13)
+// ═══════════════════════════════════════════════════════════
+function renderCOA(){
+    const coas = lsGet('grow-coa',[]);
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gc" style="font-size:32px;margin-bottom:4px">COA Viewer</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Certificate of Analysis</p></div>`;
+    html+=`<div class="card gl-c" style="padding:20px;margin-bottom:16px"><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Nuovo COA</div><div style="display:flex;flex-direction:column;gap:10px"><input type="text" id="coaStrain" class="inp" placeholder="Strain / Lotto"><input type="text" id="coaLab" class="inp" placeholder="Laboratorio"><input type="date" id="coaDate" class="inp"><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><input type="number" id="coaThc" class="inp" placeholder="THCA %" step="0.01"><input type="number" id="coaCbd" class="inp" placeholder="CBDA %" step="0.01"></div><input type="text" id="coaTerps" class="inp" placeholder="Terpeni (es. Myrcene 0.45%, Limonene 0.30%)"><input type="file" id="coaFile" accept="image/*,.pdf" style="display:none" onchange="previewCOA(this)"><button onclick="document.getElementById('coaFile').click()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333;font-size:11px">📎 Allega PDF/Immagine</button><div id="coaPreview" style="max-height:120px;overflow:hidden;border-radius:8px;display:none"><img id="coaPreviewImg" style="width:100%;object-fit:cover"></div><button onclick="saveCOA()" class="btn" style="background:var(--nc);color:#000">💾 Salva COA</button></div></div>`;
+    if(!coas.length){
+        html+=`<div style="text-align:center;padding:40px;color:#555"><div style="font-size:48px;margin-bottom:12px">📋</div><div style="font-family:Orbitron;font-size:14px">Nessun COA caricato</div></div>`;
+    } else {
+        html+=`<div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">`;
+        coas.forEach((c,i)=>{
+            const thcTot = c.thca ? (c.thca*0.877).toFixed(2) : '-';
+            html+=`<div class="card gl-c" style="padding:16px;border:1px solid rgba(0,255,255,.2)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px"><div><div style="font-weight:700;font-size:16px;font-family:Orbitron;color:var(--nc)">${esc(c.strain)}</div><div style="font-size:11px;color:#888">${esc(c.lab)} • ${c.date}</div></div><button onclick="deleteCOA(${i})" style="background:none;border:none;color:#c44;font-size:18px;cursor:pointer">🗑</button></div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px"><div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">THCA</div><div style="font-size:13px;color:var(--nc);font-weight:700">${c.thca||'-'}%</div></div><div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">THC tot</div><div style="font-size:13px;color:var(--nc);font-weight:700">${thcTot}%</div></div><div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">CBDA</div><div style="font-size:13px;color:var(--nc);font-weight:700">${c.cbda||'-'}%</div></div></div>${c.terps?`<div style="font-size:11px;color:#aaa;margin-bottom:8px">🌸 ${esc(c.terps)}</div>`:''}${c.file?`<img src="${c.file}" style="width:100%;border-radius:8px;border:1px solid #222">`:''}</div>`;
+        });
+        html+=`</div>`;
+    }
+    html+=`</div>`;
+    return html;
+}
+function previewCOA(input){
+    const file=input.files[0];
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+        const img=document.getElementById('coaPreviewImg');
+        img.src=e.target.result;
+        document.getElementById('coaPreview').style.display='block';
+        img.dataset.base64=e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+function saveCOA(){
+    const strain=document.getElementById('coaStrain').value.trim();
+    const lab=document.getElementById('coaLab').value.trim();
+    const date=document.getElementById('coaDate').value;
+    const thca=parseFloat(document.getElementById('coaThc').value)||null;
+    const cbda=parseFloat(document.getElementById('coaCbd').value)||null;
+    const terps=document.getElementById('coaTerps').value.trim();
+    const img=document.getElementById('coaPreviewImg');
+    const file=img&&img.dataset.base64?img.dataset.base64:null;
+    if(!strain||!lab){alert('Inserisci strain e laboratorio');return;}
+    const coas=lsGet('grow-coa',[]);
+    coas.unshift({strain,lab,date,thca,cbda,terps,file,createdAt:new Date().toISOString()});
+    lsSet('grow-coa',coas);
+    renderPage();
+}
+function deleteCOA(i){
+    if(!confirm('Eliminare questo COA?'))return;
+    const coas=lsGet('grow-coa',[]);
+    coas.splice(i,1);lsSet('grow-coa',coas);renderPage();
+}
+function initCOA(){}
+
+// ═══════════════════════════════════════════════════════════
+// COMMUNITY Q&A (#14)
+// ═══════════════════════════════════════════════════════════
+function renderCommunity(){
+    const posts=lsGet('grow-community',[]);
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gy" style="font-size:32px;margin-bottom:4px">Community</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Q&A Grower — Reputazione & Badge</p></div>`;
+    html+=`<div class="card gl-y" style="padding:20px;margin-bottom:16px"><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Nuova Domanda</div><div style="display:flex;flex-direction:column;gap:10px"><input type="text" id="commTitle" class="inp" placeholder="Titolo domanda..."><textarea id="commBody" class="inp" rows="3" placeholder="Descrivi il problema o la curiosità..."></textarea><input type="text" id="commTags" class="inp" placeholder="Tag (es. LST, flush, autofiorente)"><button onclick="addCommunityPost()" class="btn" style="background:var(--ny);color:#000">📢 Pubblica</button></div></div>`;
+    if(!posts.length){
+        html+=`<div style="text-align:center;padding:40px;color:#555"><div style="font-size:48px;margin-bottom:12px">💬</div><div style="font-family:Orbitron;font-size:14px">Nessuna domanda ancora</div><div style="font-size:12px;margin-top:8px">Sii il primo a chiedere!</div></div>`;
+    } else {
+        html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
+        posts.forEach((p,i)=>{
+            const authorBadge = (p.authorRep||0)>=10?`<span class="badge" style="background:rgba(57,255,20,.15);color:var(--ng);border:1px solid var(--ng);font-size:9px;margin-left:6px">🏅 Grower Certificato</span>`:'';
+            const replies = p.replies||[];
+            html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="font-weight:700;font-size:15px;color:#fff">${esc(p.title)}</div><div style="display:flex;align-items:center;gap:6px"><button onclick="upvotePost(${i})" style="background:none;border:none;color:var(--ng);font-size:16px;cursor:pointer">▲ ${p.upvotes||0}</button></div></div><div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(p.body)}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">${(p.tags||[]).map(t=>`<span class="log-tag">#${esc(t)}</span>`).join('')}</div><div style="font-size:10px;color:#555;margin-bottom:10px">👤 ${esc(p.author||'Anonimo')}${authorBadge} • ${new Date(p.date).toLocaleDateString('it-IT')}</div>${replies.length?`<div style="border-top:1px solid #1a1a1a;padding-top:10px;display:flex;flex-direction:column;gap:8px">${replies.map((r,ri)=>`<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:10px"><div style="font-size:12px;color:#bbb;line-height:1.5">${esc(r.text)}</div><div style="font-size:10px;color:#555;margin-top:4px">👤 ${esc(r.author||'Anonimo')} • ${new Date(r.date).toLocaleDateString('it-IT')}</div></div>`).join('')}</div>`:''}<div style="margin-top:10px;display:flex;gap:8px"><input type="text" id="reply-${i}" class="inp" placeholder="Rispondi..." style="flex:1;font-size:12px;padding:8px 12px"><button onclick="addReply(${i})" class="btn" style="background:#222;color:#888;font-size:11px;padding:8px 14px">Rispondi</button></div></div>`;
+        });
+        html+=`</div>`;
+    }
+    html+=`</div>`;
+    return html;
+}
+function addCommunityPost(){
+    const title=document.getElementById('commTitle').value.trim();
+    const body=document.getElementById('commBody').value.trim();
+    const tags=document.getElementById('commTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+    if(!title||!body){alert('Compila titolo e descrizione');return;}
+    const posts=lsGet('grow-community',[]);
+    posts.unshift({title,body,tags,author:'Tu',authorRep:(posts.filter(p=>p.author==='Tu').length),upvotes:0,replies:[],date:new Date().toISOString()});
+    lsSet('grow-community',posts);
+    renderPage();
+}
+function addReply(idx){
+    const el=document.getElementById('reply-'+idx);
+    const text=el.value.trim();
+    if(!text)return;
+    const posts=lsGet('grow-community',[]);
+    if(!posts[idx])return;
+    if(!posts[idx].replies)posts[idx].replies=[];
+    posts[idx].replies.push({text,author:'Tu',date:new Date().toISOString()});
+    posts[idx].authorRep=(posts[idx].authorRep||0)+1;
+    lsSet('grow-community',posts);
+    renderPage();
+}
+function upvotePost(idx){
+    const posts=lsGet('grow-community',[]);
+    if(posts[idx]){posts[idx].upvotes=(posts[idx].upvotes||0)+1;lsSet('grow-community',posts);renderPage();}
+}
+function initCommunity(){}
+
+// ═══════════════════════════════════════════════════════════
+// DATABASE ENTITÀ — BREEDER / LAB / FORNITORI (#15)
+// ═══════════════════════════════════════════════════════════
+const entityDB=[
+    {id:0,name:"Royal Queen Seeds",type:"breeder",country:"Paesi Bassi",rating:4.7,coa:true,verified:true,strains:["White Widow","Amnesia Haze","Blue Dream","Critical + 2.0"],desc:"Seed bank olandese con catalogo vasto e stabile. COA disponibili per le linee premium.",url:"https://www.royalqueenseeds.com"},
+    {id:1,name:"Barney's Farm",type:"breeder",country:"Paesi Bassi",rating:4.6,coa:true,verified:true,strains:["Gorilla Zkittlez","Liberty Haze"],desc:"Leggenda di Amsterdam, genetica premiata.",url:"https://www.barneysfarm.com"},
+    {id:2,name:"Leafly",type:"aggregator",country:"USA",rating:4.5,coa:false,verified:true,strains:[],desc:"Database strain più grande al mondo. Non vende semi ma aggrega dati.",url:"https://www.leafly.com"},
+    {id:3,name:"Grow Weed Easy",type:"source",country:"USA",rating:4.4,coa:false,verified:true,strains:[],desc:"Guida gratuita con approccio evidence-based. Fonte tecnica affidabile.",url:"https://www.growweedeasy.com"},
+    {id:4,name:"Cannalysis",type:"lab",country:"USA",rating:4.8,coa:true,verified:true,strains:[],desc:"Laboratorio ISO 17025 specializzato in cannabis. Pannelli completi.",url:"https://www.cannalysis.com"},
+    {id:5,name:"SensorPush",type:"fornitore",country:"USA",rating:4.3,coa:false,verified:true,strains:[],desc:"Sensori wireless temp/umidità per grow room. Integrazione API disponibile.",url:"https://www.sensorpush.com"},
+    {id:6,name:"AC Infinity",type:"fornitore",country:"USA",rating:4.6,coa:false,verified:true,strains:[],desc:"Ventilazione e climatizzazione smart per grow tent.",url:"https://www.acinfinity.com"}
+];
+let entityFilter='all';
+function renderEntities(){
+    let filtered=entityFilter==='all'?entityDB:entityDB.filter(e=>e.type===entityFilter);
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gp" style="font-size:32px;margin-bottom:4px">Entità Verificate</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Breeder, Lab & Fornitori</p></div>`;
+    html+=`<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">${[{v:'all',l:'Tutti',c:'#fff'},{v:'breeder',l:'Breeder',c:'var(--ng)'},{v:'lab',l:'Lab',c:'var(--nc)'},{v:'fornitore',l:'Fornitori',c:'var(--ny)'},{v:'aggregator',l:'Aggregator',c:'var(--np)'},{v:'source',l:'Fonti',c:'var(--no)'}].map(f=>`<button onclick="entityFilter='${f.v}';renderPage()" style="padding:8px 16px;border-radius:99px;border:2px solid ${entityFilter===f.v?f.c:'#222'};background:${entityFilter===f.v?f.c+'20':'#111'};color:${entityFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}</div>`;
+    html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
+    filtered.forEach(e=>{
+        const typeColor=e.type==='breeder'?'var(--ng)':e.type==='lab'?'var(--nc)':e.type==='fornitore'?'var(--ny)':'var(--np)';
+        html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div style="font-weight:700;font-size:16px;font-family:Orbitron">${esc(e.name)}</div><div style="font-size:11px;color:#888">${esc(e.country)} • ⭐ ${e.rating}</div></div><span class="badge" style="background:${typeColor}20;color:${typeColor};border:1px solid ${typeColor}50">${e.type.toUpperCase()}</span></div><div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(e.desc)}</div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${e.verified?`<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng);border:1px solid var(--ng)">✅ Verificato</span>`:''}${e.coa?`<span class="badge" style="background:rgba(0,255,255,.1);color:var(--nc);border:1px solid var(--nc)">📋 COA Caricata</span>`:''}</div>${e.strains.length?`<div style="font-size:11px;color:#666">🧬 Varietà: ${e.strains.map(s=>`<span style="color:#aaa">${esc(s)}</span>`).join(', ')}</div>`:''}<div style="margin-top:10px"><a href="${esc(e.url)}" target="_blank" rel="noopener" style="color:var(--nc);font-size:12px;text-decoration:none">🔗 Visita sito →</a></div></div>`;
+    });
+    html+=`</div></div>`;
+    return html;
+}
+function initEntities(){}
+
+// ═══════════════════════════════════════════════════════════
+// IoT SENSORI (#18)
+// ═══════════════════════════════════════════════════════════
+function renderIoT(){
+    const connected=lsGet('grow-iot-connected',false);
+    const sensor=lsGet('grow-iot-sensor','custom');
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gc" style="font-size:32px;margin-bottom:4px">Sensori IoT</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Integrazione ambientale automatica</p></div>`;
+    html+=`<div class="card gl-c" style="padding:20px;margin-bottom:16px"><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Connessione</div><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="width:14px;height:14px;border-radius:50%;background:${connected?'var(--ng)':'#555'};box-shadow:0 0 10px ${connected?'var(--ng)':'transparent'}"></div><div style="font-size:14px;color:${connected?'var(--ng)':'#888'}">${connected?'🟢 Connesso':'⚪ Disconnesso'}</div></div><select id="iotSensorType" class="inp" style="margin-bottom:10px"><option value="custom" ${sensor==='custom'?'selected':''}>Custom / Manuale</option><option value="sensorpush" ${sensor==='sensorpush'?'selected':''}>SensorPush</option><option value="xiaomi" ${sensor==='xiaomi'?'selected':''}>Xiaomi Mi Temp</option></select><button onclick="toggleIoT()" class="btn" style="background:${connected?'#1a0505':'var(--ng)'};color:${connected?'#c44':'#000'};border:1px solid ${connected?'#331111':'var(--ng)'};width:100%">${connected?'🔌 Disconnetti':'🔗 Connetti Sensore'}</button></div>`;
+    if(connected){
+        html+=`<div class="card gl-c" style="padding:20px;margin-bottom:16px"><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Lettura Manuale / Simulata</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px"><div><div class="metric-label">Temp °C</div><input type="number" id="iotTemp" class="metric-inp" placeholder="24.0" step="0.1"></div><div><div class="metric-label">Umid %</div><input type="number" id="iotHum" class="metric-inp" placeholder="55" step="1"></div><div><div class="metric-label">pH</div><input type="number" id="iotPH" class="metric-inp" placeholder="6.2" step="0.1"></div><div><div class="metric-label">EC</div><input type="number" id="iotEC" class="metric-inp" placeholder="1.4" step="0.1"></div></div><button onclick="addSensorReading()" class="btn" style="background:var(--nc);color:#000;width:100%">📡 Inserisci nel Journal</button><div style="font-size:10px;color:#555;margin-top:8px">I dati verranno aggiunti come log strutturato alla pianta attiva.</div></div>`;
+    }
+    html+=`<div style="text-align:center;padding:20px;color:#444;font-size:11px">L'integrazione reale con SensorPush/Xiaomi richiede backend con API proprietarie.<br>Per ora: lettura manuale o simulata → log automatico.</div></div>`;
+    return html;
+}
+function toggleIoT(){
+    const connected=!lsGet('grow-iot-connected',false);
+    lsSet('grow-iot-connected',connected);
+    if(connected){
+        const sensor=document.getElementById('iotSensorType')?.value||'custom';
+        lsSet('grow-iot-sensor',sensor);
+    }
+    renderPage();
+}
+function addSensorReading(){
+    const plants=lsGet('grow-plants',[]);
+    const idx=getActivePlantIndex();
+    if(!plants[idx]){alert('Nessuna pianta attiva. Aggiungi una pianta nel Journal.');return;}
+    const temp=document.getElementById('iotTemp').value;
+    const hum=document.getElementById('iotHum').value;
+    const ph=document.getElementById('iotPH').value;
+    const ec=document.getElementById('iotEC').value;
+    const metrics={};
+    if(ph)metrics.ph=ph;
+    if(ec)metrics.ec=ec;
+    if(temp)metrics.temp=temp+'°C';
+    if(hum)metrics.humidity=hum+'%';
+    const text=`Lettura sensore ${lsGet('grow-iot-sensor','custom')}: ${temp?'Temp '+temp+'°C ':''}${hum?'Umid '+hum+'% ':''}${ph?'pH '+ph+' ':''}${ec?'EC '+ec+' ':''}`.trim();
+    if(!plants[idx].logs)plants[idx].logs=[];
+    plants[idx].logs.push({date:new Date().toLocaleString('it-IT'),text,metrics,isProblem:false});
+    lsSet('grow-plants',plants);
+    alert('Dati inseriti nel journal!');
+    go('journal');
+}
+function initIoT(){}
+
+// ═══════════════════════════════════════════════════════════
+// MARKETPLACE / ATTREZZATURA (#19)
+// ═══════════════════════════════════════════════════════════
+const shopItems=[
+    {id:0,name:"LED Spider Farmer SF1000",category:"illuminazione",phase:"veg",price:"€129",popularity:95,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Quantum board Samsung LM301B. 100W reali. PPFD ottimale per 60x60."},
+    {id:1,name:"Tenda Grow 60x60x140",category:"tenda",phase:"setup",price:"€59",popularity:88,evidence:"community",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Mylar 600D, tubi portacavo, doppia apertura."},
+    {id:2,name:"pH-metro Apera PH20",category:"strumento",phase:"all",price:"€49",popularity:92,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Precisione ±0.1 pH, ATC, calibrazione automatica."},
+    {id:3,name:"Boveda 62% 8g (10 pack)",category:"accessorio",phase:"curing",price:"€15",popularity:96,evidence:"study",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Umidità a due vie. Essenziale per curing perfetto."},
+    {id:4,name:"Deumidificatore 12L/giorno",category:"clima",phase:"bloom",price:"€89",popularity:78,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Essenziale in fioritura per tenere umidità sotto il 50%."},
+    {id:5,name:"Lente 60x con LED",category:"strumento",phase:"bloom",price:"€12",popularity:85,evidence:"community",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Per osservare i tricomi e determinare il momento di raccolta."}
+];
+let shopFilter='all';
+function renderShop(){
+    let filtered=shopFilter==='all'?shopItems:shopItems.filter(s=>s.category===shopFilter||s.phase===shopFilter);
+    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Attrezzatura</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Consigli evidence-based per ogni fase</p></div>`;
+    html+=`<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">${[{v:'all',l:'Tutti',c:'#fff'},{v:'setup',l:'Setup',c:'var(--ng)'},{v:'veg',l:'Veg',c:'var(--np)'},{v:'bloom',l:'Bloom',c:'var(--no)'},{v:'curing',l:'Curing',c:'var(--ny)'}].map(f=>`<button onclick="shopFilter='${f.v}';renderPage()" style="padding:8px 16px;border-radius:99px;border:2px solid ${shopFilter===f.v?f.c:'#222'};background:${shopFilter===f.v?f.c+'20':'#111'};color:${shopFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}</div>`;
+    html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
+    filtered.forEach(item=>{
+        html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="font-weight:700;font-size:15px;color:#fff">${esc(item.name)}</div><div style="font-family:Orbitron;font-size:14px;color:var(--ng)">${esc(item.price)}</div></div><div style="font-size:11px;color:#888;margin-bottom:8px">${esc(item.category)} • Fase: ${esc(item.phase)} • 🔥 Popolarità: ${item.popularity}%</div><div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(item.desc)}</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${renderEvidenceBadge(item.evidence,{compact:true})}<a href="${esc(item.affiliate)}" target="_blank" rel="noopener" class="btn" style="background:var(--ng);color:#000;font-size:10px;padding:8px 14px;text-decoration:none">🛒 Vedi offerta</a></div></div>`;
+    });
+    html+=`</div><div style="text-align:center;padding:20px;color:#444;font-size:11px;margin-top:12px">I link sono esempi dimostrativi. In produzione sostituire con affiliate reali.</div></div>`;
+    return html;
+}
+function initShop(){}
+
+// ═══════════════════════════════════════════════════════════
+// CLOUD SYNC (#17) — Supabase standby → attivo
+// ═══════════════════════════════════════════════════════════
+async function syncToCloud(){
+    if(!supabaseClient){alert('Supabase non disponibile');return;}
+    try{
+        const userId = lsGet('grow-user-id', null) || 'anon_'+Math.random().toString(36).slice(2,10);
+        lsSet('grow-user-id', userId);
+        const payload = {
+            user_id: userId,
+            plants: lsGet('grow-plants',[]),
+            coa: lsGet('grow-coa',[]),
+            community: lsGet('grow-community',[]),
+            settings: {stoner: lsGet('stoner-mode',false), activePlant: getActivePlantIndex()},
+            updated_at: new Date().toISOString()
+        };
+        const {error} = await supabaseClient.from('grow_sync').upsert(payload, {onConflict: 'user_id'});
+        if(error){console.error(error);alert('Errore sync: '+error.message);}
+        else{lsSet('grow-cloud-status','synced');alert('☁️ Dati sincronizzati su cloud!');renderPage();}
+    }catch(e){alert('Errore: '+e.message);}
+}
+async function syncFromCloud(){
+    if(!supabaseClient){alert('Supabase non disponibile');return;}
+    try{
+        const userId = lsGet('grow-user-id', null);
+        if(!userId){alert('Nessun ID utente. Fai prima un upload.');return;}
+        const {data,error} = await supabaseClient.from('grow_sync').select('*').eq('user_id',userId).single();
+        if(error||!data){alert('Nessun dato remoto trovato');return;}
+        if(!confirm('Sovrascrivere i dati locali con quelli del cloud?'))return;
+        lsSet('grow-plants',data.plants||[]);
+        lsSet('grow-coa',data.coa||[]);
+        lsSet('grow-community',data.community||[]);
+        if(data.settings){lsSet('stoner-mode',data.settings.stoner||false);lsSet('grow-active-plant',data.settings.activePlant||0);}
+        alert('☁️ Dati scaricati dal cloud!');location.reload();
+    }catch(e){alert('Errore: '+e.message);}
+}
+function renderCloudStatus(){
+    const status=lsGet('grow-cloud-status','offline');
+    return `<span style="font-size:10px;color:${status==='synced'?'var(--ng)':'#555'}">☁️ ${status==='synced'?'Sync OK':'Offline'}</span>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// VERSIONING COMPLETO LIBRERIA (#16)
+// ═══════════════════════════════════════════════════════════
+function renderVersionHistory(item){
+    if(!item.versions||!item.versions.length)return '';
+    let html=`<div style="margin-top:20px;border-top:1px solid #222;padding-top:16px"><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">🕘 Storico Revisioni</div><div style="display:flex;flex-direction:column;gap:8px">`;
+    item.versions.forEach((v,i)=>{
+        const prev=i>0?item.versions[i-1].content:'';
+        const diff=renderSimpleDiff(prev,v.content);
+        html+=`<div class="card" style="padding:12px;background:rgba(10,10,10,.5);border:1px solid #1a1a1a"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><div style="font-size:12px;color:#888;font-family:Orbitron">${v.date}</div><div style="font-size:10px;color:#666">${v.author}</div></div><div style="font-size:11px;color:#aaa;line-height:1.6">${diff}</div></div>`;
+    });
+    html+=`</div></div>`;
+    return html;
+}
+function renderSimpleDiff(oldText,newText){
+    if(!oldText)return `<span style="color:var(--ng)">🟢 Prima versione pubblicata</span>`;
+    const oldLines=oldText.split('\n');
+    const newLines=newText.split('\n');
+    let changes=[];
+    newLines.forEach((line,i)=>{
+        if(i>=oldLines.length||line!==oldLines[i]){
+            changes.push(`<div style="color:var(--ny);font-size:10px;border-left:2px solid var(--ny);padding-left:6px;margin:2px 0">+ ${esc(line.substring(0,80))}${line.length>80?'...':''}</div>`);
+        }
+    });
+    if(!changes.length)return `<span style="color:#555">Nessuna modifica visibile (formattazione)</span>`;
+    return changes.slice(0,5).join('')+(changes.length>5?`<div style="color:#666;font-size:10px">...e altre ${changes.length-5} righe</div>`:'');
+}
+
 updateHeader();
 renderBottomNav();
 renderPage();
@@ -2716,4 +3500,4 @@ window.onerror = function(msg, url, line) {
 };
 </script>
 </body>
-</html>
+</html>
