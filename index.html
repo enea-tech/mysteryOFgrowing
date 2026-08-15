@@ -131,7 +131,7 @@ html,body{min-height:100vh;background:var(--d2)}
 .badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;font-family:'Orbitron',sans-serif;text-transform:uppercase;letter-spacing:1px}
 .prog{height:6px;background:#1a1a1a;border-radius:99px;overflow:hidden}
 .prog-f{height:100%;border-radius:99px;transition:width .5s ease}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;cursor:pointer;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:10px;color:#666}
+.nav-item{flex:0 0 auto;min-width:62px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 6px;cursor:pointer;transition:all .2s;border:none;background:transparent;font-family:'Inter',sans-serif;font-size:10px;color:#666;white-space:nowrap}
 .nav-item.active{font-weight:700}
 .t-graffiti{font-family:'Permanent Marker',cursive}
 .t-tech{font-family:'Orbitron',sans-serif}
@@ -150,9 +150,15 @@ html,body{min-height:100vh;background:var(--d2)}
 .gl-lib{box-shadow:0 0 15px rgba(196,163,90,.3),inset 0 0 15px rgba(196,163,90,.1)}
 .glib{color:#c4a35a;text-shadow:0 0 10px rgba(196,163,90,.5)}
 .header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.75);backdrop-filter:blur(20px);border-bottom:1px solid rgba(34,34,34,.6);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.8);backdrop-filter:blur(20px);border-top:1px solid rgba(34,34,34,.6);display:flex;padding:6px 8px}
-.menu-overlay{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);padding-top:80px;display:none;flex-direction:column;gap:4px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(5,5,5,.8);backdrop-filter:blur(20px);border-top:1px solid rgba(34,34,34,.6);display:flex;padding:6px 8px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ng) rgba(255,255,255,.05)}
+.bottom-nav::-webkit-scrollbar{height:4px}
+.bottom-nav::-webkit-scrollbar-track{background:rgba(255,255,255,.05)}
+.bottom-nav::-webkit-scrollbar-thumb{background:var(--ng);border-radius:4px}
+.menu-overlay{position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);padding-top:80px;padding-bottom:120px;display:none;flex-direction:column;gap:4px;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--ng) transparent}
 .menu-overlay.open{display:flex}
+.menu-overlay::-webkit-scrollbar{width:4px}
+.menu-overlay::-webkit-scrollbar-track{background:transparent}
+.menu-overlay::-webkit-scrollbar-thumb{background:var(--ng);border-radius:4px}
 .menu-btn{background:none;border:none;padding:16px 24px;color:#888;font-size:18px;font-family:'Orbitron';text-align:left;cursor:pointer;border-left:4px solid transparent;display:flex;align-items:center;gap:16px;transition:all .2s}
 .menu-btn:hover,.menu-btn.active{color:#fff;border-left-color:currentColor}
 .smoke-canvas{position:fixed;inset:0;pointer-events:none;z-index:0}
@@ -805,6 +811,20 @@ function renderJointProgress(pct, size=400){
 }
 function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+// FIX GIORNO PIANTA: il campo "day" salvato rappresenta il giorno ALLA data di inizio (utile se inizi a
+// tracciare una pianta già cresciuta). Il giorno mostrato ovunque si calcola sempre da qui, sommando i
+// giorni realmente trascorsi da "Data Inizio" ad oggi — così non resta mai fermo.
+function calcPlantDay(pl){
+    const base=parseInt(pl&&pl.day,10)||1;
+    if(!pl||!pl.startDate)return base;
+    const start=new Date(pl.startDate+'T00:00:00');
+    if(isNaN(start.getTime()))return base;
+    const now=new Date();
+    const startMid=new Date(start.getFullYear(),start.getMonth(),start.getDate());
+    const nowMid=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    const elapsed=Math.round((nowMid-startMid)/86400000);
+    return Math.max(1,base+elapsed);
+}
 function getActivePlantIndex(){const plants=lsGet('grow-plants',[]);let idx=lsGet('grow-active-plant',0);if(idx>=plants.length)idx=0;return idx}
 function setActivePlantIndex(idx){lsSet('grow-active-plant',idx);renderPage()}
 function getActivePlantProgress(){const plants=lsGet('grow-plants',[]);const idx=getActivePlantIndex();if(plants[idx]&&plants[idx].progress)return plants[idx].progress;return lsGet('grow-progress',{})}
@@ -1056,7 +1076,7 @@ html+=`<div class="card gl-p" style="padding:20px;margin-bottom:20px;background:
 <span style="font-size:32px">🌿</span>
 <div style="flex:1">
 <div style="font-weight:700;font-size:16px">${esc(active.name)}</div>
-<div style="font-size:12px;color:#888">${esc(active.strain)} • Giorno ${active.day}</div>
+<div style="font-size:12px;color:#888">${esc(active.strain)} • Giorno ${calcPlantDay(active)}</div>
 </div>
 <span style="font-size:11px;color:var(--ng);font-family:Orbitron">⭐ ATTIVA</span>
 </div>
@@ -1288,7 +1308,7 @@ html+=`<div class="card" style="padding:16px;border-left:3px solid ${phaseColor}
 <span class="badge" style="background:${phaseColor}20;color:${phaseColor};border:1px solid ${phaseColor}50">${phaseName}</span>
 </div>
 <div style="display:flex;gap:12px;margin-top:8px">
-<div style="font-size:11px;color:#555"><span style="color:#777">Giorno</span> <span style="color:#fff;font-weight:700">${pl.day}</span></div>
+<div style="font-size:11px;color:#555"><span style="color:#777">Giorno</span> <span style="color:#fff;font-weight:700">${calcPlantDay(pl)}</span></div>
 <div style="font-size:11px;color:#555"><span style="color:#777">Iniziata</span> <span style="color:#fff">${pl.startDate}</span></div>
 </div>
 <div style="margin-top:10px">
@@ -1343,8 +1363,9 @@ let html=`<div>
 <select id="pPhase" class="inp">
 ${phases.map((ph,i)=>`<option value="${i}" ${edit&&edit.phase===i?'selected':''}>${ph.emoji} ${ph.name}</option>`).join('')}
 </select></div>
-<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Giorno Corrente</div>
-<input type="number" id="pDay" class="inp" placeholder="1" value="${edit?edit.day:'1'}"></div>
+<div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Giorno alla Data Inizio</div>
+<input type="number" id="pDay" class="inp" placeholder="1" value="${edit?edit.day:'1'}">
+<div style="font-size:10px;color:#444;margin-top:4px;line-height:1.4">Es. se la pianta era già al giorno 5 quando hai impostato la Data Inizio, scrivi 5. Da qui in poi il contatore avanza da solo ogni giorno — non serve più modificarlo a mano.</div></div>
 <div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Data Inizio</div>
 <input type="date" id="pDate" class="inp" value="${edit?edit.startDate:new Date().toISOString().split('T')[0]}"></div>
 <div><div style="font-size:11px;color:#555;font-family:Orbitron;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Note</div>
@@ -1380,7 +1401,7 @@ let html=`<div>
 </div>
 <div style="display:flex;gap:8px;flex-wrap:wrap">
 <span class="badge" style="background:${phase.color}20;color:${phase.color};border:1px solid ${phase.color}50">${phase.emoji} ${phase.name}</span>
-<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">Giorno ${pl.day}</span>
+<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">Giorno ${calcPlantDay(pl)}</span>
 <span class="badge" style="background:rgba(0,255,255,.1);color:var(--nc)">Iniziata ${pl.startDate}</span>
 </div>
 </div>
@@ -2965,7 +2986,7 @@ ${totalFresh > 0 ? `<div class="dash-bar"><div class="dash-bar-fill" style="widt
 <div class="dash-card gl-p">
 <div class="dash-label">Fase Media</div>
 <div class="dash-value gp" style="color:var(--np)">${phases[Math.floor(avgPhase)]?.name || 'Setup'}</div>
-<div class="dash-sub">Giorno medio: ${Math.round(plants.reduce((s,p)=>s+(p.day||0),0)/totalPlants)}</div>
+<div class="dash-sub">Giorno medio: ${Math.round(plants.reduce((s,p)=>s+calcPlantDay(p),0)/totalPlants)}</div>
 </div>
 </div>
 
@@ -2988,7 +3009,7 @@ ${totalFresh > 0 ? `<div class="dash-bar"><div class="dash-bar-fill" style="widt
 </div>
 <div class="dash-compare">
 <div class="dash-compare-item">
-<div class="dash-compare-val" style="color:var(--ng)">${pl.day}</div>
+<div class="dash-compare-val" style="color:var(--ng)">${calcPlantDay(pl)}</div>
 <div class="dash-compare-lab">Giorno</div>
 </div>
 <div class="dash-compare-item">
@@ -3166,7 +3187,7 @@ html+=`<div onclick="selectPlantFromSelector(${i})" style="padding:14px;border-r
 <span style="font-size:28px">${isActive?'✅':'🌱'}</span>
 <div style="flex:1">
 <div style="font-weight:700;font-size:14px;color:#fff;font-family:Orbitron">${esc(pl.name)}</div>
-<div style="font-size:11px;color:#888">${esc(pl.strain)} • Giorno ${pl.day} • ${phase.name}</div>
+<div style="font-size:11px;color:#888">${esc(pl.strain)} • Giorno ${calcPlantDay(pl)} • ${phase.name}</div>
 </div>
 ${isActive?'<span style="font-size:11px;color:var(--ng);font-family:Orbitron">ATTIVA</span>':'<span style="font-size:11px;color:#555;font-family:Orbitron">Seleziona →</span>'}
 </div>`;
