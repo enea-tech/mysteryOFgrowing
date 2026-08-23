@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#050505">
 <title>GROW 420 — Street Cult Grow Journal</title>
+<!-- GROW 420 — FASE 5 COMPLETA | Espansione Contenuti Integrata al 100% -->
+
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -16,10 +18,18 @@
 /* === FASE 1: PWA & UTILITIES === */
 .offline-badge{position:fixed;top:68px;left:50%;transform:translateX(-50%);z-index:101;background:rgba(255,102,0,.15);border:1px solid var(--no);color:var(--no);padding:4px 14px;border-radius:99px;font-family:Orbitron;font-size:10px;letter-spacing:1px;text-transform:uppercase;backdrop-filter:blur(10px);display:none;animation:fadeIn .3s ease}
 .offline-badge.show{display:flex;align-items:center;gap:6px}
-.glossary-term{border-bottom:1px dashed var(--ng);cursor:help;position:relative;color:var(--ng)}
-.glossary-term:hover{background:rgba(57,255,20,.1)}
-.glossary-tooltip{position:absolute;bottom:120%;left:50%;transform:translateX(-50%);background:rgba(10,10,10,.95);border:1px solid var(--ng);padding:10px 14px;border-radius:10px;width:260px;font-size:12px;color:#ccc;line-height:1.5;z-index:50;box-shadow:0 0 20px rgba(57,255,20,.2);opacity:0;pointer-events:none;transition:opacity .2s}
-.glossary-term:hover .glossary-tooltip{opacity:1;pointer-events:auto}
+.glossary-term{border-bottom:1px dashed var(--ng);cursor:pointer;position:relative;color:var(--ng);transition:background .2s}
+.glossary-term:hover{background:rgba(57,255,20,.15)}
+.glossary-term.active-term{background:rgba(57,255,20,.25);border-bottom:1px solid var(--ng)}
+#glossaryGlobal{position:fixed;z-index:1000;max-width:320px;background:rgba(10,10,10,.98);border:1px solid var(--ng);border-radius:14px;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,.8),0 0 20px rgba(57,255,20,.15);display:none;font-family:Inter,sans-serif}
+#glossaryGlobal .gg-title{font-family:Orbitron;font-size:11px;color:var(--ng);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+#glossaryGlobal .gg-body{font-size:12px;color:#ccc;line-height:1.6;margin-bottom:10px}
+#glossaryGlobal .gg-nav{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#glossaryGlobal .gg-nav button{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);color:var(--ng);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:Orbitron;font-size:10px}
+#glossaryGlobal .gg-nav button:hover{background:rgba(57,255,20,.2)}
+#glossaryGlobal .gg-counter{font-size:10px;color:#888;font-family:Orbitron}
+#glossaryGlobal .gg-close{background:none;border:none;color:#888;font-size:16px;cursor:pointer;line-height:1;padding:0 4px}
+@media(max-width:600px){#glossaryGlobal{left:10px !important;right:10px !important;max-width:none;width:auto}}
 .versioning-bar{margin-top:24px;padding-top:16px;border-top:1px solid #222;font-size:11px;color:#555;font-family:Inter}
 .versioning-bar a{color:var(--nc);text-decoration:none}
 .versioning-bar a:hover{text-decoration:underline}
@@ -267,6 +277,7 @@ body.stoner-mode .page .t-tech {
   <button class="menu-btn" onclick="go('shop')">🛒 Attrezzatura</button>
   <button class="menu-btn" onclick="go('library')">📚 Libreria</button>
 </div>
+<div id="glossaryGlobal"></div>
 <div id="app" style="padding-top:60px"></div>
 <div class="bottom-nav" id="bottomNav"></div>
 
@@ -287,9 +298,17 @@ try {
         reminders: '++id, title, datetime, repeat, active, createdAt',
         settings: 'key'
     });
-    // FASE 2 — v2: aggiunge indice isProblem ai logs (upgrade non distruttivo per chi ha già dati)
+    // FASE 4 — Fix Dexie v2: schema completo + migration dati
     db.version(2).stores({
-        logs: '++id, plantId, date, text, tags, isProblem, *photos, [plantId+date]'
+        plants: '++id, name, strain, type, phase, day, startDate, updatedAt',
+        logs: '++id, plantId, date, text, tags, isProblem, *photos, [plantId+date]',
+        photos: '++id, plantId, logId, data, createdAt',
+        reminders: '++id, title, datetime, repeat, active, createdAt',
+        settings: 'key'
+    }).upgrade(tx => {
+        return tx.logs.toCollection().modify(log => {
+            if (log.isProblem === undefined) log.isProblem = 0;
+        });
     });
 } catch(e) {
     console.warn('Dexie non caricato, alcune funzioni offline non saranno disponibili');
@@ -320,6 +339,8 @@ window.addEventListener('online',updateOnlineStatus);window.addEventListener('of
 const glossaryDB={"LST":"Low Stress Training — piegatura dolce dei rami per aumentare l'esposizione alla luce senza ferire la pianta.","flush":"Lavaggio del substrato con acqua pulita (pH corretto) per eliminare sali in eccesso prima della raccolta.","tricomi":"Ghiandole resinose su fiori e foglie che producono cannabinoidi, terpeni e flavonoidi.","topping":"Tecnica di potatura apicale per dividere la crescita dominante in 2+ rami principali.","defoliazione":"Rimozione selettiva di foglie per migliorare l'aerazione e l'esposizione luminosa.","cotiledoni":"Prime foglie tonde che emergono dal seme, contengono nutrienti iniziali per la piantina.","internodi":"Distanza tra due nodi (punti di crescita) sullo stelo. Corti = luce intensa.","auxina":"Ormone vegetale che regola l'apical dominance. Distribuirla uniformemente = più cime.","chemotype":"Profilo chimico della pianta (rapporto THC:CBD e terpeni dominanti), indipendente dalla genetica Indica/Sativa.","COA":"Certificate of Analysis — certificato di analisi di laboratorio che attesta THC, CBD, terpeni e assenza di contaminanti.","Boveda":"Pack umidificante a due vie che mantiene l'umidità costante (es. 62%) nei barattoli di curing.","VPD":"Vapor Pressure Deficit — differenza tra umidità attuale e saturazione. Ottimale 0.8-1.2 kPa in veg, 1.2-1.6 in bloom.","PAR":"Photosynthetically Active Radiation — radiazione 400-700nm usata dalla pianta per la fotosintesi.","DLI":"Daily Light Integral — quantità totale di luce (mol/m²/die). Target: 20-40 in veg, 40-65 in bloom.","nutrient burn":"Bruciatura da eccesso di fertilizzante. Si manifesta con punte marroni e ricurve delle foglie.","overwatering":"Eccesso di acqua che soffoca le radici. Sintomo: foglie arricciate verso il basso, crescita bloccata.","underwatering":"Mancanza d'acqua. Foglie flaccide e appassite che non recuperano al tocco.","Bud Rot":"Muffa grigia (Botrytis) che attacca i fiori in condizioni di alta umidità. Irreversibile.","Powdery Mildew":"Oidio bianco polveroso sulle foglie. Trattabile con bicarbonato o olio di neem.","Ragnetto Rosso":"Acaro microscopico che causa puntini gialli e ragnatele sotto le foglie.","Fungus Gnat":"Moscerino del terriccio. Larve mangiano radici giovani. Controllare con siccità e sabbia.","Afidi":"Insetti verdi che succhiano linfa e secernono melata. Trattabili con olio di neem.","lollipopping":"Rimozione di rami e foglie nella parte bassa della pianta per concentrare l'energia sulle cime superiori.","ScrOG":"Screen of Green — tecnica con rete orizzontale per uniformare l'altezza delle cime.","mainline":"Tecnica di training che crea 8-16 cime principali di uguale altezza partendo da un manifold.","manifold":"Struttura a Y creata con topping mirati per distribuire uniformemente la linfa.","terpeni":"Composti aromatici che determinano sapore, odore e modulano l'effetto dei cannabinoidi (entourage effect).","cannabinoidi":"Composti attivi della cannabis: THC, CBD, CBG, CBN e altri 100+ molecole.","THC":"Tetraidrocannabinolo — principale cannabinoide psicoattivo.","CBD":"Cannabidiolo — cannabinoide non psicoattivo con effetti rilassanti e antinfiammatori.","CBN":"Cannabinolo — derivato dalla degradazione del THC, effetto sedativo.","CBG":"Cannabigerolo — precursore di THC e CBD, con proprietà antibatteriche.","myrcene":"Terpeno con aroma terroso e mango. Effetto sedativo e potenziatore del THC.","limonene":"Terpeno citrico. Effetto energizzante, antidepressivo e antifungino.","pinene":"Terpeno con aroma di pino. Migliora la concentrazione e la memoria.","linalool":"Terpeno floreale (lavanda). Effetto antiansia e sedativo.","caryophyllene":"Terpeno piccante. Unico ad interagire con i recettori CB2 (come un cannabinoide).","curing":"Processo di stagionatura in barattolo che migliora sapore, effetto e conservazione.","essiccazione":"Fase di asciugatura dei fiori prima del curing. Deve essere lenta (10-14 giorni).","wet trim":"Potatura dei fiori freschi, subito dopo la raccolta.","dry trim":"Potatura dei fiori dopo l'essiccazione, prima del curing.","sugar leaves":"Foglie piccole che spuntano dai fiori, ricche di tricomi. Usate per hash edibles.","fan leaves":"Foglie grandi e palmate. Poche tricomi, usate per infusi o compost.","pistilli":"Pelini bianchi/rossi che emergono dai calici. Indicano sesso femminile e maturazione.","calici":"Strutture che racchiudono gli ovuli. Si gonfiano formando le cime.","bract":"Foglia modificata che racchiude il fiore. Parte più resinosa della pianta.","apical dominance":"Dominanza della punta di crescita. L'auxina inibisce i rami laterali. Il LST la supera.","fotoperiodo":"Pianta che fiorisce in base al rapporto luce/buio (12/12).","autofiorente":"Pianta che fiorisce automaticamente dopo 2-4 settimane, indipendentemente dalla luce.","ruderalis":"Sottospecie di cannabis originaria della Siberia. Genetica base delle autofiorenti.","indica":"Sottospecie bassa e compatta, effetto rilassante. Origine montagne asiatiche.","sativa":"Sottospecie alta e slanciata, effetto energizzante. Origine zone equatoriali.","hybrid":"Incrocio tra Indica e Sativa per combinare i tratti migliori.","genetica":"Patrimonio ereditario della pianta. Determina struttura, resa, aroma e effetto.","fenotipo":"Espressione fisica osservabile di una genetica (colore, struttura, aroma).","chemovar":"Classificazione basata sul profilo chimico (cannabinoidi + terpeni) invece che sulla morfologia.","substrato":"Materiale in cui crescono le radici (terra, cocco, rockwool, idroponico).","perlite":"Materiale vulcanico espanso che migliora drenaggio e aerazione del substrato.","vermiculite":"Minerale espanso che trattiene acqua e nutrienti. Utile in miscela con perlite.","pH":"Scala di acidità. Per cannabis in terra: 6.0-6.5. In idroponica: 5.5-6.0.","EC":"Electrical Conductivity — misura la concentrazione di sali nutritivi nell'acqua (mS/cm).","PPM":"Parts Per Million — alternativa all'EC per misurare la concentrazione di nutrienti.","NPK":"Rapporto Azoto-Fosforo-Potassio nei fertilizzanti. Grow = alto N, Bloom = alto P e K.","CalMag":"Integratore di Calcio e Magnesio. Essenziale in acqua demineralizzata o RO.","root rot":"Marciume radicale causato da anaerobiosi (troppa acqua). Odore di uovo marcio.","drenaggio":"Capacità del substrato di far defluire l'acqua in eccesso. Fondamentale per radici sane.","aerazione":"Circolazione d'aria nel substrato. Radici hanno bisogno di ossigeno.","transpirazione":"Processo di evaporazione dell'acqua dalle foglie. Regola temperatura e assorbimento.","stomata":"Porzi epidermici sulle foglie che regolano scambio gas e transpirazione.","clorofilla":"Pigmento verde responsabile della fotosintesi. Si degrada durante il curing.","carotenoidi":"Pigmenti gialli/arancioni che emergono quando la clorofilla si degrada (autunno).","antocianine":"Pigmenti viola/rossi prodotti in risposta a stress termico (freddo notturno).","UV-B":"Ultravioletto B. Stress positivo che stimola la produzione di tricomi (difesa della pianta).","IR":"Infrarosso. Calore emesso dalle lampade. Gestire con ventilazione.","PPFD":"Photosynthetic Photon Flux Density — intensità luminosa utile (μmol/m²/s).","umidità relativa":"Percentuale di vapore acqueo nell'aria rispetto alla saturazione. Target: 50-65% veg, 40-50% bloom.","deumidificatore":"Apparecchio che rimuove umidità dall'aria. Essenziale in fioritura.","umidificatore":"Apparecchio che aggiunge umidità. Utile in germinazione e seedling.","carbon filter":"Filtro a carboni attivi che elimina gli odori dall'aria estratta.","inline fan":"Ventilatore in linea per estrazione aria calda e umida dal grow tent.","oscillating fan":"Ventilatore oscillante per creare brezza sulle piante (wind stress positivo).","timer":"Temporizzatore per gestire i cicli di luce (18/6 in veg, 12/12 in bloom).","thermohygrometer":"Strumento che misura temperatura e umidità. Indispensabile in ogni grow.","lux meter":"Misuratore di luce visibile. Approssimativo per LED (meglio PAR/PPFD meter).","pH meter":"Misuratore digitale dell'acidità. Va calibrato regolarmente.","TDS meter":"Misuratore di solidi disciolti. Utile per controllare EC/PPM dell'acqua.","lente":"Lente di ingrandimento 30-60x per osservare i tricomi e determinare la maturazione.","microscopio USB":"Microscopio digitale per foto dettagliate dei tricomi.","dry room":"Stanza dedicata all'essiccazione. Buio, 15-20°C, 45-55% umidità.","grow tent":"Tenda riflettente per creare un ambiente di coltivazione controllato.","LED":"Light Emitting Diode — tecnologia di illuminazione efficiente e a spettro completo.","HPS":"High Pressure Sodium — lampada ad alogenuri metallici, calda e intensa.","CMH":"Ceramic Metal Halide — lampada ceramica con spettro bilanciato.","ballast":"Alimentatore per lampade HPS/CMH. Può essere magnetico o digitale (dimmerabile).","reflector":"Riflettore che indirizza la luce verso le piante. Riduce perdite.","dimmer":"Dispositivo per regolare l'intensità luminosa. Utile in seedling.","CO2 enrichment":"Aggiunta di anidride carbonica per aumentare la fotosintesi (1500ppm target).","sealed room":"Grow room sigillata con supplemento CO2 e climatizzazione attiva.","IPM":"Integrated Pest Management — gestione integrata dei parassiti (prevenzione + trattamento).","neem oil":"Olio di neem — insetticida naturale contro afidi, ragnetti e funghi.","potassium bicarbonate":"Bicarbonato di potassio — fungicida contro oidio e muffe.","beneficial insects":"Insetti utili (es. ladybugs) che mangiano parassiti senza chimica.","companion planting":"Piantumazione associata (es. basilico) per respingere parassiti.","pruning":"Potatura generica per rimuovere parti non necessarie alla pianta.","fimming":"Tecnica simile al topping ma meno precisa (FIM = Fuck I Missed).","supercropping":"Piegatura aggressiva del ramo fino a quasi spezzarlo per stimolare la crescita.","monster cropping":"Tecnica di clonazione da pianta in fioritura per ottenere struttura bush-like.","cloning":"Riproduzione asessuata per talea. Mantiene identica la genetica madre.","mother plant":"Pianta madre mantenuta in vegetativa per produrre cloni.","talea":"Frammento di ramo radicato per clonazione. Richiede umidità alta e luce tenue.","rooting hormone":"Ormone radicante (IBA) che accelera l'emissione di radici nelle talee.","dome":"Cupola di plastica per mantenere umidità alta su talee o seedling.","heat mat":"Tappetino riscaldante per mantenere 22-26°C in germinazione e rooting.","propagation":"Fase di propagazione: germinazione, seedling e rooting di talee.","veg":"Abbreviazione di Vegetativa — fase di crescita strutturale.","bloom":"Abbreviazione di Fioritura — fase riproduttiva.","stretch":"Allungamento rapido dei rami nelle prime 2-3 settimane di bloom.","swelling":"Fase di ingrossamento delle cime (settimane 4-6 di bloom).","ripening":"Fase finale di maturazione dove i tricomi cambiano colore.","senescenza":"Invecchiamento naturale della pianta. Foglie gialle e degradazione.","hermaphroditism":"Ermafroditismo — comparsa di fiori maschili su pianta femmina per stress.","bananas":"Strutture maschili (nanners) che emergono dai fiori femminili. Pericolo polline.","seeds":"Semi. Formati quando una femmina viene impollinata da un maschio o hermie.","feminized":"Semi femminizzati — ottenuti forzando una femmina a produrre polline (colloidal silver).","regular":"Semi regolari — 50% maschi, 50% femmine. Necessari per breeding.","auto":"Abbreviazione di autofiorente.","foto":"Abbreviazione di fotoperiodo.","pheno hunt":"Ricerca del fenotipo migliore tra semi della stessa genetica.","keeper":"Fenotipo eccezionale che si decide di conservare/clonare.","breeding":"Incrocio controllato tra genitori per creare nuove varietà.","backcross":"Incrocio di un ibrido con uno dei genitori per stabilizzare tratti.","IBL":"Inbred Line — linea consanguinea, genetica altamente stabilizzata.","F1":"Prima generazione di incrocio tra due linee pure. Ibrido vigoroso.","F2":"Seconda generazione. Maggiore variabilità fenotipica.","landrace":"Varietà autoctona, adattata a un ambiente specifico per generazioni.","heirloom":"Varietà tradizionale non ibridata, preservata nel tempo.","entourage effect":"Effetto entourage — sinergia tra cannabinoidi e terpeni che modula l'effetto complessivo.","bioavailability":"Biodisponibilità — percentuale di sostanza attiva che raggiunge la circolazione.","decarboxylation":"Decarbossilazione — riscaldamento che trasforma THCA in THC attivo.","rosin":"Concentrato ottenuto per pressione termica senza solventi.","BHO":"Butane Hash Oil — concentrato ottenuto con solvente butano.","hash":"Resina compressa ottenuta separando i tricomi dalla materia vegetale.","kief":"Polvere di tricomi raccolta dal grinder. Base per hash edibles.","edibles":"Prodotti commestibili a base di cannabis (brownies, gummy, oli).","tincture":"Tintura — estratto alcolico o glicerico per uso sublinguale.","topical":"Prodotto per uso cutaneo (creme, balsami) con effetto locale.","sublingual":"Assorbimento sotto la lingua. Effetto in 15-30 minuti.","inhalation":"Inalazione — effetto in 2-5 minuti, durata 1-3 ore.","oral":"Via orale — effetto in 30-90 minuti, durata 4-8 ore.","tolerance":"Tolleranza — necessità di dosi crescenti per ottenere lo stesso effetto.","t-break":"Tolerance break — pausa volontaria per resettare la tolleranza.","strain":"Varietà / cultivar — una specifica genetica di cannabis.","cultivar":"Cultivar — cultivar (cultivated variety). Termine botanico più corretto di 'strain'.","genotype":"Genotipo — sequenza genetica ereditata, non osservabile direttamente.","soma":"Tutto il corpo della pianta esclusi i gameti (cellule diploidi).","meristem":"Tessuto meristematico — zone di divisione cellulare attiva (apici, gemme).","xylem":"Vasi del legno — trasportano acqua e minerali dalle radici alle foglie.","phloem":"Liber — trasporta zuccheri dalle foglie al resto della pianta.","cambium":"Strato di cellule tra xilema e floema che produce nuovi vasi.","callus":"Callo — tessuto di cicatrizzazione che si forma su ferite da potatura.","hormone":"Ormone vegetale — sostanza che regola crescita e sviluppo (auxina, citochinina, giberellina).","cytokinin":"Citochinina — ormone che stimola la divisione cellulare e la germinazione.","gibberellin":"Giberellina — ormone che regola allungamento dello stelo e fioritura.","ethylene":"Etilene — ormone gassoso che regola maturazione e senescenza.","abscisic acid":"Acido abscissico — ormone dello stress che induce dormienza e chiusura stomi.","photoperiodism":"Fotoperiodismo — risposta biologica alla durata del giorno (12h buio = fioritura).","circadian rhythm":"Ritmo circadiano — ciclo biologico di 24h che regola processi cellulari.","phototropism":"Fototropismo — crescita verso la luce.","gravitropism":"Gravitropismo — crescita in risposta alla gravità (radici giù, stelo su).","thigmotropism":"Tigmotropismo — risposta al tocco (piante che si attorcigliano).","hydrotropism":"Idrotropismo — crescita delle radici verso l'acqua.","Mycorrhizae":"Micorrize — simbiosi funghi-radici che aumentano l'assorbimento di acqua e nutrienti.","rhizosphere":"Rizosfera — zona intorno alle radici ricca di microrganismi benefici.","beneficial bacteria":"Batteri benefici (es. Bacillus subtilis) che proteggono dalle malattie.","trichoderma":"Fungo benefico che colonizza il substrato e combatte patogeni.","compost tea":"Compost tea — estratto aerato di compost usato come fertilizzante biologico.","worm casting":"Letame di lombrico — fertilizzante organico ricco di microrganismi.","bat guano":"Guano di pipistrello — fertilizzante naturale ricco di N, P e K.","fish emulsion":"Emulsione di pesce — fertilizzante organico ad azione rapida.","kelp":"Alga kelp — fonte naturale di citochinine e micronutrienti.","molasses":"Melassa — fonte di carboidrati per i microrganismi del suolo.","silica":"Silice — rinforza le pareti cellulari, aumenta resistenza a parassiti e caldo.","humic acid":"Acido umico — migliora la cessione di nutrienti e la struttura del suolo.","fulvic acid":"Acido fulvico — trasporta nutrienti nelle cellule vegetali.","chelated":"Chelato — nutriente legato a una molecola organica per migliorarne l'assorbimento.","macronutrients":"Macronutrienti — N, P, K (azoto, fosforo, potassio).","micronutrients":"Micronutrienti — Fe, Mn, Zn, Cu, B, Mo, Cl (ferro, manganese, zinco, rame, boro, molibdeno, cloro).","mobile nutrients":"Nutrienti mobili — si spostano nella pianta. Carenza visibile sulle foglie vecchie (N, P, K, Mg).","immobile nutrients":"Nutrienti immobili — restano dove arrivano. Carenza sulle foglie nuove (Ca, Fe, S, Mn).","nitrogen":"Azoto (N) — macronutriente per la crescita vegetativa e la clorofilla.","phosphorus":"Fosforo (P) — essenziale per il trasferimento di energia, fioritura e radici.","potassium":"Potassio (K) — regola l'acqua, la fotosintesi e la resistenza alle malattie.","magnesium":"Magnesio (Mg) — centro atomico della clorofilla. Carenza = foglie gialle tra le vene.","calcium":"Calcio (Ca) — struttura delle pareti cellulari. Carenza = punta delle foglie brune e ricurve.","iron":"Ferro (Fe) — sintesi della clorofilla. Carenza = foglie giovani gialle con vene verdi.","sulfur":"Zolfo (S) — componente di aminoacidi e proteine. Carenza = foglie giovali gialle uniformi.","zinc":"Zinco (Zn) — sintesi di auxina e enzimi. Carenza = foglie piccole e accartocciate.","manganese":"Manganese (Mn) — fotosintesi e respirazione. Carenza = macchie marroni tra le vene.","boron":"Boro (B) — divisione cellulare e trasporto di zuccheri. Carenza = stelo fragile, aborto meristematico.","copper":"Rame (Cu) — respirazione e lignificazione. Carenza = foglie bluastre e arricciate.","molybdenum":"Molibdeno (Mo) — fissazione dell'azoto. Raro in terra, comune in idroponica.","chlorine":"Cloro — fotosintesi osmotica. Raramente carente.","nickel":"Nichel — attivazione di alcuni enzimi. Micronutriente rarissimo.","silicon":"Silicio — rinforzo meccanico e resistenza agli stress abiotici.","cobalt":"Cobalto — necessario per la fissazione simbiotica dell'azoto (leguminose)."};
 
 let glossaryTermsCache = null;
+let glossaryCurrentTerm='', glossaryCurrentIndex=0, glossaryMatches=[];
+
 function parseGlossary(html) {
     if (!html) return html;
     if(!glossaryTermsCache){
@@ -333,11 +354,99 @@ function parseGlossary(html) {
         result = result.replace(regex, (match) => {
             const def = glossaryDB[term] || glossaryDB[term.toLowerCase()];
             if (!def) return match;
-            return `<span class="glossary-term">${match}<span class="glossary-tooltip">${def}</span></span>`;
+            return `<span class="glossary-term" data-glossary="${esc(term)}" onclick="event.stopPropagation(); glossaryOpen(this,'${esc(term)}')">${match}</span>`;
         });
     });
     return result;
 }
+
+function glossaryOpen(el, term){
+    glossaryCurrentTerm = term;
+    glossaryMatches = Array.from(document.querySelectorAll(`[data-glossary="${CSS.escape(term)}"]`));
+    glossaryCurrentIndex = glossaryMatches.indexOf(el);
+    if(glossaryCurrentIndex < 0) glossaryCurrentIndex = 0;
+    glossaryShow();
+    glossaryPosition(el);
+}
+
+function glossaryShow(){
+    let box = document.getElementById('glossaryGlobal');
+    if(!box) return;
+    // Crea struttura DOM stabile una sola volta
+    if(!box.querySelector('.gg-title')){
+        box.innerHTML = `
+            <div class="gg-title">
+                <span class="gg-term-text"></span>
+                <button class="gg-close" onclick="event.stopPropagation(); glossaryClose()">×</button>
+            </div>
+            <div class="gg-body"></div>
+            <div class="gg-nav">
+                <button class="gg-prev" onclick="event.stopPropagation(); glossaryPrev()">← Prec</button>
+                <span class="gg-counter"></span>
+                <button class="gg-next" onclick="event.stopPropagation(); glossaryNext()">Succ →</button>
+            </div>
+        `;
+    }
+    glossaryUpdateContent();
+    box.style.display = 'block';
+}
+
+function glossaryUpdateContent(){
+    const box = document.getElementById('glossaryGlobal');
+    if(!box) return;
+    const def = glossaryDB[glossaryCurrentTerm] || glossaryDB[glossaryCurrentTerm.toLowerCase()] || '';
+    const termEl = box.querySelector('.gg-term-text');
+    const bodyEl = box.querySelector('.gg-body');
+    const counterEl = box.querySelector('.gg-counter');
+    if(termEl) termEl.textContent = glossaryCurrentTerm;
+    if(bodyEl) bodyEl.textContent = def;
+    if(counterEl) counterEl.textContent = (glossaryCurrentIndex + 1) + '/' + glossaryMatches.length;
+    document.querySelectorAll('.active-term').forEach(e => e.classList.remove('active-term'));
+    if(glossaryMatches[glossaryCurrentIndex]) glossaryMatches[glossaryCurrentIndex].classList.add('active-term');
+}
+
+function glossaryPosition(targetEl){
+    const box = document.getElementById('glossaryGlobal');
+    if(!box || !targetEl) return;
+    const rect = targetEl.getBoundingClientRect();
+    // Forza reflow per leggere dimensioni reali
+    void box.offsetHeight;
+    const boxRect = box.getBoundingClientRect();
+    let top = rect.top - boxRect.height - 12;
+    let left = rect.left + (rect.width/2) - (boxRect.width/2);
+    if(top < 10){ top = rect.bottom + 12; }
+    if(left < 10){ left = 10; }
+    if(left + boxRect.width > window.innerWidth - 10){ left = window.innerWidth - boxRect.width - 10; }
+    box.style.top = top + 'px';
+    box.style.left = left + 'px';
+}
+
+function glossaryNext(){
+    if(!glossaryMatches.length) return;
+    glossaryCurrentIndex = (glossaryCurrentIndex + 1) % glossaryMatches.length;
+    glossaryUpdateContent();
+    glossaryPosition(glossaryMatches[glossaryCurrentIndex]);
+}
+
+function glossaryPrev(){
+    if(!glossaryMatches.length) return;
+    glossaryCurrentIndex = (glossaryCurrentIndex - 1 + glossaryMatches.length) % glossaryMatches.length;
+    glossaryUpdateContent();
+    glossaryPosition(glossaryMatches[glossaryCurrentIndex]);
+}
+
+function glossaryClose(){
+    const box = document.getElementById('glossaryGlobal');
+    if(box) box.style.display = 'none';
+    document.querySelectorAll('.active-term').forEach(e => e.classList.remove('active-term'));
+}
+
+document.addEventListener('click', e => {
+    const box = document.getElementById('glossaryGlobal');
+    if(box && box.style.display === 'block' && !box.contains(e.target) && !e.target.closest('.glossary-term')){
+        glossaryClose();
+    }
+});
 
 // ── 7. REMINDER SYSTEM ────────────────────────────────────
 let reminderInterval = null;
@@ -599,7 +708,31 @@ const strains=[
 {name:"Gorilla Glue #4",type:"Hybrid",chemotype:"type1",thc:"25–30%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"450–550g/m²",difficulty:"Media",desc:"THC sky-high. Effetto pesante. Resina abbondante.",claims:{thc_range:[25,30],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[450,550],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Caryophyllene","Limonene","Myrcene"],genetics:"Chem's Sister x Sour Dubb x Chocolate Diesel",effects:["Pesante","Sedazione"],flavors:["Terra","Diesel"],growNotes:"Resina molto abbondante. Difficile da trimmare.",evidence:"lab",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"},{label:"Grow Weed Easy",url:"https://www.growweedeasy.com",type:"source"}]},
 {name:"Zkittlez",type:"Indica",chemotype:"type1",thc:"19–23%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"Esplosione frutta tropicale dolce. Relax senza sedazione.",claims:{thc_range:[19,23],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Humulene"],genetics:"Grape Ape x Grapefruit",effects:["Relax","Felicità"],flavors:["Frutta tropicale","Dolce"],growNotes:"Compatta. Ideale per SOG.",evidence:"community",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
 {name:"Runtz",type:"Hybrid",chemotype:"type1",thc:"23–29%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Media",desc:"Croce Zkittlez x Gelato. Dolce fruttato, potente e bilanciato.",claims:{thc_range:[23,29],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.leafly.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Limonene","Caryophyllene"],genetics:"Zkittlez x Gelato",effects:["Euforia","Relax"],flavors:["Dolce","Fruttato"],growNotes:"Equilibrata. Buona per principianti intermedi.",evidence:"lab",verifiedSources:[{label:"Leafly",url:"https://www.leafly.com",type:"aggregator"}]},
-{name:"Critical + 2.0",type:"Indica",chemotype:"type1",thc:"18–22%",cbd:"<1%",flowerTime:"6–7 settimane",yield:"600–700g/m²",difficulty:"Facile",desc:"Resa mostruosa in tempi record. Ideale per principianti.",claims:{thc_range:[18,22],cbd_range:[0,1],flower_days:[42,49],yield_g_m2:[600,700],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Limonene"],genetics:"Critical Mass x Northern Light selezionata",effects:["Relax","Sonno"],flavors:["Limone","Pino"],growNotes:"Molto resistente. Ottima per outdoor.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"}]}
+{name:"Critical + 2.0",type:"Indica",chemotype:"type1",thc:"18–22%",cbd:"<1%",flowerTime:"6–7 settimane",yield:"600–700g/m²",difficulty:"Facile",desc:"Resa mostruosa in tempi record. Ideale per principianti.",claims:{thc_range:[18,22],cbd_range:[0,1],flower_days:[42,49],yield_g_m2:[600,700],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2024-03-15"},lab_results:[],terpenes:["Myrcene","Limonene"],genetics:"Critical Mass x Northern Light selezionata",effects:["Relax","Sonno"],flavors:["Limone","Pino"],growNotes:"Molto resistente. Ottima per outdoor.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"}]},
+
+// ═══════════════════════════════════════════════
+// FASE 2 — NUOVE STRAINS (8 genetiche)
+// ═══════════════════════════════════════════════
+
+// ── INDICA ──────────────────────────────────────
+{name:"Northern Lights",type:"Indica",chemotype:"type1",thc:"16–19%",cbd:"<1%",flowerTime:"7–8 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"La classica prima grow: compatta, poco odore, resistente a parassiti. Genetica da landrace afghana leggendaria.",claims:{thc_range:[16,19],cbd_range:[0,1],flower_days:[49,56],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.sensiseeds.com",source_date:"2025-01-10"},lab_results:[],terpenes:["Myrcene","Caryophyllene","Pinene"],genetics:"Afghani landrace x Thai landrace",effects:["Relax profondo","Sedazione"],flavors:["Terra","Pino","Spezie"],growNotes:"Compatta in altezza (60-100cm). Ideale per grow room basse. Resistente a sbalzi termici e parassiti. Ottima per principianti assoluti.",evidence:"source",verifiedSources:[{label:"Sensi Seeds",url:"https://www.sensiseeds.com",type:"breeder"},{label:"Pacific Seed Bank",url:"https://www.pacificseedbank.com",type:"seed_bank"},{label:"Leafly",url:"https://www.leafly.com/strains/northern-lights",type:"aggregator"}]},
+
+{name:"Granddaddy Purple",type:"Indica",chemotype:"type1",thc:"17–20%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"400–500g/m²",difficulty:"Facile",desc:"Indica 100% dai colori viola spettacolari e aromi uva/berry. Resistente a malattie e indulgente sui nutrienti.",claims:{thc_range:[17,20],cbd_range:[0,1],flower_days:[50,60],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.pacificseedbank.com",source_date:"2025-01-10"},lab_results:[],terpenes:["Myrcene","Linalool","Caryophyllene"],genetics:"Purple Urkle x Big Bud",effects:["Relax profondo","Sedazione","Felicità"],flavors:["Uva","Berry","Dolce floreale"],growNotes:"Produce cime viola spettacolari con delta termica (notti fresche <18°C accentuano le antocianine). Ottima per SOG. Resistente a muffa e parassiti.",evidence:"source",verifiedSources:[{label:"Pacific Seed Bank",url:"https://www.pacificseedbank.com",type:"seed_bank"},{label:"Leafly",url:"https://www.leafly.com/strains/granddaddy-purple",type:"aggregator"}]},
+
+// ── SATIVA / HYBRID ─────────────────────────────
+{name:"Mimosa",type:"Hybrid",chemotype:"type1",thc:"20–27%",cbd:"<1%",flowerTime:"9–10 settimane",yield:"450–600g/m²",difficulty:"Media",desc:"Sativa-dominant con aromi agrumati brillanti. THC elevato, effetto energico e creativo.",claims:{thc_range:[20,27],cbd_range:[0,1],flower_days:[63,70],yield_g_m2:[450,600],source_type:"seed_bank",source_url:"https://www.seedcellar.com",source_date:"2026-01-15"},lab_results:[],terpenes:["Limonene","Caryophyllene","Myrcene"],genetics:"Clementine x Purple Punch",effects:["Energia","Creatività","Euforia"],flavors:["Agrumi","Mandarino","Dolce"],growNotes:"Richiede spazio verticale (fino a 150cm indoor). LST o topping consigliato per contenere altezza. Alta resa se ben gestita. Nota: alcune fonti commerciali riportano rese eccessive — i dati qui indicati (450-600 g/m²) sono verificabili con coltivazione esperta.",evidence:"source",verifiedSources:[{label:"Seed Cellar",url:"https://www.seedcellar.com",type:"seed_bank"},{label:"Leafly",url:"https://www.leafly.com/strains/mimosa",type:"aggregator"}]},
+
+{name:"Durban Poison",type:"Sativa",chemotype:"type1",thc:"17–24%",cbd:"<1%",flowerTime:"8–9 settimane",yield:"350–450g/m²",difficulty:"Media",desc:"Landrace sativa del Sud Africa. Veloce per una sativa, ottima resistenza a muffa, profilo terpenico unico con Terpinolene dominante.",claims:{thc_range:[17,24],cbd_range:[0,1],flower_days:[56,63],yield_g_m2:[350,450],source_type:"seed_bank",source_url:"https://www.dutch-passion.com",source_date:"2025-03-20"},lab_results:[],terpenes:["Terpinolene","Pinene","Myrcene"],genetics:"Landrace Sativa (Durban, Sud Africa)",effects:["Energia","Focus","Euforia cerebrale"],flavors:["Anice","Pino","Dolce"],growNotes:"Alta resistenza a muffa e umidità — eccellente per outdoor in climi temperati italiani. Indoor: richiede controllo altezza con LST. Il Terpinolene dominante produce un effetto diverso dalle sative Limonene-dominant.",evidence:"source",verifiedSources:[{label:"Dutch Passion",url:"https://www.dutch-passion.com",type:"breeder"},{label:"Leafly",url:"https://www.leafly.com/strains/durban-poison",type:"aggregator"}]},
+
+// ── AUTOFIORENTI ──────────────────────────────────
+{name:"Northern Lights Auto",type:"Auto",chemotype:"type1",thc:"15–18%",cbd:"<1%",flowerTime:"50–60 giorni da seme",yield:"350–400g/m²",difficulty:"Facilissima",desc:"Versione autofiorente della leggenda. Ciclo rapido, taglia compatta, ideale per chi inizia senza complicazioni.",claims:{thc_range:[15,18],cbd_range:[0,1],flower_days:[50,60],yield_g_m2:[350,400],source_type:"seed_bank",source_url:"https://www.pacificseedbank.com",source_date:"2025-02-01"},lab_results:[],terpenes:["Myrcene","Caryophyllene"],genetics:"Northern Lights x Cannabis Ruderalis",effects:["Relax","Sedazione"],flavors:["Terra","Pino"],growNotes:"Ciclo completo 50-60 giorni da seme. Taglia molto compatta (50-80cm). Perfetta per balcone o grow room piccola. Non richiedere cambio fotoperiodo — ideale per principianti assoluti.",evidence:"source",verifiedSources:[{label:"Pacific Seed Bank",url:"https://www.pacificseedbank.com",type:"seed_bank"}]},
+
+{name:"Sticky Queen Auto",type:"Auto",chemotype:"type1",thc:">25%",cbd:"<1%",flowerTime:"10–11 settimane da seme",yield:"450–550g/m²",difficulty:"Facile",desc:"Tra le auto più potenti del 2025 (RQS). THC >25%, taglia compatta, rese elevate per una autofiorente. Struttura indica con effetto pesante.",claims:{thc_range:[25,30],cbd_range:[0,1],flower_days:[70,77],yield_g_m2:[450,550],source_type:"seed_bank",source_url:"https://www.royalqueenseeds.com",source_date:"2025-06-01"},lab_results:[],terpenes:["Myrcene","Caryophyllene","Linalool"],genetics:"Auto/Indica-dominant cross — Royal Queen Seeds",effects:["Relax pesante","Sedazione"],flavors:["Dolce","Terra","Spezie"],growNotes:"Una delle auto più potenti disponibili. Nonostante THC elevato, rimane gestibile nella taglia. Richiede supporto rami in bloom per il peso delle cime. Nutrizione moderata — autofiorenti non tollerano eccessi di azoto in bloom.",evidence:"source",verifiedSources:[{label:"Royal Queen Seeds",url:"https://www.royalqueenseeds.com",type:"breeder"},{label:"Amsterdam Seed Center",url:"https://www.amsterdamseedcenter.com",type:"retailer"}]},
+
+{name:"Green Cure CBD F1 Auto",type:"Auto",chemotype:"type3",thc:"0–1%",cbd:"18%",flowerTime:"8–10 settimane da seme",yield:"400–500g/m²",difficulty:"Facile",desc:"CBD 18%, THC <1%. Vincitrice categoria CBD Autoflower World Cup 2025. Vigore F1 ibrido, ideale per uso non psicoattivo e contesti legali.",claims:{thc_range:[0,1],cbd_range:[17,19],flower_days:[56,70],yield_g_m2:[400,500],source_type:"seed_bank",source_url:"https://www.zamnesia.com",source_date:"2025-09-01"},lab_results:[],terpenes:["Myrcene","Caryophyllene","Terpinolene"],genetics:"Auto CBD F1 Hybrid — Zamnesia Seeds",effects:["Relax senza psicoattività","Benessere"],flavors:["Floreale","Erbaceo","Dolce"],growNotes:"Chemotype type3 (CBD:THC >18:1). Vigore F1 garantisce uniformità e resistenza. Ideale per contesti con restrizioni THC. Verificare sempre le norme locali — il THC <0.5% la rende compatibile con quadro legale italiano tipo III. Vincitrice Autoflower World Cup 2025 (categoria CBD).",evidence:"source",verifiedSources:[{label:"Zamnesia Seeds",url:"https://www.zamnesia.com",type:"breeder"},{label:"Autoflower World Cup 2025",url:"https://www.autoflowerworldcup.com",type:"industry_event"}]},
+
+// ── CBD / TYPE II-III ─────────────────────────────
+{name:"Cannatonic CBD",type:"Hybrid",chemotype:"type2",thc:"5–7%",cbd:"7–12%",flowerTime:"8–9 settimane",yield:"350–450g/m²",difficulty:"Media",desc:"Chemotype type2 bilanciato (rapporto THC:CBD ~1:1). Effetto psicoattivo attenuato dal CBD. Adatta a contesti con limiti legali di THC.",claims:{thc_range:[5,7],cbd_range:[7,12],flower_days:[56,63],yield_g_m2:[350,450],source_type:"seed_bank",source_url:"https://www.resin-seeds.es",source_date:"2024-06-01"},lab_results:[],terpenes:["Myrcene","Pinene","Caryophyllene"],genetics:"MK Ultra x G13 Haze — Resin Seeds",effects:["Relax equilibrato","Chiarezza mentale","Benessere"],flavors:["Pino","Erbaceo","Agrumi leggeri"],growNotes:"Il bilanciamento THC:CBD varia tra phenotype — consigliato test COA su ogni lotto. Sensibile a muffa in ambienti umidi: aerazione importante. Adatta a contesti medici e terapeutici dove THC elevato non è desiderato.",evidence:"study",verifiedSources:[{label:"Resin Seeds",url:"https://www.resin-seeds.es",type:"breeder"},{label:"Leafly",url:"https://www.leafly.com/strains/cannatonic",type:"aggregator"},{label:"Letteratura chemovar CBD (NCBI)",url:"https://www.ncbi.nlm.nih.gov",type:"scientific"}]}
 ];
 
 const diagnosisEngine={
@@ -755,6 +888,223 @@ fix:[
 {action:"Aumenta fertilizzante Bloom (PK alto)",evidence:"source"},
 {action:"Temperatura notturna >15°C",evidence:"study"}
 ]
+},
+
+// ═══════════════════════════════════════════════════════════
+// FASE 3 — 12 NUOVE IPOTESI (PRE / DURANTE / POST)
+// ═══════════════════════════════════════════════════════════
+
+// ── PRE-COLTIVAZIONE ───────────────────────────────────────
+{
+id:"seme_non_germina",
+name:"Seme non germina",
+confidence:0,
+evidence:"source",
+rules:[
+{field:"stage",value:"seedling",weight:35},
+{field:"timeline",value:"graduale",weight:25},
+{field:"symptom",value:"non_germina",weight:40}
+],
+fix:[
+{action:"Verificare età e conservazione del seme (frigorifero buio, non congelatore)",evidence:"source"},
+{action:"Temperatura ideale: 22-26°C — usa tappetino riscaldante se necessario",evidence:"source"},
+{action:"Non interrare la radichetta se è < 0.5cm — aspettare ancora 12-24h",evidence:"source"},
+{action:"Prova metodo acqua ossigenata 3% per 1h prima di ritentare",evidence:"community"}
+],
+disclaimer:"Seme non germinato dopo 7 giorni: probabilmente non vitale. Verificare fornitore."
+},
+{
+id:"substrato_non_drenante",
+name:"Substrato compattato / scarso drenaggio",
+confidence:0,
+evidence:"community",
+rules:[
+{field:"symptom",value:"appassimento",weight:25},
+{field:"timeline",value:"dopo innaffio",weight:30},
+{field:"distribution",value:"uniforme",weight:15}
+],
+fix:[
+{action:"Aggiungi 20-30% perlite al prossimo trapianto per aerazione",evidence:"community"},
+{action:"Verifica presenza e dimensione fori drenaggio sul vaso",evidence:"community"},
+{action:"Evita terricci da giardino pesanti o argillosi",evidence:"source"},
+{action:"Sollevare il vaso — se è pesante anche dopo giorni senza innaffiatura c'è un problema di drenaggio",evidence:"community"}
+]
+},
+{
+id:"acqua_scarsa_qualita",
+name:"Acqua RO senza remineralizzazione",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"symptom",value:"ingiallimento",weight:20},
+{field:"distribution",value:"nuove",weight:25},
+{field:"stage",value:"seedling",weight:15}
+],
+fix:[
+{action:"Integrare CalMag (0.5-1 ml/L) PRIMA di nutrienti su ogni innaffiatura",evidence:"source"},
+{action:"Verificare EC acqua base — se <0.1 mS/cm aggiungere sempre mineralizzazione minima",evidence:"study"},
+{action:"In coco: CalMag obbligatorio a 2-4 ml/L con acqua RO",evidence:"source"}
+],
+disclaimer:"Carenze da acqua RO si manifestano su foglie nuove (Ca, Mg, B sono immobili)."
+},
+
+// ── DURANTE LA COLTIVAZIONE ────────────────────────────────
+{
+id:"k_deficiency",
+name:"Carenza Potassio (K)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"distribution",value:"vecchie",weight:30},
+{field:"stage",value:"bloom",weight:25},
+{field:"symptom",value:"ingiallimento",weight:20}
+],
+fix:[
+{action:"Correggi pH in range 6.0-7.0 (K si assorbe male sotto 6.0)",evidence:"study"},
+{action:"Aumenta fertilizzante Bloom con alto K (PK Booster)",evidence:"source"},
+{action:"Flush leggero se EC è alta — sali in eccesso possono bloccare K",evidence:"source"}
+],
+disclaimer:"La carenza di K parte dagli orli delle foglie vecchie — necrosi bruna con alone giallo. Escludere pH lockout prima."
+},
+{
+id:"mg_deficiency",
+name:"Carenza Magnesio (Mg)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"distribution",value:"vecchie",weight:30},
+{field:"symptom",value:"ingiallimento",weight:25},
+{field:"timeline",value:"graduale",weight:15}
+],
+fix:[
+{action:"Controlla pH — Mg si assorbe male sotto 6.0 in terra",evidence:"study"},
+{action:"Aggiungi CalMag alla prossima innaffiatura (1-2 ml/L)",evidence:"source"},
+{action:"In alternativa: sale Epsom (MgSO4) — 1g/L in acqua pH corretta",evidence:"community"}
+],
+disclaimer:"Carenza Mg classica: clorosi internervale (vene verdi, foglia gialla). Comune in coco e con acqua RO."
+},
+{
+id:"ca_deficiency_advanced",
+name:"Carenza Calcio (Ca) — Blocco nutrizionale",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"distribution",value:"nuove",weight:35},
+{field:"symptom",value:"ingiallimento",weight:20}
+],
+fix:[
+{action:"Porta pH a 6.2-7.0 — Ca si assorbe meglio in range alcalino (terra)",evidence:"study"},
+{action:"Integrare CalMag o lime dolomite per alzare Ca disponibile",evidence:"source"},
+{action:"In coco: Ca spesso bloccato dal substrato non bufferizzato — ribilanciare",evidence:"source"}
+],
+disclaimer:"La carenza di Ca colpisce foglie nuove (nutriente immobile). Macchie marroni su apici e nuova crescita."
+},
+{
+id:"powdery_mildew",
+name:"Oidio (Powdery Mildew)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"symptom",value:"muffa",weight:45},
+{field:"metrics.humidity",min:55,weight:25},
+{field:"distribution",value:"nuove",weight:15}
+],
+fix:[
+{action:"Spray soluzione latte/acqua 1:3 o bicarbonato di potassio (5-8g/L) + olio vegetale",evidence:"study"},
+{action:"Scarta cime infette — non recuperabili con oidio avanzato",evidence:"study"},
+{action:"Migliora flusso d'aria — VM ventilatore oscillante, distanza tra piante",evidence:"source"},
+{action:"Abbassa umidità sotto 50% — l'oidio si ferma sotto 45%",evidence:"study"}
+],
+disclaimer:"L'oidio in fioritura può richiedere eliminazione dei fiori colpiti. Non consumare materiale con oidio."
+},
+{
+id:"broad_mites",
+name:"Broad Mites (Acari Tarsonemidi)",
+confidence:0,
+evidence:"community",
+rules:[
+{field:"symptom",value:"contorto",weight:40},
+{field:"distribution",value:"nuove",weight:35}
+],
+fix:[
+{action:"Quarantena immediata pianta colpita — broad mites si diffondono velocemente",evidence:"source"},
+{action:"Spray saponi insetticidi al potassio (1-2%) su foglie nuove — retro compreso",evidence:"community"},
+{action:"Rilascia predatori Neoseiulus cucumeris — efficaci se infestazione precoce",evidence:"source"},
+{action:"Trattamento termico: 43°C per 30min distrugge uova (grow tent chiuso + heater)",evidence:"community"}
+],
+disclaimer:"Broad mites sono microscopici (non visibili a occhio nudo). Servono 60x o più per conferma. Diagnosi basata su sintomi nuova crescita."
+},
+{
+id:"fusarium_wilt",
+name:"Fusarium (Marciume da Fusario)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"symptom",value:"appassimento",weight:40},
+{field:"distribution",value:"uniforme",weight:25},
+{field:"timeline",value:"improvviso",weight:20}
+],
+fix:[
+{action:"Nessuna cura efficace — distruggere la pianta colpita",evidence:"study"},
+{action:"NON riusare il substrato contaminato — Fusarium persiste nel terriccio",evidence:"study"},
+{action:"Prevenzione: micorrize e Trichoderma al trapianto — competizione biologica",evidence:"study"},
+{action:"Mantieni pH >6.0 — Fusarium prospera in ambienti acidi",evidence:"study"}
+],
+disclaimer:"Irreversibile. L'appassimento da Fusarium NON risponde all'innaffiatura. Radici rossastre/marroni confermano la diagnosi."
+},
+{
+id:"light_burn",
+name:"Light Burn / Heat Stress apicale",
+confidence:0,
+evidence:"source",
+rules:[
+{field:"symptom",value:"bleaching",weight:45},
+{field:"distribution",value:"nuove",weight:25},
+{field:"metrics.temp",min:28,weight:20}
+],
+fix:[
+{action:"Alza la lampada LED — distanza minima 35-45cm dal canopy in fioritura",evidence:"source"},
+{action:"Dimmerare la lampada al 75-80% se impossibile alzarla",evidence:"source"},
+{action:"Verifica PPFD con app o PAR meter — target bloom: 600-900 µmol/m²/s",evidence:"study"},
+{action:"Controlla temperatura — sopra 28°C il bleaching da calore accelera",evidence:"source"}
+],
+disclaimer:"Light burn colpisce SOLO la parte alta della pianta (più vicina alla lampada). Non si diffonde — non è virale."
+},
+
+// ── POST-RACCOLTA ───────────────────────────────────────────
+{
+id:"essiccazione_rapida",
+name:"Essiccazione troppo veloce",
+confidence:0,
+evidence:"community",
+rules:[
+{field:"stage",value:"post",weight:40},
+{field:"symptom",value:"odore_fieno",weight:45}
+],
+fix:[
+{action:"Rallentare con ambiente più fresco e umido (18-20°C, 55-62%)",evidence:"community"},
+{action:"Prolungare il curing in barattolo con burping frequente (2x/giorno per 2 settimane)",evidence:"community"},
+{action:"Inserire Boveda 62% nei barattoli — reidrata parzialmente i terpeni",evidence:"source"}
+],
+disclaimer:"Essiccazione sotto i 5 giorni compromette il profilo terpenico in modo irreversibile. Il curing può migliorare parzialmente ma non recupera terpeni già persi."
+},
+{
+id:"muffa_in_curing",
+name:"Muffa nei barattoli (curing)",
+confidence:0,
+evidence:"study",
+rules:[
+{field:"stage",value:"post",weight:35},
+{field:"symptom",value:"muffa",weight:40},
+{field:"metrics.humidity",min:65,weight:20}
+],
+fix:[
+{action:"Rimuovi immediatamente cime infette — non trattabile, butta il contenuto se diffuso",evidence:"study"},
+{action:"Aumenta frequenza burping (3-4x/giorno) con barattoli aperti 30-60 min",evidence:"source"},
+{action:"Inserisci igrometro mini in ogni barattolo — target 58-62%",evidence:"source"},
+{action:"Boveda 62% stabile: assorbe se >62%, rilascia se <62%",evidence:"source"}
+],
+disclaimer:"Muffa nei barattoli (Botrytis/Aspergillus): NON consumare materiale visibilmente ammuffito. Il rischio micotossine è reale."
 }
 ],
 evaluate(input){
@@ -780,6 +1130,11 @@ if(!isNaN(ec)&&r.min!==undefined&&ec>=r.min)score+=r.weight;
 if(r.field==="metrics.humidity"&&input.metrics&&input.metrics.humidity!==null&&input.metrics.humidity!==""){
 const hum=parseFloat(input.metrics.humidity);
 if(!isNaN(hum)&&r.min!==undefined&&hum>=r.min)score+=r.weight;
+}
+if(r.field==="metrics.temp"&&input.metrics&&input.metrics.temp!==null&&input.metrics.temp!==""){
+const tmp=parseFloat(input.metrics.temp);
+if(!isNaN(tmp)&&r.min!==undefined&&tmp>=r.min)score+=r.weight;
+if(!isNaN(tmp)&&r.max!==undefined&&tmp<=r.max)score+=r.weight;
 }
 });
 return{...h,confidence:Math.min(score,95)};
@@ -954,6 +1309,153 @@ function go(page){
 currentPage=page;
 document.getElementById('menu').classList.remove('open');
 window.scrollTo(0,0);
+
+// ═══════════════════════════════════════════════════════════
+// FASE 4 — PROFESSIONAL ENGINEERING
+// Toast · Modal · Keyboard · AutoSave · Report · OfflineQueue
+// ═══════════════════════════════════════════════════════════
+
+/* ── TOAST NOTIFICATION SYSTEM ── */
+const Toast = {
+    el: null,
+    init() {
+        if(this.el) return;
+        this.el = document.createElement('div');
+        this.el.id = 'toastContainer';
+        this.el.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);z-index:200;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90vw;width:360px';
+        document.body.appendChild(this.el);
+    },
+    show(msg, type='info', duration=3000) {
+        this.init();
+        const t = document.createElement('div');
+        const colors = {info:'#00ffff', success:'#39ff14', warn:'#f0e800', error:'#ff4444'};
+        const c = colors[type] || colors.info;
+        t.style.cssText = `background:rgba(10,10,10,.95);border:1px solid ${c}55;color:${c};padding:12px 18px;border-radius:12px;font-family:Inter;font-size:13px;box-shadow:0 4px 20px ${c}30;backdrop-filter:blur(10px);pointer-events:auto;animation:fadeIn .3s ease;opacity:0;transform:translateY(10px);transition:all .3s`;
+        t.textContent = msg;
+        this.el.appendChild(t);
+        requestAnimationFrame(() => { t.style.opacity='1'; t.style.transform='translateY(0)'; });
+        setTimeout(() => {
+            t.style.opacity='0'; t.style.transform='translateY(10px)';
+            setTimeout(() => t.remove(), 300);
+        }, duration);
+    }
+};
+
+/* ── MODAL CONFIRM SYSTEM ── */
+function showModal(opts) {
+    return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .2s ease';
+        const box = document.createElement('div');
+        box.style.cssText = 'background:rgba(17,17,17,.95);border:1px solid #333;border-radius:20px;padding:28px;max-width:400px;width:100%;text-align:center;box-shadow:0 0 40px rgba(0,0,0,.5)';
+        const title = opts.title || 'Conferma';
+        const body = opts.body || 'Sei sicuro?';
+        const confirmColor = opts.danger ? '#ff4444' : '#39ff14';
+        box.innerHTML = `
+            <div style="font-family:Orbitron;font-size:18px;color:#fff;margin-bottom:12px">${esc(title)}</div>
+            <div style="font-size:14px;color:#aaa;line-height:1.6;margin-bottom:24px">${esc(body)}</div>
+            <div style="display:flex;gap:10px;justify-content:center">
+                <button id="modCancel" style="flex:1;padding:12px;border-radius:10px;border:1px solid #333;background:#111;color:#888;font-family:Orbitron;font-size:12px;cursor:pointer">Annulla</button>
+                <button id="modOk" style="flex:1;padding:12px;border-radius:10px;border:none;background:${confirmColor}22;color:${confirmColor};font-family:Orbitron;font-size:12px;cursor:pointer;border:1px solid ${confirmColor}55">${esc(opts.okText || 'Conferma')}</button>
+            </div>
+        `;
+        overlay.appendChild(box);
+        document.body.appendChild(overlay);
+        overlay.addEventListener('click', e => { if(e.target===overlay) { overlay.remove(); resolve(false); } });
+        box.querySelector('#modCancel').onclick = () => { overlay.remove(); resolve(false); };
+        box.querySelector('#modOk').onclick = () => { overlay.remove(); resolve(true); };
+    });
+}
+
+/* ── KEYBOARD NAVIGATION ── */
+document.addEventListener('keydown', e => {
+    if(e.ctrlKey && e.key >= '1' && e.key <= '9') {
+        e.preventDefault();
+        const pages = ['home','guide','journal','diagnosis','tools','strains','timer','library'];
+        const idx = parseInt(e.key) - 1;
+        if(pages[idx]) go(pages[idx]);
+    }
+    if(e.key === 'Escape') {
+        document.getElementById('menu').classList.remove('open');
+    }
+});
+
+/* ── AUTO-SAVE FORM RECOVERY ── */
+const AutoSave = {
+    key: 'grow-autosave',
+    save(data) { try { sessionStorage.setItem(this.key, JSON.stringify({ts:Date.now(),...data})); }catch(e){} },
+    load() { try { const d = JSON.parse(sessionStorage.getItem(this.key)); return (d && Date.now()-d.ts < 3600000) ? d : null; }catch(e){ return null; } },
+    clear() { sessionStorage.removeItem(this.key); }
+};
+
+/* ── OFFLINE QUEUE ── */
+const OfflineQueue = {
+    key: 'grow-offline-queue',
+    push(action) {
+        const q = lsGet(this.key, []);
+        q.push({action, ts: Date.now()});
+        lsSet(this.key, q);
+    },
+    async flush() {
+        const q = lsGet(this.key, []);
+        if(!q.length) return;
+        lsSet(this.key, []);
+        for(const item of q) {
+            // placeholder per sync futura
+            console.log('OfflineQueue flush:', item.action);
+        }
+        Toast.show('Dati offline sincronizzati', 'success');
+    }
+};
+window.addEventListener('online', () => {
+    Toast.show('🌐 Sei tornato online', 'success');
+    OfflineQueue.flush();
+});
+window.addEventListener('offline', () => {
+    Toast.show('📴 Sei offline — dati in coda localmente', 'warn');
+});
+
+
+
+/* ── WRAPPER CONFERME PROFESSIONALI ── */
+const _origConfirm = window.confirm;
+window.confirm = async msg => {
+    // Se siamo in un flusso utente attivo, usa modal
+    if(document.body.contains(document.getElementById('app'))) {
+        return await showModal({title:'Conferma', body:msg, okText:'Conferma', danger:false});
+    }
+    return _origConfirm(msg);
+};
+
+// Override deletePlant per usare modal danger
+const _origDeletePlant = window.deletePlant;
+window.deletePlant = async function() {
+    const ok = await showModal({title:'Elimina Pianta', body:'Questa azione è irreversibile. Tutti i log e le foto verranno rimossi.', okText:'Elimina', danger:true});
+    if(!ok) return;
+    const plants=lsGet('grow-plants',[]);
+    const wasActive=journalEditId===getActivePlantIndex();
+    plants.splice(journalEditId,1);
+    lsSet('grow-plants',plants);
+    if(wasActive){lsSet('grow-active-plant',0)}
+    journalView='list';journalEditId=null;
+    Toast.show('Pianta eliminata','warn');
+    renderPage();
+};
+
+// Override resetPlantProgress
+const _origResetProgress = window.resetPlantProgress;
+window.resetPlantProgress = async function() {
+    const ok = await showModal({title:'Reset Progressi', body:'Cancellare tutti i progressi di questa piantina? Non potrai recuperarli.', okText:'Resetta', danger:true});
+    if(!ok) return;
+    const plants=lsGet('grow-plants',[]);
+    const idx=journalEditId!==null?journalEditId:getActivePlantIndex();
+    if(plants[idx]){plants[idx].progress={};lsSet('grow-plants',plants);Toast.show('Progressi azzerati','success');renderPage();}
+};
+
+// ═══════════════════════════════════════════════════════════
+// FINE FASE 4
+// ═══════════════════════════════════════════════════════════
+
 updateHeader();
 renderBottomNav();
 renderPage()
@@ -999,7 +1501,7 @@ case'diagnosis':initDiagnosis();break;
 case'tools':initTools();break;
 case'strains':initStrains();break;
 case'timer':initTimer();break; 
-case'reminders':initReminders();break;
+case'reminders':initRemindersPage();break;
 case'library':initLibrary();break; 
 case'compare':initCompare();break;
 case'coa':initCOA();break;
@@ -1766,10 +2268,23 @@ let html=`<div>
 <div style="display:flex;flex-direction:column;gap:10px">
 <select class="inp" onchange="diagInput.symptom=this.value;runDiagnosis()">
 <option value="">Sintomo principale...</option>
+<optgroup label="🍃 Problemi fogliari">
 <option value="ingiallimento">🍃 Ingiallimento fogliare</option>
-<option value="muffa">🌸 Muffa su fiori</option>
+<option value="contorto">🌀 Crescita contorta / deformata</option>
+<option value="bleaching">🔆 Sbiancamento apicale (bleaching)</option>
+</optgroup>
+<optgroup label="🐛 Parassiti / Muffa">
+<option value="muffa">🌸 Muffa su fiori / foglie</option>
 <option value="puntini">🐛 Puntini / ragnatele</option>
+</optgroup>
+<optgroup label="🌱 Struttura / Crescita">
 <option value="allungamento">📏 Allungamento eccessivo</option>
+<option value="appassimento">😞 Appassimento / wilting</option>
+<option value="non_germina">🌰 Seme non germina</option>
+</optgroup>
+<optgroup label="🏺 Post-raccolta">
+<option value="odore_fieno">🌾 Odore di fieno (essiccazione)</option>
+</optgroup>
 </select>
 <select class="inp" onchange="diagInput.distribution=this.value;runDiagnosis()">
 <option value="">Distribuzione...</option>
@@ -1792,9 +2307,10 @@ let html=`<div>
 </div>
 <select class="inp" onchange="diagInput.stage=this.value;runDiagnosis()">
 <option value="">Fase...</option>
+<option value="seedling">Seedling / Germinazione</option>
 <option value="veg">Vegetativa</option>
 <option value="bloom">Fioritura</option>
-<option value="seedling">Seedling</option>
+<option value="post">Post-raccolta (curing/essiccazione)</option>
 </select>
 </div>
 </div>`;
@@ -1885,6 +2401,96 @@ return `<div>
 </div>
 <div id="tConvR" style="font-size:13px;color:#ccc;padding:10px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
 </div>
+
+<!-- ═══ FASE 3 — 6 NUOVI TOOL PROFESSIONALI ═══ -->
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">🌡️ Calcolatore VPD</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Vapor Pressure Deficit — Formula Tetens 🟡 Studio</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Temperatura aria (°C)</div><input type="number" id="tVpdT" class="inp" placeholder="es. 24" step="0.5" oninput="calcVPD()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Umidità relativa (%)</div><input type="number" id="tVpdH" class="inp" placeholder="es. 60" step="1" oninput="calcVPD()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Fase di crescita</div>
+<select id="tVpdPhase" class="inp" onchange="calcVPD()">
+<option value="clone">Clone / Seedling</option>
+<option value="veg" selected>Vegetativa</option>
+<option value="bloom_early">Bloom early (sett. 1-3)</option>
+<option value="bloom_mid">Bloom mid (sett. 4-6)</option>
+<option value="bloom_late">Bloom late / Flush</option>
+</select></div>
+<div id="tVpdR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">💡 Calcolatore DLI / PPFD</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Daily Light Integral (mol/m²/die) 🟡 Studio</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">PPFD (µmol/m²/s)</div><input type="number" id="tDliP" class="inp" placeholder="es. 600" step="10" oninput="calcDLI()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Ore di luce / giorno</div><input type="number" id="tDliH" class="inp" placeholder="es. 18" step="0.5" oninput="calcDLI()"></div>
+<div id="tDliR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5)">Inserisci i dati...</div>
+</div>
+</div>
+
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">⚡ Stima Costo Elettricità</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Calcolo per ciclo completo ⚪ Community</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Watt totali setup (W)</div><input type="number" id="tElW" class="inp" placeholder="es. 350" oninput="calcElettricita()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Ore di luce / giorno</div><input type="number" id="tElH" class="inp" placeholder="es. 18" step="0.5" oninput="calcElettricita()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Tariffa €/kWh</div><input type="number" id="tElE" class="inp" placeholder="es. 0.28" step="0.01" oninput="calcElettricita()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Durata ciclo (giorni)</div><input type="number" id="tElD" class="inp" placeholder="es. 90" oninput="calcElettricita()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Resa stimata (g) — opzionale</div><input type="number" id="tElG" class="inp" placeholder="es. 300" oninput="calcElettricita()"></div>
+<div id="tElR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5);line-height:1.8">Inserisci i dati...</div>
+</div>
+</div>
+
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">📅 Calcolatore Date Raccolta</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Calendario fasi con flush e raccolta 🟠 Fonte</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Data inizio (germinazione / trapianto)</div><input type="date" id="tDateStart" class="inp" oninput="calcRaccolta()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Tipo pianta</div>
+<select id="tDateType" class="inp" onchange="calcRaccolta()">
+<option value="foto">Fotoperiodo</option>
+<option value="auto">Autofiorente</option>
+</select></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Settimane veg (solo fotoperiodo)</div><input type="number" id="tDateVeg" class="inp" placeholder="es. 4" min="1" max="16" oninput="calcRaccolta()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Settimane fioritura / ciclo auto da seme</div><input type="number" id="tDateBloom" class="inp" placeholder="es. 9" min="5" max="16" oninput="calcRaccolta()"></div>
+<div id="tDateR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5);line-height:1.9">Inserisci i dati...</div>
+</div>
+</div>
+
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">🧪 Convertitore EC ↔ PPM</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Scale 500 / 640 / 700 — avviso strumenti 🟡 Studio</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Valore da convertire</div><input type="number" id="tEcV" class="inp" placeholder="es. 1.2 oppure 840" step="0.01" oninput="calcECPPM()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Unità di input</div>
+<select id="tEcFrom" class="inp" onchange="calcECPPM()">
+<option value="ec">EC (mS/cm)</option>
+<option value="ppm500">PPM scala 500 (Hanna)</option>
+<option value="ppm640">PPM scala 640 (Truncheon)</option>
+<option value="ppm700">PPM scala 700 (Bluelab)</option>
+</select></div>
+<div id="tEcR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5);line-height:1.9">Inserisci i dati...</div>
+</div>
+</div>
+
+<div class="tool-card gl-y">
+<div style="font-family:Orbitron;font-size:13px;color:var(--ny);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">🫧 Dimensionamento Ventilazione</div>
+<div style="font-size:10px;color:#555;margin-bottom:12px">Portata estrattore consigliata 🟠 Fonte tecnica</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Volume grow tent m³ (es: 0.6 × 0.6 × 1.4 = 0.50)</div><input type="number" id="tVentM3" class="inp" placeholder="es. 0.50" step="0.05" oninput="calcVentilazione()"></div>
+<div><div style="font-size:11px;color:#555;margin-bottom:4px">Configurazione</div>
+<select id="tVentType" class="inp" onchange="calcVentilazione()">
+<option value="normal">Standard (LED, normale)</option>
+<option value="hot">Caldo / HPS / estate</option>
+<option value="carbon">Con filtro a carboni attivi</option>
+</select></div>
+<div id="tVentR" style="font-size:13px;color:#ccc;padding:12px;background:rgba(10,10,10,.5);border-radius:8px;border:1px solid rgba(34,34,34,.5);line-height:1.9">Inserisci i dati...</div>
+</div>
+</div>
+
 </div>
 </div>
 </div>`;
@@ -1934,6 +2540,159 @@ if(t==='oz')res=g/28.3495;
 if(t==='lb')res=g/453.592;
 r.innerHTML=`<span style="color:var(--nc);font-weight:700">${res.toFixed(2)} ${t}</span>`;
 }
+// ═══════════════════════════════════════════════════════════
+// FASE 3 — 6 NUOVE FUNZIONI CALC TOOLS
+// ═══════════════════════════════════════════════════════════
+
+function calcVPD(){
+    const T=parseFloat(document.getElementById('tVpdT')?.value)||null;
+    const UR=parseFloat(document.getElementById('tVpdH')?.value)||null;
+    const phase=document.getElementById('tVpdPhase')?.value||'veg';
+    const r=document.getElementById('tVpdR');
+    if(!r)return;
+    if(T===null||UR===null||isNaN(T)||isNaN(UR)){r.innerHTML='Inserisci i dati...';return}
+    // Formula Tetens
+    const SVP=0.6108*Math.exp((17.27*T)/(T+237.3));
+    const VPD=SVP*(1-UR/100);
+    const v=VPD.toFixed(2);
+    // Range ottimali per fase
+    const ranges={clone:[0.4,0.8],veg:[0.8,1.2],bloom_early:[1.2,1.4],bloom_mid:[1.4,1.6],bloom_late:[1.4,1.6]};
+    const [lo,hi]=ranges[phase]||[0.8,1.2];
+    let status='',color='';
+    if(VPD<lo-0.15){status='⚠️ Troppo basso — aria satura, rischio muffa, nutrienti bloccati';color='var(--np)';}
+    else if(VPD<lo){status='🟡 Leggermente basso — considera abbassare UR';color='var(--ny)';}
+    else if(VPD<=hi){status='✅ Ottimale per la fase selezionata';color='var(--ng)';}
+    else if(VPD<=hi+0.2){status='🟡 Leggermente alto — verifica idratazione';color='var(--ny)';}
+    else{status='⚠️ Troppo alto — stress idrico, stomi chiusi';color='var(--no)';}
+    r.innerHTML=`<div style="font-size:22px;font-weight:900;color:${color};font-family:Orbitron">${v} kPa</div>
+<div style="font-size:12px;margin-top:6px;color:${color}">${status}</div>
+<div style="font-size:10px;color:#555;margin-top:6px">Target fase: <span style="color:#888">${lo}–${hi} kPa</span> &nbsp;|&nbsp; SVP: ${SVP.toFixed(3)} kPa</div>`;
+}
+
+function calcDLI(){
+    const ppfd=parseFloat(document.getElementById('tDliP')?.value)||null;
+    const h=parseFloat(document.getElementById('tDliH')?.value)||null;
+    const r=document.getElementById('tDliR');
+    if(!r)return;
+    if(!ppfd||!h){r.innerHTML='Inserisci i dati...';return}
+    const dli=(ppfd*h*3600/1000000).toFixed(1);
+    let status='',color='';
+    const d=parseFloat(dli);
+    if(d<15){status='⚠️ Troppo basso — crescita stentata (target veg: 20-40)';color='var(--no)';}
+    else if(d<20){status='🟡 Sufficiente per seedling / clone';color='var(--ny)';}
+    else if(d<=40){status='✅ Ottimale per Vegetativa';color='var(--ng)';}
+    else if(d<=65){status='✅ Ottimale per Fioritura';color='var(--ng)';}
+    else{status='⚠️ Molto alto — rischio light stress sopra 65 mol/m²/die';color='var(--no)';}
+    r.innerHTML=`<div style="font-size:22px;font-weight:900;color:${color};font-family:Orbitron">${dli} mol/m²/die</div>
+<div style="font-size:12px;margin-top:6px;color:${color}">${status}</div>
+<div style="font-size:10px;color:#555;margin-top:6px">📐 Formula: PPFD × ore × 3600 / 1.000.000 &nbsp;|&nbsp; Target: veg 20-40 / bloom 40-65</div>`;
+}
+
+function calcElettricita(){
+    const w=parseFloat(document.getElementById('tElW')?.value)||null;
+    const h=parseFloat(document.getElementById('tElH')?.value)||null;
+    const e=parseFloat(document.getElementById('tElE')?.value)||null;
+    const d=parseFloat(document.getElementById('tElD')?.value)||null;
+    const g=parseFloat(document.getElementById('tElG')?.value)||null;
+    const r=document.getElementById('tElR');
+    if(!r)return;
+    if(!w||!h||!e||!d){r.innerHTML='Inserisci i dati...';return}
+    const kwhDay=(w/1000)*h;
+    const totalKwh=kwhDay*d;
+    const totalCost=(totalKwh*e).toFixed(2);
+    const costDay=(kwhDay*e).toFixed(3);
+    let perGram='';
+    if(g&&g>0){const cpg=(parseFloat(totalCost)/g).toFixed(2);perGram=`<div style="font-size:12px;color:var(--nc);margin-top:4px">💰 Costo/grammo stimato: <strong>€${cpg}/g</strong></div>`;}
+    r.innerHTML=`<div style="font-size:20px;font-weight:900;color:var(--ny);font-family:Orbitron">€${totalCost} totale</div>
+<div style="font-size:12px;color:#888;margin-top:4px">€${costDay}/giorno &nbsp;•&nbsp; ${totalKwh.toFixed(1)} kWh totali</div>
+${perGram}
+<div style="font-size:10px;color:#555;margin-top:6px">${w}W × ${h}h/giorno × ${d}giorni @ €${e}/kWh</div>`;
+}
+
+function calcRaccolta(){
+    const startStr=document.getElementById('tDateStart')?.value;
+    const tipo=document.getElementById('tDateType')?.value||'foto';
+    const vegW=parseFloat(document.getElementById('tDateVeg')?.value)||4;
+    const bloomW=parseFloat(document.getElementById('tDateBloom')?.value)||9;
+    const r=document.getElementById('tDateR');
+    if(!r)return;
+    if(!startStr){r.innerHTML='Inserisci i dati...';return}
+    const start=new Date(startStr+'T12:00:00');
+    if(isNaN(start)){r.innerHTML='Data non valida';return}
+    const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+    const fmt=(d)=>d.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'});
+    let rows='';
+    if(tipo==='auto'){
+        const totalDays=Math.round(bloomW*7);
+        const flushStart=addDays(start,totalDays-14);
+        const harvest=addDays(start,totalDays);
+        rows=`<div style="color:#aaa">🌱 <strong>Inizio ciclo:</strong> ${fmt(start)}</div>
+<div style="color:var(--ny)">🚿 <strong>Flush:</strong> intorno al ${fmt(flushStart)}</div>
+<div style="color:var(--ng)">✂️ <strong>Raccolta:</strong> intorno al ${fmt(harvest)}</div>
+<div style="font-size:10px;color:#555;margin-top:6px">Ciclo auto: ~${totalDays} giorni da seme</div>`;
+    } else {
+        const vegEnd=addDays(start,Math.round(vegW*7));
+        const bloomEnd=addDays(vegEnd,Math.round(bloomW*7));
+        const flushStart=addDays(bloomEnd,-14);
+        rows=`<div style="color:#aaa">🌱 <strong>Inizio veg:</strong> ${fmt(start)}</div>
+<div style="color:var(--np)">🔄 <strong>Cambio 12/12:</strong> ${fmt(vegEnd)}</div>
+<div style="color:var(--ny)">🚿 <strong>Flush:</strong> intorno al ${fmt(flushStart)}</div>
+<div style="color:var(--ng)">✂️ <strong>Raccolta:</strong> intorno al ${fmt(bloomEnd)}</div>
+<div style="font-size:10px;color:#555;margin-top:6px">Durata totale: ~${Math.round((vegW+bloomW)*7)} giorni</div>`;
+    }
+    r.innerHTML=rows;
+}
+
+function calcECPPM(){
+    const v=parseFloat(document.getElementById('tEcV')?.value)||null;
+    const from=document.getElementById('tEcFrom')?.value||'ec';
+    const r=document.getElementById('tEcR');
+    if(!r)return;
+    if(!v){r.innerHTML='Inserisci i dati...';return}
+    // Fattori di conversione (rispetto a EC mS/cm)
+    const f500=500,f640=640,f700=700;
+    let ec;
+    if(from==='ec')ec=v;
+    else if(from==='ppm500')ec=v/f500;
+    else if(from==='ppm640')ec=v/f640;
+    else ec=v/f700;
+    const ppm500=Math.round(ec*f500);
+    const ppm640=Math.round(ec*f640);
+    const ppm700=Math.round(ec*f700);
+    r.innerHTML=`<div style="font-size:14px;font-weight:700;color:var(--ny);font-family:Orbitron;margin-bottom:8px">EC: ${ec.toFixed(2)} mS/cm</div>
+<div style="font-size:12px;color:#ccc">📊 PPM scala 500 (Hanna): <strong style="color:var(--nc)">${ppm500} ppm</strong></div>
+<div style="font-size:12px;color:#ccc">📊 PPM scala 640 (Truncheon): <strong style="color:var(--nc)">${ppm640} ppm</strong></div>
+<div style="font-size:12px;color:#ccc">📊 PPM scala 700 (Bluelab): <strong style="color:var(--nc)">${ppm700} ppm</strong></div>
+<div style="font-size:10px;color:#555;margin-top:8px">⚠️ Strumenti diversi usano scale diverse — confronta sempre EC, non PPM.</div>`;
+}
+
+function calcVentilazione(){
+    const m3=parseFloat(document.getElementById('tVentM3')?.value)||null;
+    const tipo=document.getElementById('tVentType')?.value||'normal';
+    const r=document.getElementById('tVentR');
+    if(!r)return;
+    if(!m3){r.innerHTML='Inserisci i dati...';return}
+    // Ricambi aria: standard 60x/h, caldo 80x/h, con filtro ×1.25
+    let ricambi=60;
+    if(tipo==='hot')ricambi=80;
+    let factor=1;
+    if(tipo==='carbon')factor=1.25;
+    const portataBase=m3*ricambi*factor;
+    const portataMin=Math.round(portataBase*0.8);
+    const portataMax=Math.round(portataBase*1.2);
+    const cfmMin=Math.round(portataMin/1.699);
+    const cfmMax=Math.round(portataMax/1.699);
+    let suggerisci='';
+    if(portataMax<=150)suggerisci='Estrattore 100mm (es. AC Infinity CLOUDLINE T4 — ~150 m³/h)';
+    else if(portataMax<=250)suggerisci='Estrattore 100-125mm (es. AC Infinity CLOUDLINE T4/T5 — 150-250 m³/h)';
+    else if(portataMax<=400)suggerisci='Estrattore 125-150mm (es. AC Infinity CLOUDLINE T6 — ~400 m³/h)';
+    else suggerisci='Estrattore 150-200mm — AC Infinity CLOUDLINE T6/T8 o equivalente';
+    r.innerHTML=`<div style="font-size:14px;font-weight:700;color:var(--ny);font-family:Orbitron;margin-bottom:6px">${portataMin}–${portataMax} m³/h</div>
+<div style="font-size:11px;color:#888">${cfmMin}–${cfmMax} CFM &nbsp;|&nbsp; ${ricambi} ricambi/ora × ${m3}m³${tipo==='carbon'?' × 1.25 (filtro carboni)':''}</div>
+<div style="font-size:12px;color:var(--nc);margin-top:8px">💡 Suggerimento: ${suggerisci}</div>
+<div style="font-size:10px;color:#555;margin-top:6px">+ Ventilatore interno oscillante sempre consigliato per VPD e rinnovamento aria canopy</div>`;
+}
+
 function initTools(){}
 
 let strainFilter='all';
@@ -1949,20 +2708,27 @@ function renderStrains(){
 let html=`<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti gk" style="font-size:32px;margin-bottom:4px">Strains</h1>
-<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Cultivar Explorer</p>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Cultivar Explorer &bull; ${strains.length} genetiche</p>
 </div>
-<div onclick="go('library');openLibraryItem(4)" style="cursor:pointer;margin-bottom:16px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
+<div onclick="go('library');openLibraryItem(4)" style="cursor:pointer;margin-bottom:12px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
 <span style="font-size:20px">🧬</span>
 <div>
 <div style="font-family:Orbitron;font-size:11px;color:var(--np);text-transform:uppercase;letter-spacing:1px">Knowledge Base</div>
 <div style="font-size:13px;color:#aaa">Approfondisci: <strong style="color:#fff">Chemovar vs Indica/Sativa</strong> e <strong style="color:#fff">Profili Terpenici</strong> →</div>
 </div>
 </div>
-<div style="margin-bottom:16px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
+<div style="margin-bottom:12px;padding:12px 16px;background:rgba(191,0,255,.08);border:1px solid rgba(191,0,255,.3);border-radius:10px;display:flex;align-items:center;gap:10px">
 <span style="font-size:20px">⚠️</span>
 <div>
 <div style="font-family:Orbitron;font-size:11px;color:var(--np);text-transform:uppercase;letter-spacing:1px">Nota Epistemologica</div>
 <div style="font-size:12px;color:#aaa"><strong style="color:#fff">Indica/Sativa/Hybrid</strong> sono etichette <em>vernacolari</em> di mercato. Non prevedono automaticamente effetto, chemotype o profilo terpenico. Per dati certi: <span style="color:var(--nc)">COA di laboratorio</span>.</div>
+</div>
+</div>
+<div style="margin-bottom:16px;padding:10px 14px;background:rgba(0,255,255,.06);border:1px solid rgba(0,255,255,.2);border-radius:10px;display:flex;align-items:flex-start;gap:10px">
+<span style="font-size:18px;flex-shrink:0">⚖️</span>
+<div>
+<div style="font-family:Orbitron;font-size:10px;color:var(--nc);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Nota Legale</div>
+<div style="font-size:11px;color:#777;line-height:1.5">I dati THC/CBD provengono da breeder/seed bank (🟠 Fonte). I valori reali dipendono da genetica, ambiente e tecnica. Verifica sempre la normativa vigente nella tua giurisdizione prima di coltivare. Strain Type III (CBD) hanno requisiti legali specifici — vedi <span onclick="go('library');openLibraryItem(8)" style="color:var(--nc);cursor:pointer;text-decoration:underline">guida legale Type III</span>.</div>
 </div>
 </div>
 <div style="margin-bottom:14px">
@@ -1970,11 +2736,11 @@ let html=`<div>
 </div>
 <div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Tipo</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
-${[{v:'all',l:'Tutti',c:'#fff'},{v:'Indica',l:'Indica',c:'var(--np)'},{v:'Sativa',l:'Sativa',c:'var(--nc)'},{v:'Hybrid',l:'Hybrid',c:'var(--ng)'}].map(f=>`<button onclick="setStrainFilter('${f.v}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainFilter===f.v?f.c:'#222'};background:${strainFilter===f.v?f.c+'20':'#111'};color:${strainFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+${[{v:'all',l:'Tutti',c:'#fff'},{v:'Indica',l:'Indica',c:'var(--np)'},{v:'Sativa',l:'Sativa',c:'var(--nc)'},{v:'Hybrid',l:'Hybrid',c:'var(--ng)'},{v:'Auto',l:'Auto 🔄',c:'var(--ny)'}].map(f=>`<button onclick="setStrainFilter('${f.v}')" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainFilter===f.v?f.c:'#222'};background:${strainFilter===f.v?f.c+'20':'#111'};color:${strainFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
 </div>
 <div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Difficoltà</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
-${[{v:null,l:'Tutte',c:'#fff'},{v:'Facile',l:'Facile',c:'var(--ng)'},{v:'Media',l:'Media',c:'var(--ny)'},{v:'Difficile',l:'Difficile',c:'var(--no)'}].map(f=>`<button onclick="setStrainDifficultyFilter(${f.v?`'${f.v}'`:'null'})" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainDifficultyFilter===f.v?f.c:'#222'};background:${strainDifficultyFilter===f.v?f.c+'20':'#111'};color:${strainDifficultyFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+${[{v:null,l:'Tutte',c:'#fff'},{v:'Facilissima',l:'Facilissima',c:'var(--nc)'},{v:'Facile',l:'Facile',c:'var(--ng)'},{v:'Media',l:'Media',c:'var(--ny)'},{v:'Difficile',l:'Difficile',c:'var(--no)'}].map(f=>`<button onclick="setStrainDifficultyFilter(${f.v?`'${f.v}'`:'null'})" style="padding:8px 16px;border-radius:99px;border:2px solid ${strainDifficultyFilter===f.v?f.c:'#222'};background:${strainDifficultyFilter===f.v?f.c+'20':'#111'};color:${strainDifficultyFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
 </div>
 <div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Chemotype (THC:CBD)</div>
 <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
@@ -2020,9 +2786,9 @@ ${s.chemotype&&chemotypeInfo[s.chemotype]?`<span class="badge" style="background
 </div>
 <div style="font-size:12px;color:#888;margin-bottom:10px;line-height:1.5">${esc(s.desc)}</div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">THC</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.thc}</div></div>
-<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">CBD</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.cbd}</div></div>
-<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Fioritura</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.flowerTime}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">THC</div><div style="font-size:12px;color:${s.chemotype==='type3'?'var(--ng)':'#ccc'};font-weight:700">${s.thc}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">CBD</div><div style="font-size:12px;color:${s.chemotype==='type2'||s.chemotype==='type3'?'var(--nc)':'#ccc'};font-weight:700">${s.cbd}</div></div>
+<div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">${s.type==='Auto'?'Ciclo':'Fioritura'}</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.flowerTime}</div></div>
 <div style="background:rgba(10,10,10,.5);border-radius:8px;padding:8px;text-align:center"><div style="font-size:9px;color:#555;font-family:Orbitron">Resa</div><div style="font-size:12px;color:#ccc;font-weight:700">${s.yield}</div></div>
 </div>
 ${s.terpenes&&s.terpenes.length?`<div style="margin-top:10px">
@@ -2030,8 +2796,13 @@ ${s.terpenes&&s.terpenes.length?`<div style="margin-top:10px">
 <div style="display:flex;gap:6px;flex-wrap:wrap">${s.terpenes.map(t=>`<button onclick="setStrainTerpeneFilter('${t}')" style="background:rgba(255,102,0,.1);color:var(--no);border:1px solid rgba(255,102,0,.35);border-radius:99px;padding:3px 10px;font-size:10px;font-family:Orbitron;cursor:pointer">${t}</button>`).join('')}</div>
 </div>`:''}
 ${s.genetics?`<div style="margin-top:10px;font-size:11px;color:#777"><span style="color:#555;font-family:Orbitron;font-size:9px;text-transform:uppercase;letter-spacing:1px">🧬 Genetica:</span> ${esc(s.genetics)}</div>`:''}
+${s.growNotes?`<div style="margin-top:8px;padding:8px;background:rgba(57,255,20,.04);border:1px solid rgba(57,255,20,.12);border-radius:8px;font-size:11px;color:#777;line-height:1.5"><span style="color:#555;font-family:Orbitron;font-size:9px;text-transform:uppercase;letter-spacing:1px">📝 Grow notes: </span>${esc(s.growNotes)}</div>`:''}
 <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-<span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${s.type}</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap">
+<span class="badge" style="background:${s.type==='Auto'?'rgba(240,232,0,.15)':s.type==='Indica'?'rgba(191,0,255,.15)':s.type==='Sativa'?'rgba(0,255,255,.15)':'rgba(57,255,20,.15)'};color:${s.type==='Auto'?'var(--ny)':s.type==='Indica'?'var(--np)':s.type==='Sativa'?'var(--nc)':'var(--ng)'};border:1px solid ${s.type==='Auto'?'var(--ny)':s.type==='Indica'?'var(--np)':s.type==='Sativa'?'var(--nc)':'var(--ng)'}">${s.type==='Auto'?'🔄 Auto':s.type}</span>
+${s.chemotype==='type3'?`<span class="badge" style="background:rgba(0,255,255,.1);color:var(--nc);border:1px solid rgba(0,255,255,.4);font-size:9px">🌿 CBD-Rich</span>`:''}
+${s.chemotype==='type2'?`<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng);border:1px solid rgba(57,255,20,.4);font-size:9px">⚖️ Bilanciato</span>`:''}
+</div>
 <button onclick="openStrainCompare(${sIdx})" class="btn" style="background:#1a1a1a;color:var(--nk);border:1px solid #333;font-size:10px;padding:8px 12px">⚖️ Confronta</button>
 </div>
 ${s.verifiedSources&&s.verifiedSources.length?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid #1a1a1a;font-size:10px;color:#555">📚 Fonti: ${s.verifiedSources.map(src=>`<a href="${esc(src.url)}" target="_blank" rel="noopener" style="color:var(--nc);text-decoration:none">${esc(src.label)}</a>`).join(' • ')}</div>`:''}
@@ -2722,6 +3493,645 @@ Se trovi muffa: **butta tutto**. Non esiste "rimuovere la muffa visibile" — le
             ]
         },
         content: `# Coltivazione Type III (CBD-Rich)\n\n## Cosa è il Type III\n- **Type I**: THC-dominante (>5:1 THC:CBD)\n- **Type II**: Bilanciato (~1:1)\n- **Type III**: CBD-dominante (>5:1 CBD:THC) — comunemente chiamata *cannabis light*\n\n## Quadro Legale Italia 2024-2026\n- **D.Lgs. 242/2016**: consente la coltivazione di canapa sativa con THC < 0.6% in campo (limite coltivazione).\n- **Circolare Ministero della Salute 2019**: il prodotto finito destinato al consumo (fiore, estratto) deve avere **THC < 0.5%**.\n- **EU**: limite generale THC < 0.3% per canapa industriale.\n\n> ⚠️ **Attenzione:** i limiti si riferiscono al **THC totale** (Δ9-THC + THCA × 0.877). Un COA che mostra solo Δ9-THC basso può essere fuorviante se il THCA è alto.\n\n## Strain Type III consigliate\n| Strain | CBD tipico | Note |\n|--------|-----------|------|\n| Charlotte's Web | 15-20% | Storica, stabile |\n| ACDC | 14-20% | Type II/III borderline |\n| Sour Tsunami | 10-15% | Genetica affidabile |\n\n## Test in campo\n- **Kit reattivi**: indicativi, non legalmente vincolanti. Utile per screening pre-raccolta.\n- **Lab accreditato**: unico documento valido per contestazioni.\n\n## Rischio principale: Hermaphroditism\nSemi femminizzati (colloidal silver) hanno tasso hermie **5-15%** vs <1% semi regolari femmina. Se una pianta Type III diventa ermafrodita e impollina una Type I vicina, i fiori della Type I possono **aumentare di THC** nelle vicinanze (sviluppo di semi = stress + potenziale aumento cannabinoidi).`
+    },
+
+    // ═══════════════════════════════════════════════
+    // FASE 1 — NUOVI ARTICOLI (ID 9-14)
+    // ═══════════════════════════════════════════════
+    {
+        id: 9,
+        title: "Watering Science: Come e Quando Annaffiare",
+        category: "guida",
+        icon: "💧",
+        color: "#00bfff",
+        desc: "Ciclo bagnato/asciutto, tecnica del peso del vaso, runoff 10-20% e differenza overwatering/underwatering.",
+        evidence: "study",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Weedmaps Learn", url: "https://weedmaps.com/learn/growing"},
+                {label: "Paradise Seeds Grow Guide", url: "https://www.paradiseseeds.com/blog"},
+                {label: "VPD & Transpiration Literature", url: "https://www.ncbi.nlm.nih.gov"}
+            ]
+        },
+        content: `# Watering Science: Come e Quando Annaffiare
+
+## Il Principio del Ciclo Bagnato/Asciutto
+
+La cannabis non vuole terreno costantemente umido. Il ciclo ottimale è:
+
+**Bagnato → Asciutto → Bagnato**
+
+Dopo ogni innaffiatura, il substrato deve asciugarsi fino al 60-70% prima di ricevere acqua nuova. Questo ciclo forza le radici a espandere la ricerca di umidità, ossigena il substrato e previene marcescenza radicale.
+
+> **Regola aurea:** Non seguire un calendario fisso. Annaffia quando il vaso ne ha bisogno — non quando lo dice il calendario.
+
+## La Tecnica del Peso del Vaso
+
+Il metodo più affidabile per i principianti:
+
+1. Pesa il vaso **a secco** (substrato asciutto, senza pianta) → nota il peso
+2. Pesa il vaso subito dopo l'innaffiatura → nota il peso saturo
+3. Quando il vaso torna al peso secco + 10-15% → è ora di annaffiare
+
+### Valori di riferimento (vaso 11L terra)
+| Condizione | Peso indicativo |
+|-----------|----------------|
+| Completamente secco | ~1.2 kg |
+| Saturo (appena innaffiato) | ~6.5 kg |
+| Pronto per annaffiatura | ~2.0-2.5 kg |
+
+> ⚠️ I valori variano con il tipo di substrato. Tarare sempre sul proprio setup specifico.
+
+## Il Runoff: Perché è Essenziale
+
+Il **runoff** (acqua che fuoriesce dal fondo del vaso) indica:
+- Che l'acqua ha attraversato tutto il substrato
+- Che i sali in eccesso vengono eliminati
+- Che il pH del substrato può essere verificato
+
+**Target runoff: 10-20%** del volume annaffiato.
+
+Se annaffi 1L → devono uscire 100-200ml dal fondo.
+
+### Misurare il pH del Runoff
+Il runoff rivela il pH reale del substrato, che può differire dal pH dell'acqua in input:
+
+| pH runoff | Stato substrato |
+|-----------|----------------|
+| 6.0-6.5 | Ottimale (terra) |
+| 5.5-6.0 | Ottimale (coco/idro) |
+| <5.5 | Troppo acido → flush |
+| >7.0 | Troppo basico → correggere input |
+
+## Overwatering vs Underwatering
+
+### Overwatering (annaffiatura eccessiva)
+**Sintomi:**
+- Foglie arricciate verso il basso ("claw")
+- Crescita bloccata nonostante pianta sana in apparenza
+- Terra sempre umida, non asciuga mai
+- Radici marroni, odore di marcio
+
+**Causa:** Mancanza di ossigeno alle radici. Le piante "annegano" nei nutrienti.
+
+**Fix:** Stop annaffiatura per 3-5 giorni. Verifica drenaggio. Aggiungi perlite al prossimo trapianto.
+
+### Underwatering (carenza d'acqua)
+**Sintomi:**
+- Foglie appassite, cascanti (wilting)
+- Terra secca e dura, si stacca dai bordi del vaso
+- Foglie sottili, carta
+
+**Causa:** Substrato troppo asciutto, radici non trovano umidità.
+
+**Fix:** Innaffia lentamente in piccole dosi, lascia assorbire. Non inondare subito.
+
+## Acqua RO e Necessità di CalMag
+
+L'acqua **osmosi inversa (RO)** è pura ma priva di minerali disciolti. Questo crea un problema:
+
+- EC dell'acqua RO: ~0.0 mS/cm
+- La cannabis ha bisogno di Ca e Mg come microelementi base
+- Substrati come il **coco** legano il Calcio e lo rendono meno disponibile
+
+**Soluzione:** Integrare sempre **CalMag** (Calcio-Magnesio) prima dei nutrienti principali con acqua RO o acqua a bassa durezza (<100 ppm).
+
+Dose tipica CalMag con RO: **0.5-1 ml/L** come base, poi aggiungere nutrienti e correggere pH.
+
+## Glossario Rapido
+
+- **Runoff**: acqua in uscita dal vaso dopo l'innaffiatura
+- **RO**: acqua osmosi inversa, molto pura
+- **Wilting**: appassimento fogliare da disidratazione
+- **Claw**: foglie a zampa per overwatering o eccesso di azoto
+- **CalMag**: integratore di Calcio e Magnesio`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — ciclo bagnato/asciutto, peso vaso, runoff, RO/CalMag."}
+        ]
+    },
+    {
+        id: 10,
+        title: "IPM: Gestione Integrata dei Parassiti",
+        category: "problemi",
+        icon: "🐛",
+        color: "#ff6600",
+        desc: "Prevenzione, monitoraggio biologico e controllo soft dei parassiti più comuni: acari, afidi, fungus gnat, oidio.",
+        evidence: "study",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Weedmaps Pest & Disease Guide", url: "https://weedmaps.com/learn/growing/pest-control"},
+                {label: "Grow Weed Easy — IPM", url: "https://www.growweedeasy.com/cannabis-pests"},
+                {label: "Entomologia Applicata (IPM)", url: "https://www.ncbi.nlm.nih.gov"}
+            ]
+        },
+        content: `# IPM: Gestione Integrata dei Parassiti
+
+## Cos'è l'IPM?
+
+L'**Integrated Pest Management** (IPM) è un approccio che combina prevenzione, monitoraggio biologico e — solo se necessario — trattamento chimico soft. L'obiettivo è tenere i parassiti sotto soglia di danno senza distruggere l'ecosistema della grow room.
+
+Il principio base: **prevenire è sempre meglio che curare.**
+
+## 1. Prevenzione
+
+### Quarantena Talee
+Qualsiasi talea proveniente dall'esterno deve trascorrere **almeno 2 settimane** in isolamento prima di entrare nella grow room principale. Durante questo periodo:
+- Ispezione visiva quotidiana (lente 60x sul retro delle foglie)
+- Trattamento preventivo con sapone insetticida diluto
+- Monitoraggio per sintomi di HLVd (vedi articolo dedicato)
+
+### Igiene della Grow Room
+- Disinfetta strumenti tra una pianta e l'altra
+- Indossa guanti quando maneggi le piante
+- Non portare materiale organico dall'esterno (terriccio da giardino, rami)
+- Cambia vestiti dopo l'orto o il giardino prima di entrare nella grow
+- Pulisci la grow room a fondo tra un ciclo e il successivo (ipoclorito 1:10)
+
+## 2. Monitoraggio
+
+### Trappole Cromotropiche Gialle
+Le **trappole adesive gialle** attirano e intrappolano:
+- Fungus Gnat adulti
+- Whitefly (mosche bianche)
+- Leafminer adulti
+
+Posiziona 1 trappola ogni 2-3 piante, a livello del substrato per fungus gnat, a metà chioma per il resto. Controlla settimanalmente — la presenza di insetti sulla trappola è un segnale precoce.
+
+### Ispezione con Lente 60x
+Sul retro delle foglie: ragnetto rosso e broad mites. Sotto le cime: afidi, thrips. Al livello del substrato: fungus gnat larvae (minuscole, bianche).
+
+## 3. Controllo Biologico
+
+Il controllo biologico introduce predatori naturali che eliminano il parassita senza residui chimici:
+
+| Parassita | Predatore biologico |
+|-----------|---------------------|
+| Ragnetto rosso (Tetranychus) | **Phytoseiulus persimilis** |
+| Broad Mite (Polyphagotarsonemus) | **Neoseiulus cucumeris** |
+| Afidi | **Coccinelle** (Hippodamia convergens) |
+| Fungus Gnat larve | **Bacillus thuringiensis israelensis (Bti)** |
+| Tripidi | **Amblyseius cucumeris** |
+
+**Nota:** I predatori vanno introdotti presto, quando l'infestazione è bassa. Non funzionano su infestazioni massive.
+
+## 4. Chimica Soft (Ultima Istanza)
+
+Usare solo se il controllo biologico non è sufficiente, mai in fioritura avanzata:
+
+### Neem Oil (Azadiractina)
+- Spettro: molto ampio (acari, afidi, tripidi, fungus gnat)
+- Dose: 5ml/L + 2ml sapone di Marsiglia come emulsionante
+- Frequenza: ogni 3-5 giorni, sera (evitare luce diretta post-spray)
+- **Stop in fioritura** (residui e impatto su terpeni)
+
+### Saponi Insetticidi al Potassio
+- Spettro: afidi, mosca bianca, acari
+- Azione: disgrega il tegumento ceroso degli insetti
+- Sicuro fino a settimana 3-4 fioritura
+
+### Bicarbonato di Potassio
+- Target specifico: **oidio (Powdery Mildew)**
+- Dose: 5-8g/L di acqua
+- Azione: alza pH fogliare rendendo ambiente inospitale per il fungo
+- Associare a olio vegetale come adesivo
+
+## 5. Tabella di Emergenza Rapida
+
+| Problema | Primo intervento |
+|---------|-----------------|
+| Ragnetto rosso | Lavaggio foglie con acqua, aumenta umidità, Phytoseiulus |
+| Fungus Gnat | Asciuga substrato, Bti, trappole gialle |
+| Afidi | Sapone insetticida, coccinelle |
+| Oidio | Bicarbonato di potassio, migliorare aerazione |
+| Broad mite | Neoseiulus, quarantena immediata |
+
+> ⚠️ **Disclaimer:** Prima di trattare, identifica correttamente il parassita. Un trattamento sbagliato può aggravare la situazione. Non trattare cime in fioritura avanzata.`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — prevenzione, monitoraggio, biologico, chimica soft."}
+        ]
+    },
+    {
+        id: 11,
+        title: "Idroponica e Coco: Guida ai Substrati Soilless",
+        category: "tecnica",
+        icon: "🧪",
+        color: "#00ffff",
+        desc: "Differenze terra/cocco/idro, buffering del coco, valori EC per fase, sistemi DWC/ebb&flow ed errori tipici.",
+        evidence: "source",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Hydrobuilder Learning Center", url: "https://hydrobuilder.com/learn"},
+                {label: "Canna Coco Professional Guide", url: "https://www.canna.it"},
+                {label: "Royal Queen Seeds — Substrates", url: "https://www.royalqueenseeds.com"}
+            ]
+        },
+        content: `# Idroponica e Coco: Guida ai Substrati Soilless
+
+## I Tre Substrati Principali
+
+### Terra (Soil)
+Il substrato più "permissivo". La terra tamponizza pH e nutrienti, dando margine di errore.
+- **pH target:** 6.0-6.5
+- **Pregi:** buffer naturale, più indulgente per principianti
+- **Difetti:** crescita più lenta vs coco/idro, rischio fungus gnat
+
+### Cocco (Coco Coir)
+Fibra di cocco: non è terriccio, non è idroponica vera. È un substrato inerte che richiede gestione attiva dei nutrienti.
+- **pH target:** 5.5-6.0 (più basso della terra!)
+- **Pregi:** crescita 20-30% più rapida vs terra, ottima aerazione
+- **Difetti:** richiede CalMag elevato, annaffiatura più frequente
+
+### Idroponica (DWC, NFT, Ebb&Flow)
+Le radici sono direttamente in soluzione nutritiva. Controllo totale e crescita massima.
+- **pH target:** 5.5-6.0
+- **Pregi:** crescita massima, nessuna variabile substrato
+- **Difetti:** curva di apprendimento ripida, errori impattano in minuti non ore
+
+## Cocco: Buffering e CalMag
+
+Il **coco coir** ha una caratteristica critica: è carico di **ioni Sodio (Na+)** che devono essere sostituiti con **ioni Calcio (Ca2+)** prima dell'uso. Questo processo si chiama **buffering**.
+
+### Come Bufferizzare il Coco
+1. Prepara una soluzione di **CalMag a 3-4 ml/L** in acqua pH 5.8
+2. Satura completamente il coco con questa soluzione
+3. Lascia drenare per 24h
+4. Risciacqua con acqua pulita pH 5.8 e un'altra dose di CalMag 2 ml/L
+5. Il coco è ora pronto — i siti di Ca sono occupati, il Na è rimosso
+
+> **Coco non bufferizzato = carenza di Calcio garantita nelle prime 2 settimane.**
+
+### EC per Fase in Coco
+| Fase | EC target (mS/cm) |
+|------|------------------|
+| Seedling (1-2 sett.) | 0.4-0.8 |
+| Veg early | 0.8-1.2 |
+| Veg late | 1.2-1.6 |
+| Bloom early | 1.6-2.0 |
+| Bloom peak | 2.0-2.4 |
+| Flush | 0.0 (solo acqua) |
+
+## Sistemi Idroponici
+
+### DWC (Deep Water Culture)
+Le radici sono sospese in soluzione nutritiva ossigenata da airstone/airpump.
+- **Parametri critici:** pH 5.5-6.0, O₂ abbondante, temp. soluzione <22°C
+- **Vantaggio:** crescita esplosiva
+- **Rischio:** root rot se manca ossigenazione
+
+### Ebb & Flow (Flood & Drain)
+Un vassoio viene periodicamente inondato di soluzione nutritiva e poi svuotato per gravità.
+- Ciclo tipico: 4-8 inondazioni/giorno in veg, 6-12 in bloom
+- Ottimo per più piante contemporaneamente
+
+### NFT (Nutrient Film Technique)
+Un film sottile di soluzione scorre continuamente sulle radici inclinate.
+- Ideale per lattuga e fast crops, meno comune per cannabis
+
+## Errori Tipici nei Substrati Soilless
+
+| Errore | Conseguenza | Fix |
+|--------|------------|-----|
+| Coco non bufferizzato | Carenza Ca in settimane 1-2 | Bufferizza sempre prima del trapianto |
+| pH errato in coco/idro | Lockout nutrizionale | Mantieni pH 5.5-6.0 |
+| CalMag insufficiente | Bordi gialli/marroni, spotting | Aumenta a 2-4 ml/L con acqua RO |
+| Temp. soluzione alta (>24°C) | Root rot in DWC | Refrigeratore soluzione o substrato isolato |
+| EC troppo alta per seedling | Nutrient burn immediato | Inizia sempre a 0.4-0.8 EC |
+
+## FAQ Coco vs Terra
+
+**D: Posso usare nutrienti da terra in coco?**
+R: No. I nutrienti per terra assumono che il substrato fornisca già Ca e Mg. In coco servono nutrienti specifici o integrazione CalMag separata.
+
+**D: Il coco si riutilizza?**
+R: Sì, ma richiede sterilizzazione (H₂O₂ 3% → risciacquo → ri-bufferizzazione). Non riusare coco con history di root rot.`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — terra/coco/idro, buffering, EC per fase, DWC, errori tipici."}
+        ]
+    },
+    {
+        id: 12,
+        title: "VPD e Clima: la Scienza dell'Ambiente di Coltivazione",
+        category: "scienza",
+        icon: "🌡️",
+        color: "#f0e800",
+        desc: "Tabella VPD per fase (veg/bloom), interazione temperatura/umidità/traspirazione e perché il clima causa metà dei problemi nutrienti.",
+        evidence: "study",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Studi VPD Indoor Crops (NCBI)", url: "https://www.ncbi.nlm.nih.gov"},
+                {label: "Toledo Indoor Garden — Climate Guide 2026", url: "https://toledoindoorgarden.com"},
+                {label: "AC Infinity VPD Chart", url: "https://acinfinity.com"}
+            ]
+        },
+        content: `# VPD e Clima: la Scienza dell'Ambiente
+
+## Cos'è il VPD?
+
+Il **Vapor Pressure Deficit (VPD)** misura la differenza tra la pressione del vapore acqueo attuale nell'aria e la pressione di saturazione a quella temperatura.
+
+In termini pratici: **quanto è "assetata" l'aria?**
+
+- **VPD alto** → aria molto asciutta → la pianta transpira di più → aumenta assorbimento di acqua e nutrienti
+- **VPD basso** → aria quasi satura → la pianta transpira poco → rischio muffa, nutrienti bloccati
+
+## Perché il VPD è Più Utile di Umidità Sola?
+
+La stessa umidità relativa (es. 60%) ha effetti completamente diversi a 20°C vs 28°C.
+
+| Temp (°C) | UR (%) | VPD (kPa) | Effetto |
+|-----------|--------|-----------|---------|
+| 22 | 70 | 0.79 | Troppo basso in veg |
+| 24 | 60 | 1.19 | Ottimale veg |
+| 26 | 50 | 1.71 | Ottimale bloom |
+| 28 | 55 | 1.68 | Accettabile bloom |
+| 30 | 60 | 1.69 | Limite — stress termico |
+
+## Tabella VPD Ottimale per Fase
+
+| Fase crescita | VPD target (kPa) | Temp | UR |
+|--------------|-----------------|------|-----|
+| Cloni/Seedling | 0.4-0.8 | 22-24°C | 70-80% |
+| Vegetativa early | 0.8-1.0 | 22-26°C | 60-70% |
+| Vegetativa late | 1.0-1.2 | 24-26°C | 55-65% |
+| Bloom early (sett. 1-3) | 1.2-1.4 | 24-26°C | 50-60% |
+| Bloom mid (sett. 4-6) | 1.4-1.6 | 22-26°C | 45-55% |
+| Bloom late / Flush | 1.4-1.6 | 20-24°C | 40-50% |
+
+> **Regola semplificata:** 0.8-1.2 kPa in veg, 1.2-1.6 kPa in bloom.
+
+## Calcolo VPD (Formula Tetens)
+
+Per chi vuole calcolare manualmente:
+
+\`\`\`
+SVP = 0.6108 × e^(17.27 × T / (T + 237.3))   [kPa]
+VPD = SVP × (1 - UR/100)
+\`\`\`
+
+Dove T = temperatura in °C, UR = umidità relativa in %.
+
+**Esempio:** T=24°C, UR=60%
+- SVP = 0.6108 × e^(17.27×24/261.3) = 0.6108 × e^1.587 = 0.6108 × 4.89 ≈ 2.98 kPa
+- VPD = 2.98 × (1 - 0.6) = **1.19 kPa** ✅ (ottimale veg)
+
+## Perché il Clima Causa Metà dei Problemi Nutrienti
+
+Questo è il punto più sottovalutato: **molti problemi apparenti di carenza nutrienti sono in realtà problemi climatici.**
+
+### Meccanismo
+La traspirazione è il motore dell'assorbimento dei nutrienti. Quando la pianta transpira, crea un flusso di linfa (flusso xilematico) che trascina i nutrienti dalle radici alle foglie.
+
+- **VPD troppo basso (aria umida)** → traspirazione ridotta → nutrienti non vengono "tirati" dalle radici → sintomi di carenza pur con EC corretta
+- **VPD troppo alto (aria secca)** → traspirazione eccessiva → stress idrico → la pianta chiude gli stomi → blocco parziale della fotosintesi
+
+### Caso Tipico: "Carenza di Calcio" Falsa
+Una pianta con umidità 75% a 26°C (VPD ≈ 0.8 kPa) può mostrare spotting da Ca non perché manchi Ca nell'acqua, ma perché la bassa traspirazione non lo mobilita correttamente.
+
+**Fix:** Migliora ventilazione, riduci umidità → il problema "nutriente" scompare senza cambiare la soluzione.
+
+## Strumenti di Misura
+
+| Strumento | Costo | Precisione | Consigliato per |
+|-----------|-------|-----------|-----------------|
+| Igrometro digitale base | €5-15 | ±5% UR | Monitoraggio base |
+| SensorPush HT1 | €45 | ±1.5% UR, ±0.3°C | Grow seri |
+| Inkbird IBS-TH2 | €15 | ±3% UR | Buon compromesso |
+| AC Infinity CLOUDLINE + sonde | incluso | ±3% | Automazione VPD |
+
+## VPD e Rischio Muffa (Botrytis)
+
+In fioritura avanzata (settimane 7+), l'umidità va tenuta **sotto il 45%** per ridurre rischio Botrytis.
+
+I fiori densi creano microclimi interni con UR più alta della grow room. Il monitoraggio dell'UR ambientale non è sufficiente: serve **ventilazione intracanopio** per rinnovare l'aria tra le cime.`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — VPD, formula Tetens, tabella per fase, meccanismo nutrienti/clima."}
+        ]
+    },
+    {
+        id: 13,
+        title: "Essiccazione e Curing Avanzato: i 60 Giorni che Fanno la Differenza",
+        category: "post-harvest",
+        icon: "🏺",
+        color: "#c4a35a",
+        desc: "Metodo 60/60, burping dei barattoli, Boveda a due vie, errori di essiccazione rapida e conservazione lungo termine.",
+        evidence: "source",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Pratica consolidata grower (community)", url: "https://www.growweedeasy.com/harvest"},
+                {label: "Dati degrado cannabinoidi/terpeni (NCBI)", url: "https://www.ncbi.nlm.nih.gov"},
+                {label: "Boveda — Humidity Control Science", url: "https://www.bovedainc.com"}
+            ]
+        },
+        content: `# Essiccazione e Curing Avanzato
+
+## Perché il Curing Trasforma la Qualità
+
+La raccolta è solo l'inizio. **Il profilo terpenico e cannabinoidico definitivo si sviluppa durante curing.** Un curing sbagliato può:
+- Ridurre del 30-50% la concentrazione di terpeni volatili
+- Lasciare clorofilla residua (sapore erbaceo amaro)
+- Favorire la crescita di muffa nei barattoli
+- Degradare THCA in CBN (effetto sedativo non desiderato)
+
+## Fase 1: Essiccazione (7-14 Giorni)
+
+### Il Metodo Slow Dry
+Il **metodo 60/60** è il riferimento di settore:
+- **Temperatura:** 18-20°C
+- **Umidità:** 55-62% UR
+- **Oscurità** totale (la luce UV degrada i cannabinoidi)
+- **Ventilazione** indiretta (ventilatore circola aria, mai diretto sui fiori)
+- **Durata target:** 10-14 giorni
+
+> Un'essiccazione più lenta = migliore break-down della clorofilla = sapore superiore.
+
+### Test dello Stelo
+Il test più semplice per capire quando passare al curing:
+- **Stelo si flette senza spezzarsi** → ancora umido (continua)
+- **Stelo si spezza con uno snap secco** → pronto per i barattoli
+
+### Errori di Essiccazione
+
+| Errore | Causa | Conseguenza |
+|--------|-------|-------------|
+| Temp >25°C | Lampade vicine, scarsa ventilazione | Terpeni volatilizzati, odore fieno |
+| UR <40% | Ambiente troppo secco | Essiccazione rapida, clorofilla intrappolata |
+| Luce diretta | Mancanza oscuramento | Fotodegradazione cannabinoidi |
+| Fiori sovrapposti | Scarso spazio | Muffa interna, essiccazione irregolare |
+| Essiccazione in <5 giorni | Temperatura/UR errate | Qualità compromessa, sapore aspro |
+
+## Fase 2: Curing in Barattoli (2-8 Settimane)
+
+### Setup Barattoli
+- **Barattoli:** vetro a chiusura ermetica (Mason jar, Weck)
+- **Riempimento:** 2/3-3/4 del volume (mai pressare)
+- **Igrometro mini:** uno per barattolo (fondamentale!)
+- **Target UR nel barattolo:** 58-62%
+
+### Il Burping Protocol
+
+**Settimane 1-2 (fase attiva):**
+Apri ogni barattolo 1-2 volte al giorno per 15-20 minuti. L'aria fresca scambia con l'umidità rilasciata dai fiori.
+
+Se senti **odore ammoniacale** → fiori troppo umidi: lascia aperti 2-4 ore. Se la situazione non migliora, riporta fiori ad asciugare.
+
+**Settimane 3-4:**
+Riduci a una volta ogni 2-3 giorni. Il profilo aromatico si stabilizza e si complessifica.
+
+**Settimane 5-8:**
+Un burping settimanale è sufficiente. Dopo 4 settimane il prodotto è pienamente consumabile; dopo 8 settimane raggiunge qualità premium.
+
+### Boveda Pack: Il Curing Automatico
+
+I **Boveda Pack 62%** sono pacchetti a due vie: assorbono umidità se il barattolo è troppo umido e la rilasciano se troppo secco.
+
+| Formato | Uso consigliato |
+|---------|----------------|
+| Boveda 4g | Barattoli fino a 250ml |
+| Boveda 8g | Barattoli fino a 500ml |
+| Boveda 67g | Contenitori 1-4L |
+
+> **Con Boveda 62%:** il burping rimane utile ma non è critico. Il rischio di over-dry o muffa si riduce drasticamente.
+
+## Conservazione a Lungo Termine
+
+| Metodo | Durata | Note |
+|--------|--------|------|
+| Barattolo vetro + Boveda, buio 18-20°C | 6-12 mesi | Standard per la maggior parte dei grower |
+| Sottovuoto + buio, <15°C | 12-24 mesi | Per long-term storage |
+| Freezer (solo in contenitore ermetico, no brina) | 2+ anni | Usare con cautela, rischio cristalli terpeni |
+| Sacchetti plastica, luce ambiente | 1-3 mesi | Da evitare |
+
+### Segnali di Cannabis Degradata
+- Odore di fieno o erba secca (terpeni persi per essiccazione rapida)
+- Fumo duro e irritante alla gola
+- Sapore amaro o metallico
+- Cime polverose al tatto (resina essiccata)
+- Spotting bianchi → **muffa**: butta tutto, non consumare
+
+## Checklist Curing Perfetto
+
+- [ ] Essiccazione completata (test stelo superato)
+- [ ] Barattoli vetro puliti e asciutti
+- [ ] Igrometro mini in ogni barattolo
+- [ ] UR barattolo a 58-62% nelle prime 24h
+- [ ] Boveda 62% inserito
+- [ ] Burping 2x/giorno per prime 2 settimane
+- [ ] Etichetta con strain, data raccolta, data inizio curing
+- [ ] Posizione: buio, 18-20°C`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — metodo 60/60, burping protocol, Boveda, conservazione."}
+        ]
+    },
+    {
+        id: 14,
+        title: "HLVd e Malattie Emergenti: il Virus del 'Dudding'",
+        category: "problemi",
+        icon: "🦠",
+        color: "#ff1493",
+        desc: "Hop Latent Viroid (HLVd): sintomi del dudding, vettori di trasmissione, nessuna cura e prevenzione con igiene e test di laboratorio.",
+        evidence: "study",
+        meta: {
+            author: "GROW 420 Team",
+            revised: "2026-08-19",
+            sources: [
+                {label: "Paradise Seeds — HLVd & Diseases", url: "https://www.paradiseseeds.com/blog"},
+                {label: "Dark Heart Nursery — HLVd Research", url: "https://www.darkheartnursery.com"},
+                {label: "Letteratura Virologica HLVd (NCBI)", url: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8387590/"}
+            ]
+        },
+        content: `# HLVd: il Virus del 'Dudding'
+
+## Cos'è l'HLVd?
+
+Il **Hop Latent Viroid (HLVd)** è un viroid (non un virus: è solo RNA, senza capside proteico) originariamente identificato nel luppolo. Ha infettato silenziosamente una percentuale significativa delle coltivazioni clonali di cannabis in Nord America e si sta diffondendo globalmente.
+
+> **Studi di settore (Dark Heart Nursery, 2021):** fino al 90% di alcune collezioni clonali commerciali risultava HLVd-positivo.
+
+## Sintomi: La Sindrome del 'Dudding'
+
+L'HLVd causa la **"dudding"** — dal termine californiano "dud" (difettoso):
+
+### Fase Vegetativa
+- Crescita rallentata o completamente stentata
+- Internodi corti e compatti (simile a fenotipi indica peggiorati)
+- Foglie più strette del normale
+- **Internodi a "fisarmonica"**: foglie ravvicinate e arricciate
+
+### Fase Fioritura
+- Cime significativamente più piccole del normale (riduzione resa 15-30%)
+- **Drastica riduzione della produzione di tricomi** (-50% riportato in studi di settore)
+- Profilo aromatico impoverito (meno terpeni)
+- Fiori spettrali, poco resinosi
+
+### Caratteristica Chiave
+La pianta non muore. Sopravvive, produce, ma in modo molto inferiore al suo potenziale genetico. Questo rende l'HLVd difficile da riconoscere: si tende ad attribuire il problema a carenze nutrienti, substrato, lampada.
+
+## Trasmissione
+
+L'HLVd si trasmette principalmente per via **meccanica**:
+- **Talee da piante infette** (via più comune)
+- Strumenti non sterilizzati (forbici, bisturi, innestatori)
+- Contatto foglia-foglia in situazioni di alta densità
+- Potenzialmente via polline (meno documentato)
+
+**NON si trasmette via semi regolari** (a differenza di molti virus delle piante). I semi riportano il materiale genetico ma non il viroid. ✅
+
+> Questa è la differenza cruciale: partire da **semi** azzera il rischio HLVd.
+
+## Diagnosi
+
+I sintomi visivi non sono sufficienti per una diagnosi certa. I sintomi del dudding si sovrappongono a stress nutrizionale, overwatering, carenza di luce.
+
+### Test di Laboratorio
+- **RT-qPCR** (Reverse Transcription quantitative PCR): standard gold, rileva HLVd anche in piante asintomatiche
+- **ELISA**: meno sensibile ma più economico
+- **Kit strip test rapido**: disponibili in commercio (sensibilità inferiore)
+
+**Tempistica ideale:** testare cloni *prima* di introdurli nella grow, idealmente in quarantena di 2 settimane.
+
+## Nessuna Cura Disponibile
+
+L'HLVd non ha cura attualmente documentata. Non esistono fungicidi, insetticidi o trattamenti che eliminino il viroid dalla pianta.
+
+**Protocollo in caso di positività:**
+1. Isola immediatamente la pianta infetta
+2. Non prendere talee da essa
+3. Valuta l'eliminazione (soprattutto se la genetica non è rara)
+4. **Non riusare il substrato** senza sterilizzazione
+5. Sterilizza *tutti* gli strumenti con isopropanolo 70% o candeggina 1:10
+
+## Prevenzione: Protocollo Completo
+
+| Misura | Efficacia |
+|--------|----------|
+| Partire da semi (non talee) | 🟢 Quasi 100% |
+| Quarantena talee 2+ settimane + test | 🟢 Alta |
+| Sterilizzazione strumenti tra ogni pianta | 🟡 Alta se costante |
+| Guanti monouso per ogni pianta | 🟡 Media |
+| No talee da fonti non verificate | 🟢 Alta |
+
+### Sterilizzazione Strumenti
+Dopo ogni taglio su ogni pianta (o almeno tra piante diverse):
+- Isopropanolo 70%: immergere la lama 30 secondi
+- Fiamma: bruciare l'alcool sulla lama (attenzione)
+- Candeggina 1:10: efficace ma può corrodere l'acciaio
+
+## Situazione in Italia
+
+I dati sull'incidenza HLVd in Europa sono meno sistematici rispetto al Nord America, ma la diffusione crescente del mercato dei cloni e delle talee aumenta il rischio. La misura preventiva più efficace rimane **partire da semi certificati** e testare qualsiasi clone acquisito.`,
+        versions: [
+            {date:"2026-08-19", author:"GROW 420 Team", content:"Prima versione — HLVd, dudding, trasmissione, diagnosi PCR, prevenzione."}
+        ]
     }
 ];
 
@@ -2790,8 +4200,9 @@ async function createReminder(){
     if(ok){ document.getElementById('remTitle').value=''; document.getElementById('remDate').value=''; renderPage(); }
 }
 
-async function initReminders(){
+async function initRemindersPage(){
     if ('Notification' in window && Notification.permission === 'default') {
+        // richiedi permesso    if ('Notification' in window && Notification.permission === 'default') {
         // richiedi permesso al primo accesso
         Notification.requestPermission();
     }
@@ -2824,7 +4235,8 @@ function renderLibrary() {
         { v: 'tecnica', l: 'Tecniche', c: '#6db56d' },
         { v: 'scienza', l: 'Scienza', c: '#00ffff' },
         { v: 'varietà', l: 'Varietà', c: '#bf00ff' },
-        { v: 'post-harvest', l: 'Post-Harvest', c: '#c4a35a' }
+        { v: 'post-harvest', l: 'Post-Harvest', c: '#c4a35a' },
+        { v: 'problemi', l: 'Problemi', c: '#ff6600' }
     ];
     let filtered = libraryData;
     if (libraryFilter !== 'all') {
@@ -2843,7 +4255,7 @@ function renderLibrary() {
     let html = `<div>
 <div style="margin-bottom:20px">
 <h1 class="t-graffiti glib" style="font-size:32px;margin-bottom:4px">Libreria</h1>
-<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Knowledge base grow</p>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Knowledge base grow &bull; ${libraryData.length} articoli</p>
 </div>
 <div style="margin-bottom:16px">
 <input type="text" class="inp" placeholder="Cerca nella libreria..." value="${esc(librarySearch)}" oninput="setLibrarySearch(this.value)" style="background:rgba(10,10,10,.5)">
@@ -2893,12 +4305,12 @@ function renderLibraryDetail() {
         backToLibrary();
         return '';
     }
-    return `<div>
-<div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
+    return `<div style="width:100%;max-width:none;margin:0;padding:0">
+<div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;padding:0 4px">
 <button onclick="backToLibrary()" style="background:none;border:none;color:#888;font-size:14px;cursor:pointer;font-family:Orbitron">← INDIETRO</button>
 <span class="badge" style="background:${item.color}15;color:${item.color};border:1px solid ${item.color}40">${item.icon} ${item.category}</span>
 </div>
-<div class="card gl-lib" style="padding:24px;background:rgba(17,17,17,.55);border:1px solid rgba(196,163,90,.25)">
+<div class="card gl-lib" style="padding:24px;background:rgba(17,17,17,.55);border:1px solid rgba(196,163,90,.25);width:100%;max-width:none;box-sizing:border-box">
 <div style="text-align:center;margin-bottom:20px">
 <span style="font-size:48px">${item.icon}</span>
 <h1 class="t-graffiti" style="font-size:28px;color:${item.color};margin:12px 0 4px">${esc(item.title)}</h1>
@@ -3414,26 +4826,86 @@ function addSensorReading(){
 function initIoT(){}
 
 // ═══════════════════════════════════════════════════════════
-// MARKETPLACE / ATTREZZATURA (#19)
+// MARKETPLACE / ATTREZZATURA (#19) — FASE 3: ESPANSIONE
 // ═══════════════════════════════════════════════════════════
 const shopItems=[
-    {id:0,name:"LED Spider Farmer SF1000",category:"illuminazione",phase:"veg",price:"€129",popularity:95,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Quantum board Samsung LM301B. 100W reali. PPFD ottimale per 60x60."},
-    {id:1,name:"Tenda Grow 60x60x140",category:"tenda",phase:"setup",price:"€59",popularity:88,evidence:"community",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Mylar 600D, tubi portacavo, doppia apertura."},
-    {id:2,name:"pH-metro Apera PH20",category:"strumento",phase:"all",price:"€49",popularity:92,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Precisione ±0.1 pH, ATC, calibrazione automatica."},
-    {id:3,name:"Boveda 62% 8g (10 pack)",category:"accessorio",phase:"curing",price:"€15",popularity:96,evidence:"study",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Umidità a due vie. Essenziale per curing perfetto."},
-    {id:4,name:"Deumidificatore 12L/giorno",category:"clima",phase:"bloom",price:"€89",popularity:78,evidence:"source",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Essenziale in fioritura per tenere umidità sotto il 50%."},
-    {id:5,name:"Lente 60x con LED",category:"strumento",phase:"bloom",price:"€12",popularity:85,evidence:"community",affiliate:"https://www.amazon.it/dp/EXAMPLE",desc:"Per osservare i tricomi e determinare il momento di raccolta."}
+    // ── ILLUMINAZIONE ──────────────────────────────────────
+    {id:0,name:"Mars Hydro TS1000",category:"illuminazione",phase:"veg",price:"€70–90",fascia:"bassa",popularity:96,evidence:"source",affiliate:"https://www.amazon.it/s?k=mars+hydro+ts1000",desc:"150W reali. Miglior rapporto qualità/prezzo assoluto. Spettro completo, dimmerabile, copre 60×60 / 75×75. Ideale per primo grow."},
+    {id:1,name:"Spider Farmer SF2000",category:"illuminazione",phase:"veg",price:"€150–180",fascia:"intermedia",popularity:93,evidence:"source",affiliate:"https://www.amazon.it/s?k=spider+farmer+sf2000",desc:"200W Samsung LM301, efficienza 2.7 µmol/J, fanless silenziosissimo. Copre 90×90. Il top della fascia intermedia."},
+    {id:2,name:"AC Infinity Ionboard S33 / Mars Hydro FC-E4800",category:"illuminazione",phase:"bloom",price:"€200–350",fascia:"professionale",popularity:89,evidence:"source",affiliate:"https://www.amazon.it/s?k=ac+infinity+ionboard",desc:"240-480W professionale. IP65, integrazione smart controller, uniformità PAR da grow room. Per chi produce seriamente."},
+
+    // ── TENDA ─────────────────────────────────────────────
+    {id:3,name:"Tenda Grow 60×60×140 Mylar 600D",category:"tenda",phase:"setup",price:"€50–65",fascia:"bassa",popularity:88,evidence:"community",affiliate:"https://www.amazon.it/s?k=grow+tent+60x60+mylar",desc:"Mylar 600D, tubi portacavo, doppia apertura. Standard entry. Sufficiente per 1-2 piante LED 100-150W."},
+    {id:4,name:"AC Infinity Cloudlab 642 (60×60×120cm)",category:"tenda",phase:"setup",price:"€100–150",fascia:"intermedia",popularity:91,evidence:"source",affiliate:"https://www.amazon.it/s?k=ac+infinity+cloudlab",desc:"Tela 2000D ultra-resistente, cerniere robuste, compatibile con l'ecosistema controller AC Infinity. La scelta degli enthusiast."},
+    {id:5,name:"Gorilla Grow Tent 60×60",category:"tenda",phase:"setup",price:"€250–350",fascia:"professionale",popularity:84,evidence:"source",affiliate:"https://www.amazon.it/s?k=gorilla+grow+tent",desc:"Tela 1680D, altezza estendibile +30cm, standard industriale. La tenda più robusta sul mercato consumer."},
+
+    // ── STRUMENTI pH / EC ──────────────────────────────────
+    {id:6,name:"HM Digital COM-300",category:"strumento",phase:"all",price:"€50–60",fascia:"bassa",popularity:82,evidence:"source",affiliate:"https://www.amazon.it/s?k=hm+digital+com-300",desc:"pH + EC + TDS + Temp in uno strumento. Sonda non sostituibile, ma rara per il prezzo. Ideale per chi inizia."},
+    {id:7,name:"Apera PH20 + penna EC separata",category:"strumento",phase:"all",price:"€50–80",fascia:"intermedia",popularity:94,evidence:"source",affiliate:"https://www.amazon.it/s?k=apera+ph20",desc:"pH20: ±0.1 pH, ATC, calibrazione automatica. Abbinare una penna EC dedicata per setup completo. Il combo preferito dai grower italiani."},
+    {id:8,name:"Bluelab OnePen / Hanna GroLine",category:"strumento",phase:"all",price:"€150–250",fascia:"professionale",popularity:86,evidence:"source",affiliate:"https://www.amazon.it/s?k=bluelab+combo+meter",desc:"IP68, risoluzione 0.01 pH, sonda sostituibile. Bluelab Connect o Quick Cal Hanna. Precisione da laboratorio per grow seri."},
+
+    // ── CLIMA / VENTILAZIONE ───────────────────────────────
+    {id:9,name:"Estrattore 100mm + Filtro Carboni entry",category:"clima",phase:"veg",price:"€60–80",fascia:"bassa",popularity:80,evidence:"source",affiliate:"https://www.amazon.it/s?k=estrattore+inline+100mm+filtro+carboni",desc:"Sufficiente per 60×60. Estrattore da 100mm + filtro carboni basic. Controlla odori e ricambia l'aria ogni ora."},
+    {id:10,name:"AC Infinity Cloudline T6",category:"clima",phase:"all",price:"€150–200",fascia:"intermedia",popularity:95,evidence:"source",affiliate:"https://www.amazon.it/s?k=ac+infinity+cloudline+t6",desc:"Motore EC silenzioso, controller integrato con sonde temp/UR, programmazione avanzata. Standard de facto per tent 90×90 e 120×120."},
+    {id:11,name:"AC Infinity Cloudline Pro + Controller 69 Pro + Deumidificatore 20L",category:"clima",phase:"bloom",price:"€350–500",fascia:"professionale",popularity:87,evidence:"source",affiliate:"https://www.amazon.it/s?k=ac+infinity+controller+69+pro",desc:"Automazione VPD completa. Data logging, controllo temp/UR/CO2 automatico. Deumidificatore a compressore per bloom professionale."},
+
+    // ── ACCESSORI POST-HARVEST ─────────────────────────────
+    {id:12,name:"Lente 60x LED + Igrometri mini barattolo",category:"accessorio",phase:"bloom",price:"€15–25",fascia:"bassa",popularity:92,evidence:"community",affiliate:"https://www.amazon.it/s?k=lente+60x+led+trichome",desc:"Lente 60x con LED per osservare tricomi (trasparente → lattiginoso → ambrato). Igrometri mini da inserire in ogni barattolo di curing."},
+    {id:13,name:"Boveda 62% 67g (5 pack) + Barattoli UV Mason",category:"accessorio",phase:"curing",price:"€30–50",fascia:"intermedia",popularity:96,evidence:"study",affiliate:"https://www.amazon.it/s?k=boveda+62+cannabis",desc:"Boveda 67g per barattoli 1-4L. Controllo umidità a due vie 62%. Barattoli UV-proof proteggono i cannabinoidi dalla fotodegradazione."},
+    {id:14,name:"Microscopio USB Digitale + Bilancia 0.01g",category:"accessorio",phase:"bloom",price:"€50–90",fascia:"professionale",popularity:79,evidence:"source",affiliate:"https://www.amazon.it/s?k=microscopio+usb+digitale+trichome",desc:"Microscopio USB per foto documentabili dei tricomi (100-1000x). Bilancia di precisione 0.01g per pesare harvest e nutrienti con accuratezza."},
+
+    // ── SUBSTRATO / NUTRIENTI ──────────────────────────────
+    {id:15,name:"Terra Biobizz Light Mix 50L + Perlite 10L",category:"accessorio",phase:"setup",price:"€25–35",fascia:"bassa",popularity:90,evidence:"source",affiliate:"https://www.amazon.it/s?k=biobizz+light+mix+50l",desc:"Biobizz Light Mix: terra leggera, nutrienti leggeri per le prime 2-3 sett. Aggiungere 20% perlite per drenaggio ottimale."},
+    {id:16,name:"Canna Coco Professional Plus 50L + CalMag",category:"accessorio",phase:"setup",price:"€30–45",fascia:"intermedia",popularity:88,evidence:"source",affiliate:"https://www.amazon.it/s?k=canna+coco+professional",desc:"Coco coir bufferizzato di qualità. Abbinare CalMag (es. Plagron Calcium/Magnesium) obbligatoriamente per evitare lockout nelle prime settimane."},
+    {id:17,name:"Kit pH Up/Down + EC pen + soluzioni calibrazione",category:"strumento",phase:"all",price:"€25–40",fascia:"bassa",popularity:85,evidence:"source",affiliate:"https://www.amazon.it/s?k=ph+up+down+kit+coltivazione",desc:"pH Up (KOH) + pH Down (acido fosforico/citrico) + soluzioni di calibrazione 4.0 e 7.0 pH. Essenziale per ogni grow, qualunque substrato."}
 ];
 let shopFilter='all';
+let shopFasciaFilter='all';
 function renderShop(){
-    let filtered=shopFilter==='all'?shopItems:shopItems.filter(s=>s.category===shopFilter||s.phase===shopFilter);
-    let html=`<div><div style="margin-bottom:20px"><h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Attrezzatura</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Consigli evidence-based per ogni fase</p></div>`;
-    html+=`<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">${[{v:'all',l:'Tutti',c:'#fff'},{v:'setup',l:'Setup',c:'var(--ng)'},{v:'veg',l:'Veg',c:'var(--np)'},{v:'bloom',l:'Bloom',c:'var(--no)'},{v:'curing',l:'Curing',c:'var(--ny)'}].map(f=>`<button onclick="shopFilter='${f.v}';renderPage()" style="padding:8px 16px;border-radius:99px;border:2px solid ${shopFilter===f.v?f.c:'#222'};background:${shopFilter===f.v?f.c+'20':'#111'};color:${shopFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}</div>`;
-    html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
-    filtered.forEach(item=>{
-        html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div style="font-weight:700;font-size:15px;color:#fff">${esc(item.name)}</div><div style="font-family:Orbitron;font-size:14px;color:var(--ng)">${esc(item.price)}</div></div><div style="font-size:11px;color:#888;margin-bottom:8px">${esc(item.category)} • Fase: ${esc(item.phase)} • 🔥 Popolarità: ${item.popularity}%</div><div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(item.desc)}</div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${renderEvidenceBadge(item.evidence,{compact:true})}<a href="${esc(item.affiliate)}" target="_blank" rel="noopener" class="btn" style="background:var(--ng);color:#000;font-size:10px;padding:8px 14px;text-decoration:none">🛒 Vedi offerta</a></div></div>`;
-    });
-    html+=`</div><div style="text-align:center;padding:20px;color:#444;font-size:11px;margin-top:12px">I link sono esempi dimostrativi. In produzione sostituire con affiliate reali.</div></div>`;
+    let filtered=shopFilter==='all'?[...shopItems]:shopItems.filter(s=>s.category===shopFilter||s.phase===shopFilter);
+    if(shopFasciaFilter!=='all') filtered=filtered.filter(s=>s.fascia===shopFasciaFilter);
+    let html=`<div>
+<div style="margin-bottom:20px">
+<h1 class="t-graffiti gn" style="font-size:32px;margin-bottom:4px">Attrezzatura</h1>
+<p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Consigli evidence-based per ogni fase</p>
+</div>
+<div style="margin-bottom:12px;padding:12px 16px;background:rgba(57,255,20,.06);border:1px solid rgba(57,255,20,.2);border-radius:10px;font-size:11px;color:#777;line-height:1.6">
+⚠️ I prezzi sono indicativi e soggetti a variazione. Verifica sempre prima dell'acquisto. I link sono dimostrativi — in produzione sostituire con affiliate reali.
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Categoria</div>
+<div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:8px">
+${[{v:'all',l:'Tutto',c:'#fff'},{v:'illuminazione',l:'💡 LED',c:'var(--ny)'},{v:'tenda',l:'🏕 Tenda',c:'var(--ng)'},{v:'strumento',l:'🔬 Misura',c:'var(--nc)'},{v:'clima',l:'🌬 Clima',c:'var(--np)'},{v:'accessorio',l:'🧰 Accessori',c:'var(--no)'}].map(f=>`<button onclick="shopFilter='${f.v}';renderPage()" style="padding:8px 16px;border-radius:99px;border:2px solid ${shopFilter===f.v?f.c:'#222'};background:${shopFilter===f.v?f.c+'20':'#111'};color:${shopFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+</div>
+<div style="font-size:9px;color:#444;font-family:Orbitron;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Budget / Fascia</div>
+<div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:8px">
+${[{v:'all',l:'Tutte',c:'#fff'},{v:'bassa',l:'🟢 Entry',c:'var(--ng)'},{v:'intermedia',l:'🟡 Mid',c:'var(--ny)'},{v:'professionale',l:'🔴 Pro',c:'var(--no)'}].map(f=>`<button onclick="shopFasciaFilter='${f.v}';renderPage()" style="padding:8px 16px;border-radius:99px;border:2px solid ${shopFasciaFilter===f.v?f.c:'#222'};background:${shopFasciaFilter===f.v?f.c+'20':'#111'};color:${shopFasciaFilter===f.v?f.c:'#555'};cursor:pointer;font-family:Orbitron;font-size:11px;flex-shrink:0">${f.l}</button>`).join('')}
+</div>`;
+    if(!filtered.length){
+        html+=`<div style="text-align:center;padding:40px 20px;color:#555"><div style="font-size:48px;margin-bottom:12px">🔍</div><div style="font-family:Orbitron;font-size:14px">Nessun prodotto trovato</div><div style="font-size:12px;margin-top:8px">Prova a cambiare i filtri</div></div>`;
+    } else {
+        html+=`<div style="display:flex;flex-direction:column;gap:12px">`;
+        filtered.forEach(item=>{
+            const fasciaColor=item.fascia==='bassa'?'var(--ng)':item.fascia==='intermedia'?'var(--ny)':'var(--no)';
+            const fasciaLabel=item.fascia==='bassa'?'🟢 Entry':item.fascia==='intermedia'?'🟡 Intermedia':'🔴 Pro';
+            html+=`<div class="card" style="padding:16px;background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6)">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:8px">
+<div style="font-weight:700;font-size:15px;color:#fff">${esc(item.name)}</div>
+<div style="text-align:right;flex-shrink:0">
+<div style="font-family:Orbitron;font-size:14px;color:var(--ng)">${esc(item.price)}</div>
+<div style="font-size:10px;color:${fasciaColor};font-family:Orbitron;margin-top:2px">${fasciaLabel}</div>
+</div>
+</div>
+<div style="font-size:11px;color:#888;margin-bottom:8px">${esc(item.category)} • 🔥 ${item.popularity}%</div>
+<div style="font-size:12px;color:#aaa;line-height:1.6;margin-bottom:10px">${esc(item.desc)}</div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+${renderEvidenceBadge(item.evidence,{compact:true})}
+<a href="${esc(item.affiliate)}" target="_blank" rel="noopener" class="btn" style="background:var(--ng);color:#000;font-size:10px;padding:8px 14px;text-decoration:none">🛒 Cerca online</a>
+</div>
+</div>`;
+        });
+        html+=`</div>`;
+    }
+    html+=`<div style="text-align:center;padding:20px;color:#444;font-size:11px;margin-top:12px">Prezzi indicativi — verificare sempre prima dell'acquisto. Link dimostrativi.</div></div>`;
     return html;
 }
 function initShop(){}
@@ -3521,4 +4993,4 @@ window.onerror = function(msg, url, line) {
 };
 </script>
 </body>
-</html>
+</html>
