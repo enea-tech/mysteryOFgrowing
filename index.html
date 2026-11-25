@@ -144,7 +144,7 @@ html,body{min-height:100vh;min-height:100dvh;background:var(--d2)}
 .scanline::before{content:'';position:absolute;width:100%;height:2px;background:rgba(57,255,20,.08);animation:sl 6s linear infinite;box-shadow:0 0 10px rgba(57,255,20,.2)}
 #leaves{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
 .falling-bud{position:fixed;pointer-events:none;z-index:1;width:36px;height:36px;background-size:contain;background-repeat:no-repeat;opacity:.55;animation:lf linear infinite;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(191,0,255,.5))}
-.page{padding:20px;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));min-height:100vh;min-height:100dvh;position:relative;z-index:2;animation:fadeIn .4s ease}
+.page{max-width:1120px;margin-left:auto;margin-right:auto;padding:20px;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));min-height:100vh;min-height:100dvh;position:relative;z-index:2;animation:fadeIn .4s ease}
 .page-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 .card{background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s}
 .card:active{transform:scale(.98)}
@@ -258,7 +258,7 @@ button:focus-visible,a:focus-visible,.nav-item:focus-visible,[tabindex]:focus-vi
 </style>
 <style>
 /* ═══════════════════════════════════════════════════════════
-   GROW 420 — v7: widget (13), installazione PWA, fix Stoner mode
+   GROW 420 — v8
    ═══════════════════════════════════════════════════════════ */
 
 /* ── STONER MODE: bordi arcobaleno sincronizzati ────────────
@@ -312,9 +312,9 @@ html.hue-ok body.stoner-mode .wdg{border-color:hsl(var(--rb) 100% 58% / .45)}
 .wdg-edit.on{background:rgba(57,255,20,.14);border-color:rgba(57,255,20,.5);color:var(--ng)}
 .wdg-grid{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:700px){.wdg-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.wdg.wide{grid-column:span 2}}
-.wdg{--wc:#39ff14;--wcr:57,255,20;position:relative;padding:16px 16px 18px;border-radius:20px;background:linear-gradient(160deg,rgba(26,26,26,.78),rgba(12,12,12,.58));border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;min-width:0}
-.wdg::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--wc),transparent);opacity:.75}
-.wdg::after{content:'';position:absolute;right:-40px;top:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(var(--wcr),.16),transparent 70%);pointer-events:none}
+.wdg{--wc:#39ff14;--wcr:57,255,20;position:relative;padding:16px 16px 18px;border-radius:18px;background:linear-gradient(160deg,rgba(26,26,26,.78),rgba(12,12,12,.58));border:1px solid rgba(255,255,255,.075);box-shadow:0 12px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden;min-width:0}
+.wdg::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(var(--wcr),.8),transparent);opacity:.7}
+.wdg::after{content:'';position:absolute;right:-40px;top:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(var(--wcr),.10),transparent 70%);pointer-events:none}
 .wdg-h{display:flex;align-items:center;gap:9px;margin-bottom:14px;position:relative;z-index:1}
 .wdg-ic{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;background:rgba(var(--wcr),.16);font-size:15px;flex:none}
 .wdg-t{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--wc);font-weight:700;flex:1}
@@ -323,7 +323,7 @@ html.hue-ok body.stoner-mode .wdg{border-color:hsl(var(--rb) 100% 58% / .45)}
 .wdg-ctl button:disabled{opacity:.25;cursor:default}
 .wdg-editing .wdg{outline:1px dashed rgba(255,255,255,.22);outline-offset:-5px}
 .wdg-body{position:relative;z-index:1}
-.wdg-kpi{font-family:Orbitron,sans-serif;font-size:34px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:.5px}
+.wdg-kpi{font-family:Orbitron,sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1.05;letter-spacing:.5px}
 .wdg-kpi small{font-size:14px;color:#777;font-weight:700;margin-left:4px}
 .wdg-cap{font-size:11px;color:#8a8a8a;margin-top:5px;line-height:1.45}
 .wdg-muted{font-size:12px;color:#777;padding:6px 0}
@@ -386,17 +386,12 @@ html.hue-ok body.stoner-mode .wdg{border-color:hsl(var(--rb) 100% 58% / .45)}
 .phase-cell small{display:block;font-size:9px;color:#777;font-family:Orbitron,sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
 .phase-cell span{font-size:12px;color:#e2e2e2;line-height:1.35;word-break:break-word}
 .phase-tip{margin-top:10px;font-size:11.5px;color:#9aa;line-height:1.5;padding:10px 12px;border-left:2px solid var(--wc);background:rgba(var(--wcr),.06);border-radius:0 10px 10px 0}
-.trend-svg{width:100%;height:auto;display:block;margin:4px 0 8px;touch-action:none}
-.trend-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.trend-stats div{text-align:center;padding:8px 2px;border-radius:10px;background:rgba(255,255,255,.04)}
-.trend-stats b{display:block;font-family:Orbitron,sans-serif;font-size:13px;color:#fff}
-.trend-stats small{font-size:9px;color:#777;font-family:Orbitron,sans-serif;text-transform:uppercase;letter-spacing:.5px}
 .wdg-rem{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
 .wdg-rem.late{border-color:rgba(255,102,0,.55);background:rgba(255,102,0,.08)}
 .wdg-rem .t{font-family:Orbitron,sans-serif;font-size:10px;color:var(--wc);min-width:68px;line-height:1.35}
 .wdg-rem .x{flex:1;font-size:12.5px;color:#ddd;min-width:0;overflow-wrap:anywhere}
 .wdg-rem button{width:40px;height:40px;border-radius:11px;border:1px solid rgba(var(--wcr),.5);background:rgba(var(--wcr),.12);color:var(--wc);font-size:16px;cursor:pointer;flex:none}
-@media(max-width:380px){.trend-stats{grid-template-columns:repeat(2,1fr)}.light-wrap{flex-direction:column;align-items:stretch}.light-wrap svg{margin:0 auto}}
+@media(max-width:380px){.light-wrap{flex-direction:column;align-items:stretch}.light-wrap svg{margin:0 auto}}
 @media (prefers-reduced-motion:reduce){.wdg-ring,.wdg-dot i{transition:none}}
 
 /* ═══ v7 — nuovi widget ═══════════════════════════════════ */
@@ -446,6 +441,365 @@ html.hue-ok body.stoner-mode .wdg{border-color:hsl(var(--rb) 100% 58% / .45)}
 .hm-stats div{text-align:center;padding:9px 2px;border-radius:12px;background:rgba(255,255,255,.04)}
 .hm-stats b{display:block;font-family:Orbitron,sans-serif;font-size:18px;color:#fff}
 .hm-stats small{font-size:9px;color:#777;font-family:Orbitron,sans-serif;text-transform:uppercase;letter-spacing:.5px}
+/* ═══ v8 — widget delle sezioni, tab, apri ═══════════════════ */
+.wdg-open{margin-left:auto;flex:none;background:transparent;border:1px solid rgba(var(--wcr),.4);color:var(--wc);border-radius:99px;padding:6px 12px;font-size:10.5px;font-family:Orbitron,sans-serif;font-weight:700;letter-spacing:.5px;cursor:pointer;min-height:30px}
+.wdg-open:hover{background:rgba(var(--wcr),.15)}
+.wdg-h .wdg-open+.wdg-ctl{margin-left:8px}
+.wdg-tabs{margin:0 0 12px}
+.wdg-tabs .wdg-chip{--wc:#39ff14;--wcr:57,255,20}
+.gd-joint{display:flex;justify-content:center;align-items:center;min-height:56px;margin:2px 0 6px;overflow:hidden}
+.gd-meta{font-size:12px;color:#aaa;text-align:center;margin-bottom:10px;font-family:Orbitron,sans-serif;letter-spacing:.5px}
+.gd-next{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:12.5px;color:#ddd;margin-bottom:10px}
+.gd-next span{flex:1;min-width:0}
+.jr-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.jr-item:last-child{border-bottom:none}
+.jr-dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--wc);margin-top:6px;box-shadow:0 0 8px rgba(var(--wcr),.7)}
+.jr-dot.bad{background:#ff6600;box-shadow:0 0 8px rgba(255,102,0,.7)}
+.jr-t{font-size:12.5px;color:#ddd;line-height:1.4;word-break:break-word}
+.jr-item small{font-size:10px;color:#777;font-family:Orbitron,sans-serif;letter-spacing:.5px}
+.dg-res{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.dg-r{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
+.dg-r b{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#fff}
+.dg-r b i{font-style:normal;font-family:Orbitron,sans-serif;font-size:11px;color:var(--wc)}
+.dg-r small{display:block;font-size:11px;color:#888;margin-top:3px;line-height:1.4}
+.tm-disp{font-family:Orbitron,sans-serif;font-size:40px;font-weight:900;color:#fff;text-align:center;letter-spacing:2px;margin:4px 0 12px;font-variant-numeric:tabular-nums;text-shadow:0 0 18px rgba(var(--wcr),.35)}
+.tm-disp.done{color:var(--wc);animation:tmBlink 1s steps(2) infinite}
+@keyframes tmBlink{50%{opacity:.35}}
+.st-name{font-family:Orbitron,sans-serif;font-size:17px;font-weight:800;color:#fff;margin-bottom:6px}
+.st-badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.st-badges span{font-size:10px;padding:4px 9px;border-radius:99px;border:1px solid rgba(var(--wcr),.45);color:var(--wc);font-family:Orbitron,sans-serif;letter-spacing:.5px}
+.dh-row{display:grid;grid-template-columns:minmax(0,1fr) 1.4fr auto;gap:10px;align-items:center;margin-top:10px;font-size:12px;color:#ccc}
+.dh-row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dh-row b{font-family:Orbitron,sans-serif;font-size:11px;color:#fff;min-width:34px;text-align:right}
+@media (prefers-reduced-motion:reduce){.tm-disp.done{animation:none}}
+/* ═══ v8 — menu burger: pannello ═════════════════════════════ */
+.menu-panel{width:100%;max-width:520px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column;gap:14px}
+.mn-card{border-radius:18px;padding:16px;background:rgba(17,17,17,.72);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.mn-card.joint{border-color:rgba(57,255,20,.28)}
+body.stoner-mode .mn-card.joint{border-color:rgba(191,0,255,.5);box-shadow:0 0 28px rgba(191,0,255,.18)}
+.mn-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
+.mn-h b{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:2px;color:var(--ng);text-transform:uppercase}
+.mn-h small{font-size:10px;color:#777;font-family:Orbitron,sans-serif;letter-spacing:.5px}
+.mn-stage{display:flex;justify-content:center;align-items:center;min-height:90px;padding:22px 0 14px;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:12px;outline:none}
+.mn-stage:focus-visible{outline:2px solid var(--ng);outline-offset:2px}
+.mn-jbox{position:relative;display:flex;align-items:center;justify-content:center}
+.mn-puff{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:rgba(215,215,215,.6);filter:blur(4px);pointer-events:none;animation:mnPuff 1.7s ease-out forwards;z-index:4}
+@keyframes mnPuff{0%{opacity:.85;transform:translate(0,0) scale(.4)}100%{opacity:0;transform:translate(var(--dx,0),-80px) scale(3.2)}}
+.mn-quote{min-height:40px;text-align:center;font-size:13px;color:#bbb;font-style:italic;line-height:1.45;padding:0 4px;margin-bottom:12px}
+.mn-actions{display:flex;gap:8px}
+.mn-btn{flex:1;min-height:46px;border-radius:12px;border:1px solid rgba(57,255,20,.5);background:rgba(57,255,20,.12);color:var(--ng);font-family:Orbitron,sans-serif;font-weight:800;font-size:11px;letter-spacing:.5px;cursor:pointer;text-transform:uppercase}
+.mn-btn:active{transform:scale(.96)}
+.mn-btn.ghost{flex:none;padding:0 16px;border-color:rgba(255,255,255,.14);background:transparent;color:#aaa}
+.mn-badges{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.mn-badge{font-size:10.5px;padding:4px 10px;border-radius:99px;border:1px solid rgba(57,255,20,.35);color:var(--ng);background:rgba(57,255,20,.07)}
+.mn-banner{text-align:center;padding:8px;border-radius:12px;margin-bottom:8px;border:1px solid var(--ng);color:var(--ng);font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:1.5px;animation:mnGlow 1.6s ease-in-out infinite alternate}
+@keyframes mnGlow{from{box-shadow:0 0 6px rgba(57,255,20,.2)}to{box-shadow:0 0 22px rgba(57,255,20,.55)}}
+.mn-row{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.06);color:#ddd;font-size:14px;font-family:Inter,sans-serif;text-align:left;cursor:pointer;min-height:50px}
+.mn-row:last-child{border-bottom:none}
+.mn-row .ic{font-size:20px;width:26px;text-align:center;flex:none}
+.mn-row .st{margin-left:auto;font-size:10.5px;color:#888;font-family:Orbitron,sans-serif;letter-spacing:.5px}
+.mn-sw{margin-left:auto;flex:none;width:46px;height:26px;border-radius:99px;background:#1d1d1d;border:1px solid #444;position:relative;transition:all .2s}
+.mn-sw::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#777;transition:all .2s}
+.mn-sw.on{background:rgba(191,0,255,.3);border-color:var(--np)}
+.mn-sw.on::after{left:22px;background:var(--np);box-shadow:0 0 10px var(--np)}
+.mn-foot{text-align:center;font-size:10px;color:#555;font-family:Orbitron,sans-serif;letter-spacing:1.5px;padding:2px 0 8px}
+@media (prefers-reduced-motion:reduce){.mn-banner{animation:none}.mn-puff{animation-duration:.01s}}
+
+/* ═══ v9 — sistema visivo, Home a sezioni, Trend, Avvisi, Insights, Diario, Galleria, Profilo ═══ */
+:root{--v9-line:rgba(255,255,255,.075);--v9-line2:rgba(255,255,255,.13);--v9-tx:#ececec;--v9-tx2:#a9a9a9;--v9-tx3:#767676;--v9-ok:#5ee08a;--v9-warn:#ff8a3d;--v9-r:18px;--v9-sh:0 10px 30px rgba(0,0,0,.34)}
+body.sheet-lock{overflow:hidden}
+@keyframes wdgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes v9sk{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.sk{display:block;border-radius:12px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:v9sk 1.4s linear infinite}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+
+/* — stato coltivazione (Home) — */
+.hs-card{position:relative;margin-bottom:6px;padding:18px 18px 16px;border-radius:var(--v9-r);background:linear-gradient(160deg,rgba(24,24,24,.72),rgba(12,12,12,.55));border:1px solid var(--v9-line);box-shadow:var(--v9-sh);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
+.hs-card::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(94,224,138,.6),transparent)}
+.hs-top{display:flex;align-items:center;gap:12px}
+.hs-leaf{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:22px;background:rgba(94,224,138,.12);flex:none}
+.hs-id{flex:1;min-width:0}
+.hs-name{font-weight:700;font-size:16px;color:var(--v9-tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hs-sub{font-size:12px;color:var(--v9-tx3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.al-chip{flex:none;display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 12px;border-radius:99px;border:1px solid var(--v9-line2);background:rgba(255,255,255,.04);color:var(--v9-tx2);font-size:11.5px;font-family:Inter,sans-serif;cursor:pointer;transition:background .2s,border-color .2s}
+.al-chip b{color:#fff}
+.al-chip.warn{border-color:rgba(255,138,61,.55);background:rgba(255,138,61,.1);color:#ffb98a}
+.al-chip.ok{color:var(--v9-ok);border-color:rgba(94,224,138,.28)}
+.hs-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hs-bd{font-size:11px;padding:4px 11px;border-radius:99px;border:1px solid var(--v9-line2);color:var(--v9-tx2);background:rgba(255,255,255,.03)}
+.hs-bd.ph{color:#c7a6ff;border-color:rgba(179,136,255,.4);background:rgba(179,136,255,.1)}
+.hs-prog{display:flex;align-items:center;gap:12px;margin-top:14px}
+.hs-pct{font-family:Orbitron,sans-serif;font-weight:800;font-size:22px;color:#fff;min-width:64px}
+.hs-bar{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+.hs-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3fcf72,#8cf0a8);box-shadow:0 0 10px rgba(94,224,138,.4);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.hs-cnt{font-size:11px;color:var(--v9-tx3);white-space:nowrap}
+.hs-act{display:flex;gap:8px;margin-top:14px}
+.hs-act button{flex:1;min-height:40px;border-radius:12px;border:1px solid var(--v9-line);background:rgba(255,255,255,.04);color:var(--v9-tx2);font-size:12px;font-family:Inter,sans-serif;cursor:pointer;transition:background .2s}
+.hs-act button:hover{background:rgba(255,255,255,.08)}
+
+/* — sezioni widget — */
+.wdg-sec{margin-top:6px}
+.sec-h{display:flex;align-items:center;gap:10px;width:100%;margin:26px 0 12px;padding:2px;background:none;border:none;text-align:left;cursor:pointer;color:inherit;min-height:36px}
+.sec-h.static{cursor:default}
+.sec-h .sn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:#d2d2d2;font-weight:700;white-space:nowrap}
+.sec-h .sd{font-size:11px;color:var(--v9-tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.sec-h .sl{flex:1;height:1px;background:linear-gradient(90deg,var(--v9-line2),transparent);min-width:12px}
+.sec-h .sc{font-size:11px;color:var(--v9-tx3);font-family:Orbitron,sans-serif}
+.sec-h .sx{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;color:var(--v9-tx2);font-size:12px;transition:transform .25s}
+.sec-h[aria-expanded=false] .sx{transform:rotate(-90deg)}
+.wdg-tabs{margin-top:2px}
+@media(max-width:520px){.sec-h .sd{display:none}}
+
+/* — widget: rifiniture condivise — */
+.wdg{animation:wdgIn .5s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion:reduce){.wdg{animation:none}}
+.wdg-sub b{font-weight:600}
+.wdg-link{min-height:36px}
+
+/* — trend — */
+.tr-head{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.tr-head .wdg-chips{margin:0;padding-bottom:0}
+.tr-chips .wdg-chip{--wc:var(--tc,#b388ff)}
+.tr-seg{display:inline-flex;align-self:flex-start;padding:3px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid var(--v9-line)}
+.tr-seg button{min-height:32px;padding:0 13px;border:none;border-radius:9px;background:transparent;color:var(--v9-tx3);font-size:11.5px;font-family:Inter,sans-serif;cursor:pointer;transition:all .2s}
+.tr-seg button.on{background:rgba(255,255,255,.12);color:#fff;font-weight:600}
+.tr-read{display:flex;flex-direction:column;gap:6px;margin:4px 0 6px}
+.tr-big{font-family:Orbitron,sans-serif;font-weight:800;font-size:34px;line-height:1;color:#fff}
+.tr-big small{font-size:14px;color:var(--v9-tx3);margin-left:4px;font-weight:700}
+.tr-big.out{color:var(--v9-warn)}
+.tr-meta{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;font-size:11.5px;color:var(--v9-tx3)}
+.tr-chip{padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:700;letter-spacing:.3px}
+.tr-chip.ok{background:rgba(94,224,138,.14);color:var(--v9-ok)}
+.tr-chip.hi{background:rgba(255,138,61,.16);color:#ffa564}
+.tr-chip.lo{background:rgba(90,174,255,.16);color:#8cc4ff}
+.tr-dl{font-family:Orbitron,sans-serif;font-size:11px;font-weight:700;color:var(--v9-tx2)}
+.tr-dl.good{color:var(--v9-ok)}.tr-dl.bad{color:var(--v9-warn)}
+.tr-chart{position:relative;margin:6px -4px 10px}
+.tr-svg{width:100%;height:auto;display:block;touch-action:pan-y;user-select:none;-webkit-user-select:none;overflow:visible}
+.tr-gl{stroke:rgba(255,255,255,.06);stroke-width:1}
+.tr-yt,.tr-xt{fill:#6c6c6c;font-size:8.5px;font-family:Inter,sans-serif}
+.tr-band{fill:rgba(94,224,138,.075)}
+.tr-bl{stroke:rgba(94,224,138,.28);stroke-dasharray:3 4;stroke-width:1}
+.tr-bt{fill:rgba(94,224,138,.55);font-size:7.5px;font-family:Inter,sans-serif;letter-spacing:.4px;text-transform:uppercase}
+.tr-line{fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px var(--tc,#b388ff))}
+.tr-dot{fill:#0d0d0d;stroke:var(--tc,#b388ff);stroke-width:1.6}
+.tr-dot.out{stroke:var(--v9-warn)}
+.tr-halo{fill:var(--tc,#b388ff);opacity:.22;transform-box:fill-box;transform-origin:center;animation:trPulse 2.6s ease-in-out infinite}
+.tr-halo.out{fill:var(--v9-warn)}
+.tr-g{stroke:rgba(255,255,255,.35);stroke-width:1;stroke-dasharray:2 3;transition:opacity .15s}
+.tr-c{fill:#fff;stroke:var(--tc,#b388ff);stroke-width:2.5;transition:opacity .15s}
+.tr-g.off,.tr-c.off{opacity:0}
+.tr-tip{position:absolute;z-index:3;transform:translate(-50%,-100%);padding:6px 10px;border-radius:10px;background:rgba(10,10,10,.92);border:1px solid var(--v9-line2);box-shadow:0 6px 18px rgba(0,0,0,.5);pointer-events:none;white-space:nowrap;display:flex;flex-direction:column;gap:1px;transition:opacity .15s}
+.tr-tip.r{transform:translate(-100%,-100%) translateX(-8px)}
+.tr-tip.off{opacity:0}
+.tr-tip b{font-family:Orbitron,sans-serif;font-size:13px;color:#fff}
+.tr-tip span{font-size:10px;color:var(--v9-tx3)}
+.tr-anim .tr-line{stroke-dasharray:1;stroke-dashoffset:1;animation:trDraw 1.1s cubic-bezier(.4,0,.2,1) forwards}
+.tr-anim .tr-area{opacity:0;animation:trFade .9s .35s ease forwards}
+.tr-anim .tr-dot,.tr-anim .tr-halo{opacity:0;animation:trFade .5s .9s ease forwards}
+.tr-anim .tr-halo{animation:trFade .5s .9s ease forwards,trPulse 2.6s 1.4s ease-in-out infinite}
+@keyframes trDraw{to{stroke-dashoffset:0}}
+@keyframes trFade{to{opacity:1}}
+@keyframes trPulse{0%,100%{transform:scale(.7);opacity:.28}50%{transform:scale(1.25);opacity:.07}}
+.tr-anim .tr-halo{--o:.22}
+.tr-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:460px){.tr-stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tr-t{padding:10px 11px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--v9-line);min-width:0}
+.tr-t small{display:block;font-size:9px;color:var(--v9-tx3);font-family:Orbitron,sans-serif;letter-spacing:1px;text-transform:uppercase}
+.tr-t b{display:block;font-family:Orbitron,sans-serif;font-size:15px;color:#fff;margin:4px 0 2px;white-space:nowrap}
+.tr-t em{display:block;font-style:normal;font-size:10.5px;color:var(--v9-tx3);line-height:1.35}
+.tr-pb{display:block;height:4px;border-radius:99px;background:rgba(255,255,255,.08);margin:5px 0 4px;overflow:hidden}
+.tr-pb i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3fcf72,#8cf0a8)}
+.tr-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:14px 6px 6px;color:var(--v9-tx3)}
+.tr-ghost{width:100%;max-width:300px;height:auto;color:rgba(255,255,255,.14)}
+.tr-et{font-size:13.5px;color:var(--v9-tx);font-weight:600}
+
+/* — insights — */
+.in-row{padding:11px 12px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--v9-line);margin-bottom:8px}
+.in-row.off{background:transparent;border-style:dashed;padding:9px 12px}
+.in-top{display:flex;align-items:baseline;gap:10px}
+.in-l{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--c,#aaa);font-weight:700;min-width:44px}
+.in-v{font-family:Orbitron,sans-serif;font-size:19px;color:#fff;flex:1}
+.in-v small{font-size:11px;color:var(--v9-tx3);margin-left:3px}
+.in-d{font-family:Orbitron,sans-serif;font-size:11px;font-weight:700;color:var(--v9-tx2)}
+.in-d.na,.in-na{font-family:Inter,sans-serif;font-weight:400;font-size:11px;color:var(--v9-tx3)}
+.in-sub{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin-top:8px}
+.in-bar{flex:0 0 70px;height:4px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden}
+.in-bar i{display:block;height:100%;background:linear-gradient(90deg,#3fcf72,#8cf0a8)}
+.in-s{font-size:11px;color:var(--v9-tx3)}
+.in-s em{font-style:normal;font-weight:700}.in-s em.ok{color:var(--v9-ok)}.in-s em.warn{color:var(--v9-warn)}
+.in-lack,.in-empty span{font-size:11.5px;color:var(--v9-tx3);line-height:1.5}
+.in-lack{margin:2px 0 12px}
+.in-empty{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:14px;border:1px dashed var(--v9-line2);margin-bottom:12px}
+.in-empty b{font-size:13px;color:var(--v9-tx)}
+.in-act{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+.in-act div{padding:10px 8px;border-radius:12px;background:rgba(255,255,255,.04);text-align:center;min-width:0}
+.in-act b{display:block;font-family:Orbitron,sans-serif;font-size:18px;color:#fff}
+.in-act b i{font-style:normal;font-size:11px;color:var(--v9-tx3)}
+.in-act small{font-size:10px;color:var(--v9-tx3);line-height:1.3;display:block;margin-top:2px}
+.in-act em{font-style:normal;opacity:.7}
+
+/* — galleria widget — */
+.gw-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.gw-strip .sk{aspect-ratio:1}
+.gw-th{position:relative;aspect-ratio:1;padding:0;border:1px solid var(--v9-line);border-radius:12px;overflow:hidden;background:#0a0a0a;cursor:pointer}
+.gw-th img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+.gw-th:hover img{transform:scale(1.06)}
+.gw-th span,.dy-th span{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.55);color:#fff;font-family:Orbitron,sans-serif;font-size:13px}
+
+/* — centro avvisi — */
+.hdr-ic.al-btn{position:relative}
+.al-badge{position:absolute;top:5px;right:3px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#8a8a8a;color:#000;font-family:Orbitron,sans-serif;font-size:9px;font-weight:800;display:grid;place-items:center;line-height:1}
+.al-badge.warn{background:var(--v9-warn)}
+.al-badge[hidden]{display:none}
+.sheet-ov{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.sheet-ov.open{opacity:1;pointer-events:auto}
+.sheet{width:100%;max-width:560px;max-height:86vh;max-height:86dvh;display:flex;flex-direction:column;background:linear-gradient(180deg,#171717,#0e0e0e);border:1px solid var(--v9-line2);border-bottom:none;border-radius:24px 24px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.5);transform:translateY(24px);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet-ov.open .sheet{transform:none}
+@media(min-width:700px){.sheet-ov{align-items:center}.sheet{border-radius:24px;border-bottom:1px solid var(--v9-line2)}}
+.sheet-grab{width:38px;height:4px;border-radius:99px;background:rgba(255,255,255,.18);margin:10px auto 0;flex:none}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 6px;flex:none}
+.sheet-h h2{font-family:Orbitron,sans-serif;font-size:13px;letter-spacing:2.2px;text-transform:uppercase;color:#e6e6e6;font-weight:700}
+.sheet-x{width:40px;height:40px;border-radius:12px;border:1px solid var(--v9-line);background:rgba(255,255,255,.05);color:#ddd;font-size:14px;cursor:pointer}
+.sheet-b{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:6px 16px 18px}
+.al-g{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--v9-tx3);margin:14px 2px 8px}
+.al-it{display:flex;gap:12px;padding:13px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--v9-line);margin-bottom:8px;animation:wdgIn .35s both}
+.al-it.warn{border-color:rgba(255,138,61,.4);background:rgba(255,138,61,.06)}
+.al-ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-size:16px;background:rgba(255,255,255,.06);flex:none}
+.al-it.warn .al-ic{background:rgba(255,138,61,.16)}
+.al-tx{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
+.al-tx b{font-size:13.5px;color:#f0f0f0}
+.al-tx>span{font-size:12px;color:var(--v9-tx2);line-height:1.45;overflow-wrap:anywhere}
+.al-ac{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.al-b{min-height:36px;padding:0 14px;border-radius:10px;border:1px solid rgba(94,224,138,.5);background:rgba(94,224,138,.12);color:var(--v9-ok);font-size:12px;font-family:Inter,sans-serif;font-weight:600;cursor:pointer}
+.al-b.ghost{border-color:var(--v9-line2);background:transparent;color:var(--v9-tx3);font-weight:400}
+.al-empty{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:30px 14px 18px}
+.al-empty b{font-size:15px;color:#eee}.al-empty span{font-size:12.5px;color:var(--v9-tx3);line-height:1.5;max-width:320px}
+.al-ok{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:24px;color:var(--v9-ok);background:rgba(94,224,138,.12);border:1px solid rgba(94,224,138,.35);margin-bottom:6px}
+.al-foot{font-size:11px;color:var(--v9-tx3);line-height:1.6;margin-top:14px;text-align:center}
+.al-link{background:none;border:none;color:var(--v9-ok);font-size:11px;cursor:pointer;text-decoration:underline;padding:4px}
+
+/* — diario — */
+.dy-chips{margin:0 0 14px}
+.dy-chip{flex:none;padding:8px 13px;border-radius:99px;border:1px solid var(--v9-line2);background:rgba(255,255,255,.04);color:var(--v9-tx2);font-size:11.5px;font-family:Inter,sans-serif;cursor:pointer;min-height:36px;white-space:nowrap;transition:all .2s}
+.dy-chip.on{background:rgba(179,136,255,.18);border-color:#b388ff;color:#d8c4ff;font-weight:700}
+.dy{margin-bottom:6px}
+.dy-h{display:flex;align-items:baseline;gap:10px;margin:2px 0 12px 8px;flex-wrap:wrap}
+.dy-h b{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#d4d4d4}
+.dy-h span{font-size:11px;color:var(--v9-tx3)}
+.dy-ev{display:flex;flex-direction:column;gap:2px;margin:0 0 14px 8px;padding:11px 14px;border-radius:13px;background:rgba(255,255,255,.04);border:1px solid var(--v9-line);font-size:12.5px;color:#ddd}
+.dy-ev span{font-size:11px;color:var(--v9-tx3)}
+.dy-ev.phase{border-color:color-mix(in srgb,var(--pc,#b388ff) 45%,transparent);background:color-mix(in srgb,var(--pc,#b388ff) 10%,transparent)}
+.dy-ev.start{border-color:rgba(94,224,138,.35);background:rgba(94,224,138,.07)}
+.dy-ev.water{flex-direction:row;align-items:center;gap:8px;padding:8px 14px;border-radius:99px;display:inline-flex;color:#9cc9ff;background:rgba(90,174,255,.08);border-color:rgba(90,174,255,.25)}
+.timeline-dot.phase{border-color:var(--pc,#b388ff);box-shadow:0 0 10px color-mix(in srgb,var(--pc,#b388ff) 55%,transparent)}
+.timeline-dot.start{border-color:var(--v9-ok)}
+.timeline-dot.water{border-color:#5aaeff;box-shadow:0 0 8px rgba(90,174,255,.35);top:9px}
+.timeline-dot.photo{border-color:#e0a8ff;box-shadow:0 0 8px rgba(224,168,255,.35)}
+.dy-ph{display:flex;gap:7px;margin:0 0 14px 8px}
+.dy-th{position:relative;width:64px;height:64px;padding:0;border-radius:11px;overflow:hidden;border:1px solid var(--v9-line);background:#0a0a0a;cursor:pointer;flex:none}
+.dy-th img{width:100%;height:100%;object-fit:cover;display:block}
+.dy-empty{text-align:center;padding:22px 10px;color:var(--v9-tx3);font-size:12.5px;line-height:1.5}
+.timeline-item{animation:none}
+
+/* — galleria — */
+.ga-bar{display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.ga-act{display:flex;gap:8px;flex-wrap:wrap}
+.ga-act .wdg-btn{--wc:#b388ff;--wcr:179,136,255}
+.ga-fl{min-width:0}
+.ga-fh{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--v9-tx3);margin:0 2px 6px}
+.ga-fl .wdg-chips{margin-bottom:0}
+.ga-fl .wdg-chip{--wc:#b388ff;--wcr:179,136,255}
+.ga-fl .wdg-chip small{opacity:.6;margin-left:3px}
+.ga-cmpbar{position:sticky;top:calc(64px + env(safe-area-inset-top,0px));z-index:5;padding:11px 14px;border-radius:12px;background:rgba(179,136,255,.16);border:1px solid rgba(179,136,255,.5);color:#dccbff;font-size:12.5px;margin-bottom:12px;backdrop-filter:blur(10px)}
+.ga-sum{font-size:11.5px;color:var(--v9-tx3);margin:4px 2px 0}
+.ga-m{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:#cfcfcf;margin:20px 2px 10px;text-transform:capitalize}
+.ga-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+@media(min-width:600px){.ga-grid{grid-template-columns:repeat(4,1fr);gap:8px}}
+@media(min-width:900px){.ga-grid{grid-template-columns:repeat(6,1fr)}}
+.ga-sk{aspect-ratio:1}
+.ga-c{position:relative;aspect-ratio:1;padding:0;border-radius:12px;overflow:hidden;border:1px solid var(--v9-line);background:#0a0a0a;cursor:pointer;transition:transform .2s,border-color .2s}
+.ga-c:active{transform:scale(.97)}
+.ga-c img{width:100%;height:100%;object-fit:cover;display:block}
+.ga-c.sel{border-color:#b388ff;box-shadow:0 0 0 2px #b388ff}
+.ga-d,.ga-p{position:absolute;left:6px;font-size:10px;line-height:1;padding:4px 7px;border-radius:99px;background:rgba(0,0,0,.62);color:#fff;backdrop-filter:blur(4px);max-width:calc(100% - 12px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ga-d{bottom:6px;font-family:Orbitron,sans-serif;font-size:9px}
+.ga-p{top:6px;color:#d8c4ff}
+.ga-n{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:#b388ff;color:#000;font-family:Orbitron,sans-serif;font-size:11px;font-weight:800;display:grid;place-items:center}
+.ga-empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:36px 14px;color:var(--v9-tx3);font-size:12.5px;line-height:1.5}
+.ga-empty b{color:#eee;font-size:15px}.ga-empty span{max-width:320px}
+.ga-ei{font-size:38px;opacity:.85}
+.gv{position:fixed;inset:0;z-index:310;background:#050505;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s;padding-top:env(safe-area-inset-top,0px);overflow-y:auto}
+.gv.open{opacity:1;pointer-events:auto}
+.gv-top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;flex:none}
+.gv-cnt{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1.4px;color:var(--v9-tx2)}
+.gv-stage{position:relative;flex:1;min-height:40vh;display:grid;place-items:center;touch-action:pan-y;padding:0 8px}
+.gv-stage img{max-width:100%;max-height:62vh;max-height:62dvh;object-fit:contain;border-radius:12px}
+.gv-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;border:none;background:rgba(0,0,0,.35);color:#fff;font-size:28px;cursor:pointer;border-radius:12px;z-index:2}
+.gv-nav.l{left:6px}.gv-nav.r{right:6px}
+.gv-info{flex:none;padding:14px 16px calc(16px + env(safe-area-inset-bottom,0px));max-width:640px;width:100%;margin:0 auto}
+.gv-t{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.gv-t b{font-size:16px;color:#fff}
+.gv-badge{font-size:10.5px;padding:3px 10px;border-radius:99px;background:rgba(179,136,255,.16);color:#d8c4ff;border:1px solid rgba(179,136,255,.35)}
+.gv-badge.d{background:rgba(94,224,138,.12);color:var(--v9-ok);border-color:rgba(94,224,138,.3)}
+.gv-dt{font-size:12px;color:var(--v9-tx3);margin:6px 0 10px;text-transform:capitalize}
+.gv-ctx{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--v9-line);font-size:12px;color:#ccc;line-height:1.5;margin-bottom:12px}
+.gv-ctx small{display:block;font-family:Orbitron,sans-serif;font-size:9px;letter-spacing:1.4px;text-transform:uppercase;color:var(--v9-tx3);margin-bottom:4px}
+.gv-ctx em{font-style:normal;color:var(--v9-tx3);display:block;font-size:11px}
+.gv-ctx.off{color:var(--v9-tx3);background:transparent;border-style:dashed}
+.gv-act{display:flex;gap:8px}
+.gv-act .wdg-btn{--wc:#b388ff;--wcr:179,136,255}
+.gc-seg{display:inline-flex;align-self:center;padding:3px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--v9-line);margin:0 0 12px}
+.gc-seg button{min-height:36px;padding:0 18px;border:none;border-radius:9px;background:transparent;color:var(--v9-tx3);font-size:12px;font-family:Inter,sans-serif;cursor:pointer}
+.gc-seg button.on{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+.gc-stage{position:relative;width:calc(100% - 24px);max-width:520px;aspect-ratio:4/5;max-height:62dvh;margin:0 auto;border-radius:16px;overflow:hidden;background:#0a0a0a;border:1px solid var(--v9-line2);touch-action:pan-y;flex:none}
+.gc-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gc-a{clip-path:inset(0 calc(100% - var(--x)) 0 0)}
+.gc-bar{position:absolute;top:0;bottom:0;left:var(--x);width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 12px rgba(0,0,0,.6);pointer-events:none}
+.gc-bar::after{content:'↔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-size:15px;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.gc-lb{position:absolute;top:10px;font-family:Orbitron,sans-serif;font-size:9px;letter-spacing:1.6px;padding:4px 8px;border-radius:99px;background:rgba(0,0,0,.6);color:#fff}
+.gc-lb.l{left:10px}.gc-lb.r{right:10px}
+.gc-rng{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.gc-caps,.gc-side{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:calc(100% - 24px);max-width:520px;margin:12px auto 14px}
+.gc-side{max-width:760px}
+.gc-side figure{margin:0;min-width:0}
+.gc-side img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:14px;border:1px solid var(--v9-line2);display:block}
+.gc-cap{display:flex;flex-direction:column;gap:2px;margin-top:8px;font-size:11.5px;color:var(--v9-tx2);min-width:0}
+.gc-cap b{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:1.6px;color:#d8c4ff}
+.gc-cap span{overflow:hidden;text-overflow:ellipsis}
+
+/* — profilo — */
+.pf-tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:560px){.pf-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pf-t{padding:14px;border-radius:16px;background:linear-gradient(160deg,rgba(26,26,26,.7),rgba(12,12,12,.55));border:1px solid var(--v9-line);display:flex;flex-direction:column;gap:3px;min-width:0}
+.pf-t b{font-family:Orbitron,sans-serif;font-size:26px;color:#fff;line-height:1.1}
+.pf-t b i{font-style:normal}
+.pf-t span{font-size:11.5px;color:var(--v9-tx);margin-top:4px}
+.pf-t em{font-style:normal;font-size:10.5px;color:var(--v9-tx3)}
+.pf-sec{margin-top:26px}
+.pf-sec h3{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:#d2d2d2;margin:0 2px 12px;font-weight:700}
+@media(min-width:700px){.pf-in{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}}
+.pf-ms{display:flex;flex-direction:column;gap:8px}
+.pf-m{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--v9-line);background:rgba(255,255,255,.025);opacity:.62}
+.pf-m.ok{opacity:1;border-color:rgba(94,224,138,.3);background:rgba(94,224,138,.05)}
+.pf-mi{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--v9-line2);display:grid;place-items:center;font-size:12px;color:#000;flex:none}
+.pf-m.ok .pf-mi{background:var(--v9-ok);border-color:var(--v9-ok)}
+.pf-m b{display:block;font-size:13px;color:#eee;font-weight:600}
+.pf-m span{font-size:11.5px;color:var(--v9-tx3)}
+.pf-pl{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:13px 14px;margin-bottom:8px;border-radius:14px;border:1px solid var(--v9-line);background:rgba(255,255,255,.03);color:inherit;cursor:pointer;font-family:Inter,sans-serif}
+.pf-pl>div:first-child{flex:1;min-width:0}
+.pf-pl b{display:block;font-size:13.5px;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf-pl>div>span{font-size:11.5px;color:var(--v9-tx3)}
+.pf-pn{text-align:center;min-width:34px}
+.pf-pn b{font-family:Orbitron,sans-serif;font-size:15px;color:#fff}
+.pf-pn small{display:block;font-size:9px;color:var(--v9-tx3);text-transform:uppercase;letter-spacing:.6px}
+
+/* — barra di navigazione: gruppi + sfumature di scorrimento — */
+.nav-item.grp{margin-left:6px;position:relative}
+.nav-item.grp::before{content:'';position:absolute;left:-4px;top:12px;bottom:12px;width:1px;background:var(--v9-line2)}
+.bottom-nav.fade-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+.bottom-nav.fade-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 34px);mask-image:linear-gradient(90deg,transparent,#000 34px)}
+.bottom-nav.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent)}
 </style>
 <base target="_self">
 </head>
@@ -466,30 +820,15 @@ html.hue-ok body.stoner-mode .wdg{border-color:hsl(var(--rb) 100% 58% / .45)}
     <span id="header-title" class="t-graffiti" style="font-size:20px;letter-spacing:2px">GROW 420</span>
   </div>
   <div class="hdr-right">
+    <button id="alertBtn" class="hdr-ic al-btn" type="button" onclick="Alerts.open()" title="Centro avvisi" aria-label="Centro avvisi" aria-haspopup="dialog">🔔<span class="al-badge" id="alertBadge" hidden></span></button>
     <button id="installBtn" class="hdr-ic" type="button" onclick="installApp()" style="display:none" title="Installa app" aria-label="Installa app">📲</button>
     <button id="stonerBtn" class="hdr-ic" type="button" onclick="toggleStonerMode()" title="Stoner Mode" aria-label="Attiva Stoner Mode" aria-pressed="false">🌈</button>
     <button id="menuBtn" class="hdr-ic" type="button" onclick="toggleMenu()" style="font-size:20px" aria-label="Apri menu" aria-expanded="false" aria-controls="menu">☰</button>
   </div>
 </div>
 
-<div class="menu-overlay" id="menu" role="navigation" aria-label="Menu principale">
-  <button class="menu-btn" onclick="go('home')">🏠 Home</button>
-  <button class="menu-btn" onclick="go('dashboard')">📊 Dashboard</button>
-  <button class="menu-btn" onclick="go('guide')">📖 Guida</button>
-  <button class="menu-btn" onclick="go('journal')">📓 Journal</button>
-  <button class="menu-btn" onclick="go('diagnosis')">🔍 Diagnosi</button>
-  <button class="menu-btn" onclick="go('tools')">🧮 Tools</button>
-  <button class="menu-btn" onclick="go('strains')">🧬 Strains</button>
-  <button class="menu-btn" onclick="go('compare')">⚖️ Confronta</button>
-  <button class="menu-btn" onclick="go('coa')">📋 COA</button>
-  <button class="menu-btn" onclick="go('community')">💬 Community</button>
-  <button class="menu-btn" onclick="go('entities')">🏢 Entità</button>
-  <button class="menu-btn" onclick="go('timer')">⏱️ Timer</button>
-  <button class="menu-btn" onclick="go('reminders')">⏰ Promemoria</button>
-  <button class="menu-btn" onclick="go('iot')">📡 Sensori</button>
-  <button class="menu-btn" onclick="go('shop')">🛒 Attrezzatura</button>
-  <button class="menu-btn" onclick="go('library')">📚 Libreria</button>
-  <button class="menu-btn" id="menuInstall" onclick="installApp()" style="display:none;color:var(--ng)">📲 Installa app</button>
+<div class="menu-overlay" id="menu" aria-label="Menu" onclick="if(event.target===this||event.target.id==='menuPanel')closeMenu()">
+  <div class="menu-panel" id="menuPanel"></div>
 </div>
 <div id="glossaryGlobal"></div>
 <main id="app" role="main" style="padding-top:calc(60px + env(safe-area-inset-top,0px))"></main>
@@ -896,12 +1235,15 @@ async function addPhoto(plantId, file) {
                         'image/jpeg',
                         0.82
                     );
+                    const pPl = (lsGet('grow-plants', []) || [])[plantId];
                     const id = await db.photos.add({
                         plantId,
                         logId: null,
                         data,
-                        createdAt: new Date().toISOString()
+                        createdAt: new Date().toISOString(),
+                        phase: pPl && typeof pPl.phase === 'number' ? pPl.phase : null
                     });
+                    if (typeof Gal !== 'undefined') Gal.all = null;
                     resolve(id);
                 } catch(err) {
                     reject(err);
@@ -918,7 +1260,7 @@ async function addPhoto(plantId, file) {
 async function getPlantPhotos(plantId, limit = 50) {
     return await db.photos.where('plantId').equals(plantId).reverse().limit(limit).toArray();
 }
-async function deletePhoto(id) { await db.photos.delete(id); }
+async function deletePhoto(id) { await db.photos.delete(id); if (typeof Gal !== 'undefined') Gal.all = null; }
 
 // ── 9. EXPORT / IMPORT ────────────────────────────────────
 async function exportAllData() {
@@ -1501,7 +1843,7 @@ function renderJointProgress(pct, size=400){
     const smoking = pct > 0 && pct < 100;
     let smokeHtml = '';
     if(smoking){
-        smokeHtml = `<div class="joint-smoke">
+        smokeHtml = `<div class="joint-smoke" style="left:${burn}%;right:auto;transform:translate(-50%,-72%)">
             <div class="smoke-particle" style="animation-delay:0s"></div>
             <div class="smoke-particle" style="animation-delay:0.3s"></div>
             <div class="smoke-particle" style="animation-delay:0.6s"></div>
@@ -1645,24 +1987,26 @@ container.appendChild(el)
 let currentPage='home',currentStageIndex=0,lastStageIndex=-1;
 const navItems=[
 {id:'home',label:'Home',icon:'🏠',color:'var(--ng)'},
-{id:'dashboard',label:'Dashboard',icon:'📊',color:'var(--nc)'},
-{id:'guide',label:'Guida',icon:'📖',color:'var(--ng)'},
 {id:'journal',label:'Journal',icon:'📓',color:'var(--np)'},
+{id:'gallery',label:'Galleria',icon:'🖼️',color:'var(--np)'},
+{id:'dashboard',label:'Dashboard',icon:'📊',color:'var(--nc)'},
+{id:'profile',label:'Profilo',icon:'👤',color:'var(--nc)'},
+{id:'guide',label:'Guida',icon:'📖',color:'var(--ng)',grp:1},
 {id:'diagnosis',label:'Diagnosi',icon:'🔍',color:'var(--no)'},
 {id:'tools',label:'Tools',icon:'🧮',color:'var(--nc)'},
-{id:'strains',label:'Strains',icon:'🧬',color:'var(--nk)'},
-{id:'compare',label:'Confronta',icon:'⚖️',color:'var(--nc)'},
-{id:'coa',label:'COA',icon:'📋',color:'var(--nc)'},
-{id:'community',label:'Community',icon:'💬',color:'var(--ny)'},
-{id:'entities',label:'Entità',icon:'🏢',color:'var(--np)'},
 {id:'timer',label:'Timer',icon:'⏱️',color:'var(--ny)'},
 {id:'reminders',label:'Promemoria',icon:'⏰',color:'var(--ny)'},
 {id:'iot',label:'Sensori',icon:'📡',color:'var(--nc)'},
+{id:'strains',label:'Strains',icon:'🧬',color:'var(--nk)',grp:1},
+{id:'library',label:'Libreria',icon:'📚',color:'#c4a35a'},
+{id:'compare',label:'Confronta',icon:'⚖️',color:'var(--nc)'},
+{id:'coa',label:'COA',icon:'📋',color:'var(--nc)'},
 {id:'shop',label:'Attrezzatura',icon:'🛒',color:'var(--ng)'},
-{id:'library',label:'Libreria',icon:'📚',color:'#c4a35a'}
+{id:'community',label:'Community',icon:'💬',color:'var(--ny)',grp:1},
+{id:'entities',label:'Entità',icon:'🏢',color:'var(--np)'}
 ];
 
-function toggleMenu(){const m=document.getElementById('menu');const open=m.classList.toggle('open');const b=document.getElementById('menuBtn');if(b){b.setAttribute('aria-expanded',open?'true':'false');b.setAttribute('aria-label',open?'Chiudi menu':'Apri menu')}}
+function toggleMenu(){const m=document.getElementById('menu');const open=m.classList.toggle('open');if(open&&typeof Menu!=='undefined')Menu.render();const b=document.getElementById('menuBtn');if(b){b.setAttribute('aria-expanded',open?'true':'false');b.setAttribute('aria-label',open?'Chiudi menu':'Apri menu')}}
 // ═══════════════════════════════════════════════════════════
 // PROFESSIONAL ENGINEERING
 // Toast · Modal · Keyboard · AutoSave · Report · OfflineQueue
@@ -1805,6 +2149,8 @@ function go(page,fromPop){
 if(!navItems.some(n=>n.id===page))page='home';
 currentPage=page;
 closeMenu();
+if(typeof Gal!=='undefined')Gal.closeAll();
+if(page==='home')Wst.trAnim=true;
 window.scrollTo(0,0);
 // cronologia: il tasto Indietro (Android/browser) torna alla pagina precedente invece di chiudere l'app
 if(!fromPop){try{if(location.hash!=='#'+page)history.pushState({p:page},'','#'+page)}catch(e){}}
@@ -1821,11 +2167,58 @@ if(title&&item){title.style.color=item.color;title.style.textShadow='0 0 10px '+
 function renderBottomNav(){
 const nav=document.getElementById('bottomNav');
 const prevScroll=nav.scrollLeft;
-nav.innerHTML=navItems.map(item=>`<button class="nav-item ${item.id===currentPage?'active':''}" onclick="go('${item.id}')" style="color:${item.id===currentPage?item.color:'#666'}"${item.id===currentPage?' aria-current="page"':''}><span style="font-size:20px">${item.icon}</span><span>${item.label}</span></button>`).join('');
+nav.innerHTML=navItems.map(item=>`<button class="nav-item${item.grp?' grp':''} ${item.id===currentPage?'active':''}" onclick="go('${item.id}')" style="color:${item.id===currentPage?item.color:'#666'}"${item.id===currentPage?' aria-current="page"':''}><span style="font-size:20px">${item.icon}</span><span>${item.label}</span></button>`).join('');
 // mantiene lo scroll della barra e porta in vista la voce attiva (prima tornava sempre all'inizio)
 nav.scrollLeft=prevScroll;
 const act=nav.querySelector('.nav-item.active');
 if(act){const l=act.offsetLeft,r=l+act.offsetWidth;if(l<nav.scrollLeft||r>nav.scrollLeft+nav.clientWidth){nav.scrollLeft=l-(nav.clientWidth-act.offsetWidth)/2}}
+navFade();
+}
+function navFade(){
+const n=document.getElementById('bottomNav');if(!n)return;
+n.classList.toggle('fade-l',n.scrollLeft>8);
+n.classList.toggle('fade-r',n.scrollLeft+n.clientWidth<n.scrollWidth-8);
+}
+document.getElementById('bottomNav').addEventListener('scroll',navFade,{passive:true});
+window.addEventListener('resize',navFade);
+// ─────────────────────────────────────────────────────────────
+// 🧬 AGGIORNAMENTO DOM "INTELLIGENTE" (v8)
+// Prima ogni click ricostruiva tutta la pagina (innerHTML): icone, joint, scroll orizzontali e
+// input venivano ricreati → si vedeva uno "scatto". Ora, sulla stessa pagina, si confronta il
+// nuovo HTML con il DOM esistente e si cambia solo ciò che è diverso (immagini già caricate,
+// scroll e focus restano, il joint si "consuma" con una transizione fluida).
+// Pagine con grafici/init asincroni (dashboard, journal, promemoria) restano sul vecchio metodo.
+// ─────────────────────────────────────────────────────────────
+const MORPH_PAGES=new Set(['home','guide','diagnosis','tools','strains','timer','library','compare','coa','community','entities','iot','shop']);
+function morphAttrs(f,t){
+  Array.from(f.attributes).forEach(a=>{if(!t.hasAttribute(a.name))f.removeAttribute(a.name)});
+  Array.from(t.attributes).forEach(a=>{if(f.getAttribute(a.name)!==a.value)f.setAttribute(a.name,a.value)});
+}
+function morphNode(f,t){
+  if(f.nodeType!==t.nodeType||f.nodeName!==t.nodeName){f.replaceWith(t.cloneNode(true));return}
+  if(f.nodeType!==1){if(f.nodeValue!==t.nodeValue)f.nodeValue=t.nodeValue;return}
+  morphAttrs(f,t);
+  const n=f.nodeName,focus=f===document.activeElement;
+  if(n==='INPUT'){
+    if(f.type==='checkbox'||f.type==='radio')f.checked=t.hasAttribute('checked');
+    else if(!focus){const v=t.getAttribute('value')||'';if(f.value!==v)f.value=v}
+    return;
+  }
+  if(n==='TEXTAREA'){if(!focus&&f.value!==t.value)f.value=t.value;return}
+  if(f.hasAttribute('data-morph-skip'))return;
+  morphKids(f,t);
+  if(n==='SELECT'&&!focus)f.selectedIndex=t.selectedIndex;
+}
+function morphKids(f,t){
+  const tk=Array.from(t.childNodes);
+  for(let i=0;i<tk.length;i++){
+    const fc=f.childNodes[i];
+    if(!fc)f.appendChild(tk[i].cloneNode(true));else morphNode(fc,tk[i]);
+  }
+  while(f.childNodes.length>tk.length)f.removeChild(f.lastChild);
+}
+function morphInto(root,html){
+  const tpl=document.createElement('template');tpl.innerHTML=html;morphKids(root,tpl.content);
 }
 function renderPage(){
 const app=document.getElementById('app');
@@ -1847,14 +2240,17 @@ case'community':html=renderCommunity();break;
 case'entities':html=renderEntities();break;
 case'iot':html=renderIoT();break;
 case'shop':html=renderShop();break;
+case'gallery':html=renderGallery();break;
+case'profile':html=renderProfile();break;
 default:html=renderHome()
 }
 // stessa pagina (toggle step, filtri, stoner…): niente fade-in e scroll invariato → niente "sfarfallio"
 const samePage=app.dataset.page===currentPage&&!!app.firstElementChild;
 const keepY=window.scrollY;
-app.innerHTML=`<div class="page-bg" style="${getPageBg()}"></div><div class="page${samePage?' same':''}">${html}</div>`;
+const pageHtml=`<div class="page-bg" style="${getPageBg()}"></div><div class="page${samePage?' same':''}">${html}</div>`;
+if(samePage&&MORPH_PAGES.has(currentPage)){morphInto(app,pageHtml)}
+else{app.innerHTML=pageHtml;if(samePage)window.scrollTo(0,keepY)}
 app.dataset.page=currentPage;
-if(samePage)window.scrollTo(0,keepY);
 a11yLabelInputs(app);
 switch(currentPage){
 case'home':initHome();break;
@@ -1873,8 +2269,11 @@ case'community':initCommunity();break;
 case'entities':initEntities();break;
 case'iot':initIoT();break;
 case'shop':initShop();break;
+case'gallery':initGallery();break;
+case'profile':initProfile();break;
 default:initHome()
 }
+Alerts.kick();
 }
 function toggleStonerMode(){            // ← FUORI, funzione globale
     const body=document.body;
@@ -1935,52 +2334,19 @@ ${renderInstallCard()}
 </svg>
 <div class="plant-shine"></div>
 <div class="plant-container">${stageImgs}</div>
-<div class="plant-particles" id="plantParticles"></div>
+<div class="plant-particles" id="plantParticles" data-morph-skip></div>
 <div class="plant-badge" style="color:${stageColor}">${phaseName}</div>
 </div>
-<div class="card gl-g" style="padding:24px;margin-bottom:20px;text-align:center;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(57,255,20,.25)">
-<div style="font-size:13px;color:#808080;margin-bottom:8px;font-family:Orbitron;letter-spacing:2px;text-transform:uppercase">Progresso Totale</div>
-<div style="font-size:48px;font-weight:900;color:var(--ng);font-family:Orbitron;text-shadow:0 0 20px rgba(57,255,20,.4)">${overall}%</div>
-<div class="prog" style="margin-top:16px"><div class="prog-f" style="width:${overall}%;background:var(--ng);box-shadow:0 0 12px rgba(57,255,20,.5)"></div></div>
-<div style="font-size:12px;color:#808080;margin-top:8px">${completed} / ${totalSteps} step completati</div>
-</div>`;
-if(active){
-html+=`<div class="card gl-p" style="padding:20px;margin-bottom:20px;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(191,0,255,.25)">
-<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
-<span style="font-size:32px">🌿</span>
-<div style="flex:1">
-<div style="font-weight:700;font-size:16px">${esc(active.name)}</div>
-<div style="font-size:12px;color:#888">${esc(active.strain)} • Giorno ${calcPlantDay(active)}</div>
+<div class="hs-card">
+${active?`<div class="hs-top"><span class="hs-leaf" aria-hidden="true">🌿</span><div class="hs-id"><div class="hs-name">${esc(active.name)}</div><div class="hs-sub">${active.strain?esc(active.strain)+' • ':''}Giorno ${calcPlantDay(active)}</div></div><button type="button" class="al-chip" onclick="Alerts.open()" aria-label="Apri il centro avvisi">${Alerts.chipHtml()}</button></div>
+<div class="hs-badges"><span class="hs-bd ph">${phases[active.phase]?.name||'Setup'}</span><span class="hs-bd">${esc(active.type)}</span><span class="hs-bd">⭐ Attiva</span></div>`
+:`<div class="hs-top"><span class="hs-leaf" aria-hidden="true">🌱</span><div class="hs-id"><div class="hs-name">Nessuna pianta attiva</div><div class="hs-sub">Aggiungi la prima dal Journal</div></div><button type="button" class="al-chip" onclick="Alerts.open()" aria-label="Apri il centro avvisi">${Alerts.chipHtml()}</button></div>`}
+<div class="hs-prog"><div class="hs-pct">${overall}%</div><div class="hs-bar" role="progressbar" aria-valuenow="${overall}" aria-valuemin="0" aria-valuemax="100" aria-label="Progresso totale"><i style="width:${overall}%"></i></div><div class="hs-cnt">${completed}/${totalSteps} step</div></div>
+<div class="hs-act">${active?(plants.length>1?`<button type="button" onclick="showPlantSelector()">🌿 Cambia pianta</button>`:`<button type="button" onclick="openPlant(${getActivePlantIndex()})">🌿 Scheda pianta</button>`):`<button type="button" onclick="go('journal');newPlant()">➕ Aggiungi pianta</button>`}<button type="button" onclick="go('profile')">👤 Profilo</button></div>
 </div>
-<span style="font-size:11px;color:var(--ng);font-family:Orbitron">⭐ ATTIVA</span>
-</div>
-<div style="display:flex;gap:8px;flex-wrap:wrap">
-<span class="badge" style="background:rgba(191,0,255,.15);color:var(--np);border:1px solid var(--np)">${phases[active.phase]?.name||'Setup'}</span>
-<span class="badge" style="background:rgba(57,255,20,.1);color:var(--ng)">${esc(active.type)}</span>
-</div>
-${plants.length>1?`<button onclick="showPlantSelector()" class="btn" style="width:100%;margin-top:12px;background:#111;color:#888;border:1px solid #333;font-size:11px;padding:8px">🌿 Cambia Pianta Attiva</button>`:''}
-</div>`;
-}
+`;
 html+=renderWidgets();
-html+=`<div class="wdg-bar" style="margin-top:28px"><h2>Esplora</h2></div>`;
-const items=[
-{label:'Guida',icon:'📖',color:'var(--ng)',page:'guide',desc:'10 fasi'},
-{label:'Journal',icon:'📓',color:'var(--np)',page:'journal',desc:'Le tue piante'},
-{label:'Diagnosi',icon:'🔍',color:'var(--no)',page:'diagnosis',desc:'Problemi'},
-{label:'Tools',icon:'🧮',color:'var(--nc)',page:'tools',desc:'Calcolatori'},
-{label:'Strains',icon:'🧬',color:'var(--nk)',page:'strains',desc:'Varietà'},
-{label:'Timer',icon:'⏱️',color:'var(--ny)',page:'timer',desc:'Countdown'},
-{label:'Libreria',icon:'📚',color:'#c4a35a',page:'library',desc:'Knowledge'}
-];
-html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">`;
-items.forEach(item=>{
-html+=`<button class="card" onclick="go('${item.page}')" style="padding:20px;text-align:left;border:none;background:rgba(17,17,17,.30);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)">
-<span style="font-size:28px">${item.icon}</span>
-<span style="font-weight:700;font-size:14px;color:${item.color};font-family:Orbitron;letter-spacing:1px">${item.label}</span>
-<span style="font-size:11px;color:#808080">${item.desc}</span>
-</button>`;
-});
-html+=`</div><div style="text-align:center;margin-top:16px">${renderCloudStatus()}</div></div>`;
+html+=`<div style="text-align:center;margin-top:24px">${renderCloudStatus()}</div></div>`;
 return html;
 }
 function initHome(){
@@ -1988,6 +2354,8 @@ bindWidgets();
 updateInstallUI();
 const container=document.getElementById('plantParticles');
 if(!container)return;
+if(container._stage===currentStageIndex&&container.children.length){lastStageIndex=currentStageIndex;return}
+container._stage=currentStageIndex;
 container.innerHTML='';
 const count=[3,5,7,9,12,0][currentStageIndex]||0;
 const colors=['#8fb87a','#6db56d','#4ea86a','#b8a84a','#c47a3a','#7a4ea8'];
@@ -2005,7 +2373,7 @@ container.appendChild(p)
 }
 lastStageIndex=currentStageIndex;
 }
-const pageBgs={home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',dashboard:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',compare:'assets/art6.jpg',coa:'assets/art4.jpg',community:'assets/art2.jpg',entities:'assets/art5.jpg',timer:'assets/art7.jpg',reminders:'assets/art7.jpg',iot:'assets/art3.jpg',shop:'assets/art5.jpg',library:'assets/bg-library.jpg'};
+const pageBgs={gallery:'assets/art3.jpg',profile:'assets/art1.jpg',home:'assets/art1.jpg',guide:'assets/art2.jpg',journal:'assets/art3.jpg',dashboard:'assets/art3.jpg',diagnosis:'assets/art4.jpg',tools:'assets/art5.jpg',strains:'assets/art6.jpg',compare:'assets/art6.jpg',coa:'assets/art4.jpg',community:'assets/art2.jpg',entities:'assets/art5.jpg',timer:'assets/art7.jpg',reminders:'assets/art7.jpg',iot:'assets/art3.jpg',shop:'assets/art5.jpg',library:'assets/bg-library.jpg'};
 function getPageBg(){const url=pageBgs[currentPage];return url?`background:linear-gradient(rgba(5,5,5,.55),rgba(5,5,5,.70)),url('${url}') center/cover no-repeat;`:''}
 // phaseIconFiles spostato sopra phases per fix dependency
 let guideState={activePhase:0,tab:'steps'};
@@ -2309,7 +2677,7 @@ ${[
 <div style="font-size:13px;color:#aaa;line-height:1.7;white-space:pre-wrap">${esc(pl.notes)||'<span style="color:#444;font-style:italic">Nessuna nota...</span>'}</div>
 </div>
 <div class="card" style="padding:20px">
-<div style="font-size:11px;color:#808080;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">Album Foto</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><div style="font-size:11px;color:#808080;font-family:Orbitron;text-transform:uppercase;letter-spacing:2px">Album Foto</div><button type="button" onclick="go('gallery')" style="background:none;border:none;color:var(--np);font-size:11px;font-family:Orbitron;cursor:pointer;padding:6px 0">GALLERIA ›</button></div>
 <div class="photo-grid" id="photoGrid"></div>
 <div style="margin-top:12px">
 <input type="file" id="photoInput" accept="image/*" multiple style="display:none" onchange="uploadPlantPhotos()">
@@ -2377,7 +2745,8 @@ ${(pl.logs||[]).some(l=>l.isProblem)?`<span class="badge" style="background:rgba
 </div>
 
 <div class="card" style="padding:20px">
-<div style="font-size:11px;color:#808080;font-family:Orbitron;margin-bottom:16px;text-transform:uppercase;letter-spacing:2px">📅 Timeline Grow</div>
+<div style="font-size:11px;color:#808080;font-family:Orbitron;margin-bottom:12px;text-transform:uppercase;letter-spacing:2px">📅 Diario Grow</div>
+${Diary.chips()}
 <div class="timeline-wrap" id="logTimeline">
 ${renderTimelineHTML(pl)}
 </div>
@@ -2400,8 +2769,8 @@ if(!name){notify('Inserisci un nome per la pianta');return}
 const plants=lsGet('grow-plants',[]);
 if(journalEditId===null&&plants.length>=5){notify('Hai raggiunto il limite massimo di 5 piantine.');return}
 const data={name,strain,type,phase,day,startDate,notes,logs:[],progress:{}};
-if(journalEditId!==null){data.logs=plants[journalEditId].logs||[];data.progress=plants[journalEditId].progress||{};plants[journalEditId]=Object.assign({},plants[journalEditId],data);lsSet('grow-plants',plants);journalView='list';journalEditId=null;renderPage()}
-else{plants.push(data);lsSet('grow-plants',plants);journalView='list';journalEditId=null;if(plants.length>1){showPlantSelector()}else{setActivePlantIndex(0)}}
+if(journalEditId!==null){data.logs=plants[journalEditId].logs||[];data.progress=plants[journalEditId].progress||{};const oldPh=plants[journalEditId].phase;plants[journalEditId]=Object.assign({},plants[journalEditId],data);recordPhase(plants[journalEditId],oldPh,phase);lsSet('grow-plants',plants);journalView='list';journalEditId=null;renderPage()}
+else{if(startDate&&!isNaN(new Date(startDate+'T00:00:00')))data.phaseLog=[{p:phase,d:new Date(startDate+'T00:00:00').toISOString(),start:true}];plants.push(data);lsSet('grow-plants',plants);journalView='list';journalEditId=null;if(plants.length>1){showPlantSelector()}else{setActivePlantIndex(0)}}
 }
 async function deletePlant(){
 if(!await confirmAsync('Questa azione è irreversibile. Tutti i log di questa pianta verranno rimossi.',{title:'Elimina pianta',okText:'Elimina'}))return;
@@ -2461,38 +2830,6 @@ renderPage();
 // ═══════════════════════════════════════════════════════════
 // TIMELINE VERTICALE + PROBLEM TIMELINE + DASHBOARD
 // ═══════════════════════════════════════════════════════════
-
-function renderTimelineHTML(pl) {
-    const logs = (pl.logs || []).slice().reverse();
-    if (!logs.length) {
-        return `<div style="text-align:center;padding:20px;color:#444;font-size:12px">Nessun log ancora.<br>Inizia a tracciare il tuo grow!</div>`;
-    }
-    let html = `<div class="timeline-line"></div>`;
-    logs.forEach((log, i) => {
-        const isProblem = log.isProblem;
-        const tags = (log.tags || []).map(t => `<span class="log-tag">#${esc(t)}</span>`).join('');
-        const metrics = log.metrics ? Object.entries(log.metrics).filter(([k, v]) => v !== undefined && v !== null && v !== '').map(([k, v]) => {
-            let color = '#888';
-            if (k === 'ph') color = 'var(--nc)';
-            if (k === 'ec') color = 'var(--np)';
-            if (k === 'temp') color = 'var(--no)';
-            if (k === 'humidity') color = 'var(--ng)';
-            return `<span class="timeline-metric" style="color:${color};border-color:${color}30">${k.toUpperCase()}: ${v}</span>`;
-        }).join('') : '';
-
-        html += `<div class="timeline-item">
-<div class="timeline-dot ${isProblem ? 'problem' : ''}"></div>
-<div class="timeline-card">
-<div class="timeline-date">${esc(log.date)} ${isProblem ? '<span style="color:var(--no);margin-left:8px">⚠️ PROBLEMA</span>' : ''}</div>
-<div class="timeline-text">${esc(log.text)}</div>
-${tags ? `<div class="timeline-tags">${tags}</div>` : ''}
-${metrics ? `<div class="timeline-metrics">${metrics}</div>` : ''}
-${isProblem ? `<div class="timeline-problem-badge">🔍 Problema segnalato</div>` : ''}
-</div>
-</div>`;
-    });
-    return html;
-}
 
 function renderProblemChartHTML(pl) {
     const hasProblems = (pl.logs || []).some(l => l.isProblem && l.metrics);
@@ -2613,7 +2950,8 @@ async function initJournal(){
         if(plant){
             initProblemChart(plant);
             const photos = await getPlantPhotos(journalEditId);
-            grid.innerHTML = photos.map(p => `<img src="${p.data}" class="photo-thumb" loading="lazy" onclick="confirmAsync('Eliminare questa foto?',{title:'Elimina foto',okText:'Elimina'}).then(ok=>{if(ok)deletePhoto(${p.id}).then(()=>renderPage())})">`).join('');
+            Diary.photos = photos; Diary.paint();
+            grid.innerHTML = photos.map(p => `<img src="${p.data}" class="photo-thumb" loading="lazy" onclick="Gal.openPlant(${journalEditId},${p.id})" alt="Foto pianta">`).join('');
             if(!photos.length) grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#444;font-size:12px;padding:12px">Nessuna foto ancora</div>';
         }
     }
@@ -2725,7 +3063,13 @@ function runDiagnosis(){
 diagResults=diagnosisEngine.evaluate(diagInput);
 renderPage();
 }
-function initDiagnosis(){}
+function initDiagnosis(){
+  // i campi riflettono sempre diagInput (prima le tendine tornavano su "Sintomo principale..." dopo ogni scelta)
+  const keys=['symptom','distribution','timeline','stage'];
+  document.querySelectorAll('#app select.inp').forEach((el,i)=>{if(keys[i]&&el!==document.activeElement)el.value=diagInput[keys[i]]||''});
+  const mk=['ph','ec','temp','humidity'];
+  document.querySelectorAll('#app input.inp[type=number]').forEach((el,i)=>{if(mk[i]&&el!==document.activeElement)el.value=diagInput.metrics[mk[i]]||''});
+}
 function renderTools(){
 return `<div>
 <div style="margin-bottom:20px">
@@ -5380,22 +5724,42 @@ function renderSimpleDiff(oldText,newText){
 // 🧩 WIDGET HOME — interattivi, riordinabili, tutto offline
 // ═══════════════════════════════════════════════════════════
 const WDG_DEFS = [
-    {id:'today',    icon:'✅', title:'Oggi',            c:'#39ff14', rgb:'57,255,20'},
-    {id:'water',    icon:'💧', title:'Acqua',           c:'#4aa8ff', rgb:'74,168,255'},
-    {id:'vpd',      icon:'🌡️', title:'VPD live',        c:'#ff6600', rgb:'255,102,0', wide:true},
-    {id:'light',    icon:'💡', title:'Ciclo luce',      c:'#f0e800', rgb:'240,232,0'},
-    {id:'moon',     icon:'🌙', title:'Luna',            c:'#d8d4ff', rgb:'216,212,255'},
-    {id:'cycle',    icon:'🗓️', title:'Ciclo pianta',    c:'#c4a35a', rgb:'196,163,90', wide:true},
-    {id:'trend',    icon:'📈', title:'Trend ambiente',  c:'#bf00ff', rgb:'191,0,255', wide:true},
-    {id:'weather',  icon:'🌤️', title:'Meteo',           c:'#7aa7ff', rgb:'122,167,255', wide:true},
-    {id:'phase',    icon:'🧭', title:'Parametri fase',  c:'#8fb87a', rgb:'143,184,122'},
-    {id:'energy',   icon:'🔌', title:'Costo energia',   c:'#ffb020', rgb:'255,176,32'},
-    {id:'activity', icon:'🔥', title:'Attività',        c:'#39ff14', rgb:'57,255,20', wide:true},
-    {id:'rem',      icon:'⏰', title:'Promemoria',      c:'#ff1493', rgb:'255,20,147'},
-    {id:'quick',    icon:'⚡', title:'Log rapido',      c:'#00ffff', rgb:'0,255,255'}
+    {id:'today',     icon:'✅', title:'Oggi',            c:'#7be495', rgb:'123,228,149', grp:'now'},
+    {id:'water',     icon:'💧', title:'Acqua',           c:'#5aaeff', rgb:'90,174,255',  grp:'now'},
+    {id:'quick',     icon:'⚡', title:'Log rapido',      c:'#5ce1e6', rgb:'92,225,230',  grp:'now'},
+    {id:'rem',       icon:'⏰', title:'Promemoria',      c:'#f472b6', rgb:'244,114,182', grp:'now', go:'reminders'},
+    {id:'vpd',       icon:'🌡️', title:'VPD live',        c:'#ff6600', rgb:'255,102,0',   grp:'env', wide:true},
+    {id:'trend',     icon:'📈', title:'Trend ambiente',  c:'#b388ff', rgb:'179,136,255', grp:'env', wide:true},
+    {id:'weather',   icon:'🌤️', title:'Meteo',           c:'#7aa7ff', rgb:'122,167,255', grp:'env', wide:true},
+    {id:'light',     icon:'💡', title:'Ciclo luce',      c:'#f0d878', rgb:'240,216,120', grp:'env'},
+    {id:'moon',      icon:'🌙', title:'Luna',            c:'#d8d4ff', rgb:'216,212,255', grp:'env'},
+    {id:'phase',     icon:'🧭', title:'Parametri fase',  c:'#9bc98a', rgb:'155,201,138', grp:'env'},
+    {id:'energy',    icon:'🔌', title:'Costo energia',   c:'#f5b84a', rgb:'245,184,74',  grp:'env'},
+    {id:'insights',  icon:'🔬', title:'Grow Insights',   c:'#8ab4ff', rgb:'138,180,255', grp:'grow', go:'profile', wide:true},
+    {id:'cycle',     icon:'🗓️', title:'Ciclo pianta',    c:'#c4a35a', rgb:'196,163,90',  grp:'grow', wide:true},
+    {id:'journal',   icon:'📓', title:'Journal',         c:'#b388ff', rgb:'179,136,255', grp:'grow', go:'journal'},
+    {id:'gallery',   icon:'🖼️', title:'Galleria',        c:'#e0a8ff', rgb:'224,168,255', grp:'grow', go:'gallery'},
+    {id:'dash',      icon:'📊', title:'Dashboard',       c:'#5cc8ff', rgb:'92,200,255',  grp:'grow', go:'dashboard'},
+    {id:'activity',  icon:'🔥', title:'Attività',        c:'#7be495', rgb:'123,228,149', grp:'grow', wide:true},
+    {id:'guide',     icon:'📖', title:'Guida',           c:'#8fcf8f', rgb:'143,207,143', grp:'grow', go:'guide', wide:true},
+    {id:'diag',      icon:'🔍', title:'Diagnosi',        c:'#ff8a5c', rgb:'255,138,92',  grp:'explore', go:'diagnosis', wide:true},
+    {id:'tools',     icon:'🧮', title:'Tools',           c:'#4fd8e8', rgb:'79,216,232',  grp:'explore', go:'tools'},
+    {id:'timer',     icon:'⏱️', title:'Timer',           c:'#f0d878', rgb:'240,216,120', grp:'explore', go:'timer'},
+    {id:'strain',    icon:'🧬', title:'Strains',         c:'#ff7eb6', rgb:'255,126,182', grp:'explore', go:'strains', wide:true},
+    {id:'library',   icon:'📚', title:'Libreria',        c:'#e0c070', rgb:'224,192,112', grp:'explore', go:'library'},
+    {id:'shop',      icon:'🛒', title:'Attrezzatura',    c:'#4fd8b0', rgb:'79,216,176',  grp:'explore', go:'shop'},
+    {id:'community', icon:'💬', title:'Community',       c:'#f5c85a', rgb:'245,200,90',  grp:'explore', go:'community', wide:true}
+];
+const WDG_SECS = [
+    ['now',     'Adesso',       'Le azioni di ogni giorno'],
+    ['env',     'Ambiente',     'Clima, luce e andamento'],
+    ['grow',    'Coltivazione', 'Storia e panoramica della pianta'],
+    ['explore', 'Esplora',      'Strumenti, guide e community']
 ];
 const Wst = {editing:false, phaseSel:null, trend:lsGet('grow-w-trend','temp'), vpd:null, vpdRange:[0.8,1.2], light:null,
     moonOff:0, cycSel:null, wxBusy:false, wxResults:null, wxQ:'',
+    tab:(t => ['all', 'now', 'env', 'grow', 'explore'].includes(t) ? t : 'all')(lsGet('grow-w-tab', 'all')),
+    trR:lsGet('grow-w-trr', '14'), trAnim:true, col:Object.assign({explore:true}, lsGet('grow-w-col', {}) || {}), dg:{s:'', d:''}, tl:'ec', tlv:{ecV:'', ecFrom:'ec', dose:'', lit:'', pct:'100'}, stIdx:null, libIdx:null, shIdx:null,
     energy:Object.assign({w:240, h:18, p:0.30}, lsGet('grow-w-energy', {}) || {})};
 
 function wdgLayout(){
@@ -5580,42 +5944,6 @@ const WDG_BODY = {
 <input id="lightOn" class="wdg-inp sm" type="time" value="${on}" onchange="Wdg.lightOn(this.value)"></div></div>
 <div class="wdg-chips" style="margin:12px 0 0">${chip(18, '18/6 Veg')}${chip(20, '20/4')}${chip(24, '24/0')}${chip(12, '12/12 Fiore')}</div>`;
     },
-    trend(){
-        const {pl} = wdgPlant();
-        if(!pl) return wdgNeedPlant();
-        const defs = {temp:{l:'Temp', u:'°C'}, humidity:{l:'UR', u:'%'}, ph:{l:'pH', u:''}, ec:{l:'EC', u:''}};
-        if(!defs[Wst.trend]) Wst.trend = 'temp';
-        const m = Wst.trend, d = defs[m];
-        const chips = '<div class="wdg-chips">' + Object.keys(defs).map(k => `<button type="button" class="wdg-chip ${k === m ? 'on' : ''}" onclick="Wdg.setTrend('${k}')">${defs[k].l}</button>`).join('') + '</div>';
-        const pts = (pl.logs || []).map(l => parseMetricValue(l.metrics && l.metrics[m])).filter(v => v !== null).slice(-14);
-        if(pts.length < 2){
-            return chips + `<div class="wdg-muted">${pts.length ? 'Ultima misura: <b style="color:#fff">' + pts[0] + d.u + '</b> — ' : ''}Registra almeno 2 misure di ${d.l} (dal Journal, dal Log rapido o dal widget VPD) per vedere il trend.</div>`;
-        }
-        const ph = phases[pl.phase] || phases[3];
-        let band = null;
-        if(m === 'temp') band = wdgRange(ph.temp);
-        else if(m === 'humidity') band = wdgRange(ph.humidity);
-        else if(m === 'ph') band = [6.0, 6.5];
-        let mn = Math.min(...pts), mx = Math.max(...pts);
-        if(band){ mn = Math.min(mn, band[0]); mx = Math.max(mx, band[1]); }
-        const pad = (mx - mn) * 0.12 || 1;
-        mn -= pad; mx += pad;
-        const W = 300, H = 96, px = 10, py = 8;
-        const X = i => px + i * (W - 2 * px) / (pts.length - 1);
-        const Y = v => H - py - (v - mn) / (mx - mn) * (H - 2 * py);
-        const line = pts.map((v, i) => (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(v).toFixed(1)).join('');
-        const area = line + `L${X(pts.length - 1).toFixed(1)} ${H}L${X(0).toFixed(1)} ${H}Z`;
-        const last = pts[pts.length - 1];
-        const inBand = !band || (last >= band[0] && last <= band[1]);
-        const dc = inBand ? '#39ff14' : '#ff6600';
-        const bandSvg = band ? `<rect x="0" y="${Y(band[1]).toFixed(1)}" width="${W}" height="${(Y(band[0]) - Y(band[1])).toFixed(1)}" fill="rgba(57,255,20,.09)"/><line x1="0" x2="${W}" y1="${Y(band[1]).toFixed(1)}" y2="${Y(band[1]).toFixed(1)}" stroke="rgba(57,255,20,.25)" stroke-dasharray="3 4"/><line x1="0" x2="${W}" y1="${Y(band[0]).toFixed(1)}" y2="${Y(band[0]).toFixed(1)}" stroke="rgba(57,255,20,.25)" stroke-dasharray="3 4"/>` : '';
-        const dots = pts.map((v, i) => `<circle cx="${X(i).toFixed(1)}" cy="${Y(v).toFixed(1)}" r="${i === pts.length - 1 ? 5 : 2.6}" fill="${i === pts.length - 1 ? dc : '#bf00ff'}" stroke="#0d0d0d" stroke-width="1.5"><title>${v}${d.u}</title></circle>`).join('');
-        const avg = pts.reduce((a, b) => a + b, 0) / pts.length;
-        const f = v => (Math.round(v * 100) / 100).toString();
-        return chips + `<svg class="trend-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="Andamento ${d.l}, ultimi ${pts.length} valori"><defs><linearGradient id="trg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bf00ff" stop-opacity=".35"/><stop offset="1" stop-color="#bf00ff" stop-opacity="0"/></linearGradient></defs>${bandSvg}<path d="${area}" fill="url(#trg)"/><path d="${line}" fill="none" stroke="#bf00ff" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" style="filter:drop-shadow(0 0 4px rgba(191,0,255,.6))"/>${dots}</svg>
-<div class="trend-stats"><div><b style="color:${dc}">${f(last)}</b><small>Ultimo</small></div><div><b>${f(Math.min(...pts))}</b><small>Min</small></div><div><b>${f(Math.max(...pts))}</b><small>Max</small></div><div><b>${f(avg)}</b><small>Media</small></div></div>
-${band ? `<div class="wdg-cap" style="margin-top:8px">Fascia verde = target fase (${band[0]}–${band[1]}${d.u})</div>` : ''}`;
-    },
     phase(){
         const {pl} = wdgPlant();
         const sel = Wst.phaseSel !== null ? Wst.phaseSel : (pl && phases[pl.phase] ? pl.phase : 3);
@@ -5644,21 +5972,39 @@ ${band ? `<div class="wdg-cap" style="margin-top:8px">Fascia verde = target fase
 function wdgInner(id){
     const d = WDG_DEFS.find(x => x.id === id);
     const lay = wdgLayout();
-    const vis = lay.order.filter(i => !lay.hidden.includes(i));
+    const vis = lay.order.filter(i => !lay.hidden.includes(i) && (WDG_DEFS.find(x => x.id === i) || {}).grp === d.grp);   // si riordina dentro la propria sezione
     const i = vis.indexOf(id);
     const ctl = Wst.editing ? `<span class="wdg-ctl"><button type="button" aria-label="Sposta su" onclick="Wdg.move('${id}',-1)" ${i <= 0 ? 'disabled' : ''}>▲</button><button type="button" aria-label="Sposta giù" onclick="Wdg.move('${id}',1)" ${i >= vis.length - 1 ? 'disabled' : ''}>▼</button><button type="button" aria-label="Nascondi" onclick="Wdg.hide('${id}')">✕</button></span>` : '';
     let body;
     try{ body = WDG_BODY[id](); }catch(e){ console.warn('widget', id, e); body = '<div class="wdg-muted">Widget non disponibile</div>'; }
-    return `<div class="wdg-h"><span class="wdg-ic" aria-hidden="true">${d.icon}</span><h3 class="wdg-t">${d.title}</h3>${ctl}</div><div class="wdg-body">${body}</div>`;
+    const open = d.go && !Wst.editing ? `<button type="button" class="wdg-open" onclick="go('${d.go}')" aria-label="Apri ${d.title}">Apri ›</button>` : '';
+    return `<div class="wdg-h"><span class="wdg-ic" aria-hidden="true">${d.icon}</span><h3 class="wdg-t">${d.title}</h3>${open}${ctl}</div><div class="wdg-body">${body}</div>`;
+}
+function wdgCard(id, n){
+    const d = WDG_DEFS.find(x => x.id === id);
+    return `<section class="wdg ${d.wide ? 'wide' : ''}" id="wdg-${id}" style="--wc:${d.c};--wcr:${d.rgb};animation-delay:${Math.min(n, 8) * 45}ms" aria-label="${d.title}">${wdgInner(id)}</section>`;
 }
 function wdgRootInner(){
     const lay = wdgLayout();
     const vis = lay.order.filter(i => !lay.hidden.includes(i));
-    let h = `<div class="wdg-bar"><h2>Widget</h2><button type="button" class="wdg-edit ${Wst.editing ? 'on' : ''}" onclick="Wdg.toggleEdit()">${Wst.editing ? '✔ Fatto' : '✏️ Personalizza'}</button></div>`;
-    h += `<div class="wdg-grid ${Wst.editing ? 'wdg-editing' : ''}">` + vis.map(id => {
-        const d = WDG_DEFS.find(x => x.id === id);
-        return `<section class="wdg ${d.wide ? 'wide' : ''}" id="wdg-${id}" style="--wc:${d.c};--wcr:${d.rgb}" aria-label="${d.title}">${wdgInner(id)}</section>`;
-    }).join('') + '</div>';
+    const grpOf = id => (WDG_DEFS.find(x => x.id === id) || {}).grp;
+    let h = `<div class="wdg-bar"><h2>Cruscotto</h2><button type="button" class="wdg-edit ${Wst.editing ? 'on' : ''}" onclick="Wdg.toggleEdit()">${Wst.editing ? '✔ Fatto' : '✏️ Personalizza'}</button></div>`;
+    const tabs = [['all', 'Tutti']].concat(WDG_SECS.map(s => [s[0], s[1]]));
+    if(!Wst.editing) h += '<div class="wdg-chips wdg-tabs" role="group" aria-label="Sezioni del cruscotto">' + tabs.map(([k, l]) => `<button type="button" class="wdg-chip ${Wst.tab === k ? 'on' : ''}" aria-pressed="${Wst.tab === k}" onclick="Wdg.tab('${k}')">${l}</button>`).join('') + '</div>';
+    const grid = ids => `<div class="wdg-grid ${Wst.editing ? 'wdg-editing' : ''}">${ids.map((id, n) => wdgCard(id, n)).join('')}</div>`;
+    const single = !Wst.editing && Wst.tab !== 'all';
+    let any = false;
+    WDG_SECS.forEach(([k, name, desc]) => {
+        if(single && Wst.tab !== k) return;
+        const ids = vis.filter(id => grpOf(id) === k);
+        if(!ids.length) return;
+        any = true;
+        const closed = !Wst.editing && !single && !!Wst.col[k];
+        const head = single ? `<div class="sec-h static"><span class="sn">${name}</span><span class="sd">${desc}</span><span class="sl"></span></div>`
+            : `<button type="button" class="sec-h" aria-expanded="${!closed}" aria-controls="sec-${k}" onclick="Wdg.sec('${k}')"><span class="sn">${name}</span><span class="sd">${desc}</span><span class="sl"></span><span class="sc">${ids.length}</span><span class="sx" aria-hidden="true">▾</span></button>`;
+        h += `<div class="wdg-sec" id="sec-${k}">${head}${closed ? '' : grid(ids)}</div>`;
+    });
+    if(!any) h += '<div class="wdg-muted" style="margin-top:14px">Nessun widget in questa sezione: premi «Personalizza» per riattivarli.</div>';
     if(Wst.editing){
         h += '<div class="wdg-chips wrap" style="margin-top:14px">' + lay.hidden.map(id => {
             const d = WDG_DEFS.find(x => x.id === id);
@@ -5677,6 +6023,8 @@ function refreshWidget(id){
 function bindWidget(id){
     if(id === 'rem') Wdg.remLoad();
     if(id === 'weather' && !Wst.wxBusy) Wdg.wxAuto();
+    if(id === 'trend'){ Wdg.trBind(); if(Wst.trAnim) setTimeout(() => { Wst.trAnim = false; }, 1700); }
+    if(id === 'gallery' && !Gal.all) Gal.widgetFill();
     if(id === 'phase'){
         const row = document.getElementById('phaseChips');
         const on = row && row.querySelector('.on');
@@ -5694,7 +6042,8 @@ const Wdg = {
     redraw(){ const r = document.getElementById('wdgRoot'); if(!r) return; r.innerHTML = wdgRootInner(); bindWidgets(); },
     move(id, dir){
         const lay = wdgLayout();
-        const vis = lay.order.filter(i => !lay.hidden.includes(i));
+        const g = (WDG_DEFS.find(x => x.id === id) || {}).grp;
+        const vis = lay.order.filter(i => !lay.hidden.includes(i) && (WDG_DEFS.find(x => x.id === i) || {}).grp === g);
         const a = vis.indexOf(id), b = a + dir;
         if(a < 0 || b < 0 || b >= vis.length) return;
         const ia = lay.order.indexOf(vis[a]), ib = lay.order.indexOf(vis[b]);
@@ -5721,7 +6070,9 @@ const Wdg = {
         if(!pl || pl.phase >= phases.length - 1) return;
         const ok = await showModal({title:'Cambio fase', body:`Passare a «${phases[pl.phase + 1].name}»?`, okText:'Avanti'});
         if(!ok) return;
+        const oldP = pl.phase;
         pl.phase += 1;
+        recordPhase(pl, oldP, pl.phase);
         lsSet('grow-plants', plants);
         Toast.show('🌿 Nuova fase: ' + phases[pl.phase].name, 'success');
         renderPage();
@@ -5771,7 +6122,6 @@ const Wdg = {
     lightOn(v){ if(/^\d\d:\d\d$/.test(v)){ Wst.light.on = v; Wdg.lightSave(); } },
 
     // ── trend / fase ──
-    setTrend(k){ Wst.trend = k; lsSet('grow-w-trend', k); refreshWidget('trend'); },
     setPhase(i){ Wst.phaseSel = i; refreshWidget('phase'); },
 
     // ── promemoria ──
@@ -6174,6 +6524,1123 @@ Object.assign(Wdg, {
     wxChange(){ lsSet(WX_KEY, null); Wst.wxResults = null; refreshWidget('weather'); }
 });
 
+// ═══════════════════════════════════════════════════════════
+// 🧩 v8 — WIDGET DELLE SEZIONI (Guida, Journal, Diagnosi, Tools, Strains, Timer, Dashboard, Libreria, Attrezzatura, Community)
+// ═══════════════════════════════════════════════════════════
+const wdgDayOfYear = () => Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0)) / 864e5);
+const WDG_DIAG_SYMS = [['ingiallimento','🍃 Foglie gialle'],['contorto','🌀 Contorte'],['bleaching','🔆 Sbiancate'],['muffa','🌸 Muffa'],['puntini','🐛 Puntini / ragnatele'],['allungamento','📏 Allungate'],['appassimento','😞 Appassite'],['non_germina','🌰 Non germina']];
+const WDG_DIAG_DIST = [['','Qualsiasi'],['vecchie','Foglie vecchie'],['nuove','Foglie nuove'],['uniforme','Uniforme'],['punte','Solo punte']];
+function wdgDiagEval(){
+    return diagnosisEngine.evaluate({symptom:Wst.dg.s, distribution:Wst.dg.d, timeline:'', metrics:{ph:'', ec:'', temp:'', humidity:''}, stage:''}).filter(h => h.confidence > 0).slice(0, 3);
+}
+
+// ── mini timer (indipendente dalla pagina Timer, sopravvive al ricaricamento) ──
+const TM_KEY = 'grow-w-timer';
+function tmState(){ const s = lsGet(TM_KEY, null) || {}; return {total:s.total || 900, left:s.left != null ? s.left : (s.total || 900), end:s.end || null, done:!!s.done}; }
+function tmSave(s){ lsSet(TM_KEY, s); }
+function tmRemaining(s){ return s.end ? Math.max(0, Math.ceil((s.end - Date.now()) / 1000)) : s.left; }
+function tmFmt(sec){
+    const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), x = sec % 60, p = n => String(n).padStart(2, '0');
+    return (h ? h + ':' + p(m) : p(m)) + ':' + p(x);
+}
+
+// ── tools: convertitore EC/PPM e dosi ──
+function tlOutHtml(){
+    const v = Wst.tlv, cell = (l, t) => `<div class="phase-cell"><small>${l}</small><span style="font-size:15px;font-weight:700;color:#fff">${t}</span></div>`;
+    if(Wst.tl === 'ec'){
+        const x = wdgNum(v.ecV, null);
+        if(x === null || x <= 0) return '<div class="wdg-muted">Inserisci un valore…</div>';
+        const f = {ec:0, ppm500:500, ppm640:640, ppm700:700}[v.ecFrom] || 0, ec = f ? x / f : x;
+        return `<div class="phase-grid">${cell('EC', ec.toFixed(2) + ' mS/cm')}${cell('PPM 500', Math.round(ec * 500))}${cell('PPM 640', Math.round(ec * 640))}${cell('PPM 700', Math.round(ec * 700))}</div><div class="wdg-cap" style="margin-top:8px">Scale diverse: confronta sempre l'EC, non i PPM.</div>`;
+    }
+    const d = wdgNum(v.dose, null), L = wdgNum(v.lit, null), p = wdgNum(v.pct, 100);
+    if(d === null || L === null || d <= 0 || L <= 0) return '<div class="wdg-muted">Inserisci dose e litri…</div>';
+    const tot = d * L * (p / 100);
+    return `<div class="phase-grid">${cell('Per litro', (d * p / 100).toFixed(2).replace('.', ',') + ' ml')}${cell('Totale', tot.toFixed(1).replace('.', ',') + ' ml')}</div><div class="wdg-cap" style="margin-top:8px">${d} ml/L × ${L} L × ${p}% della dose in etichetta.</div>`;
+}
+
+Object.assign(WDG_BODY, {
+    guide(){
+        const {pl} = wdgPlant();
+        const ph = pl ? Math.min(Math.max(pl.phase || 0, 0), phases.length - 1) : guideState.activePhase;
+        const P = phases[ph], prog = pl ? (pl.progress || {}) : lsGet('grow-progress', {});
+        const done = P.steps.filter((_, i) => prog[ph + '-' + i]).length, pct = Math.round(done / P.steps.length * 100);
+        const next = P.steps.findIndex((_, i) => !prog[ph + '-' + i]);
+        const tip = P.tips && P.tips.length ? P.tips[(wdgDayOfYear() + ph) % P.tips.length] : '';
+        const sz = lsGet('stoner-mode', false) ? 120 : 210;
+        return `<div class="gd-joint">${renderJointProgress(pct, sz)}</div>
+<div class="gd-meta"><b style="color:${P.color}">${esc(P.name)}</b> · ${done}/${P.steps.length} step · ${pct}%</div>
+${next >= 0 ? `<div class="gd-next"><span>👉 ${esc(P.steps[next].label)}</span><button type="button" class="wdg-btn sm" aria-label="Segna come fatto" onclick="toggleStep(${ph},${next})">✓</button></div>` : '<div class="gd-next"><span>✅ Fase completata: bel lavoro!</span></div>'}
+${tip ? `<div class="phase-tip">💡 ${esc(tip)}</div>` : ''}
+<button type="button" class="wdg-btn block" onclick="Wdg.gdOpen(${ph})">📖 Apri la guida</button>`;
+    },
+    journal(){
+        const {pl} = wdgPlant();
+        if(!pl) return wdgNeedPlant();
+        const logs = pl.logs || [], last = logs.slice(-3).reverse(), bad = logs.filter(l => l.isProblem).length;
+        const rows = last.length ? last.map(l => `<div class="jr-item"><span class="jr-dot ${l.isProblem ? 'bad' : ''}"></span><div><div class="jr-t">${esc(String(l.text || '').slice(0, 90))}</div><small>${esc(String(l.date || '').split(',')[0])}${l.isProblem ? ' · ⚠️ problema' : ''}</small></div></div>`).join('') : '<div class="wdg-muted">Ancora nessuna nota: usa «Log rapido» per iniziare.</div>';
+        return `<div class="wdg-cap" style="margin:0 0 4px"><b style="color:#fff">${esc(pl.name)}</b> · ${logs.length} note · ${bad} problemi</div>${rows}
+<button type="button" class="wdg-btn block" style="margin-top:10px" onclick="go('journal')">📓 Apri il journal</button>`;
+    },
+    diag(){
+        const g = Wst.dg;
+        const chips = WDG_DIAG_SYMS.map(([v, l]) => `<button type="button" class="wdg-chip warn ${g.s === v ? 'on' : ''}" aria-pressed="${g.s === v}" onclick="Wdg.dgSym('${v}')">${l}</button>`).join('');
+        let res = '<div class="wdg-muted">Tocca il sintomo che vedi: ti dico le cause più probabili.</div>';
+        let dist = '';
+        if(g.s){
+            dist = '<div class="wdg-cap" style="margin:8px 0 6px">Dove si vede?</div><div class="wdg-chips">' + WDG_DIAG_DIST.map(([v, l]) => `<button type="button" class="wdg-chip ${g.d === v ? 'on' : ''}" onclick="Wdg.dgDist('${v}')">${l}</button>`).join('') + '</div>';
+            const r = wdgDiagEval();
+            res = r.length ? '<div class="dg-res">' + r.map(h => `<div class="dg-r"><b>${esc(h.name)}<i>${h.confidence}%</i></b>${h.fix && h.fix[0] ? `<small>FIX: ${esc(h.fix[0].action)}</small>` : ''}</div>`).join('') + '</div><div class="wdg-cap">Indicativo: per un quadro completo servono pH, EC e fase.</div>' : '<div class="wdg-muted">Nessuna ipotesi forte: prova a scegliere dove si vede.</div>';
+        }
+        return `<div class="wdg-chips wrap" style="margin-bottom:4px">${chips}</div>${dist}${res}
+<button type="button" class="wdg-btn block" style="margin-top:8px" onclick="Wdg.dgOpen()">🔬 ${g.s ? 'Affina nella Diagnosi' : 'Apri la Diagnosi'}</button>`;
+    },
+    tools(){
+        const v = Wst.tlv, on = k => Wst.tl === k ? 'on' : '';
+        const form = Wst.tl === 'ec'
+            ? `<div class="wdg-qa"><input id="wTl1" class="wdg-inp" inputmode="decimal" placeholder="Valore" aria-label="Valore" value="${esc(v.ecV)}" oninput="Wdg.tlIn('ecV',this.value)"><select class="wdg-inp" style="max-width:48%" aria-label="Unità" onchange="Wdg.tlIn('ecFrom',this.value)">${[['ec','EC mS/cm'],['ppm500','PPM 500'],['ppm640','PPM 640'],['ppm700','PPM 700']].map(([k, l]) => `<option value="${k}" ${v.ecFrom === k ? 'selected' : ''}>${l}</option>`).join('')}</select></div>`
+            : `<div class="wdg-qa4" style="grid-template-columns:repeat(3,1fr)"><input class="wdg-inp" inputmode="decimal" placeholder="ml/L" aria-label="Dose ml per litro" value="${esc(v.dose)}" oninput="Wdg.tlIn('dose',this.value)"><input class="wdg-inp" inputmode="decimal" placeholder="Litri" aria-label="Litri" value="${esc(v.lit)}" oninput="Wdg.tlIn('lit',this.value)"><input class="wdg-inp" inputmode="decimal" placeholder="% dose" aria-label="Percentuale dose" value="${esc(v.pct)}" oninput="Wdg.tlIn('pct',this.value)"></div>`;
+        return `<div class="wdg-chips"><button type="button" class="wdg-chip ${on('ec')}" onclick="Wdg.tlTab('ec')">EC ⇄ PPM</button><button type="button" class="wdg-chip ${on('dose')}" onclick="Wdg.tlTab('dose')">Dose nutrienti</button></div>${form}<div id="wTlOut" style="margin-top:10px">${tlOutHtml()}</div>
+<button type="button" class="wdg-btn ghost block" style="margin-top:10px" onclick="go('tools')">🧮 Tutti i calcolatori (VPD, DLI, ventilazione…)</button>`;
+    },
+    strain(){
+        const n = strains.length, i = Wst.stIdx !== null ? Wst.stIdx % n : wdgDayOfYear() % n, s = strains[i];
+        const tile = (l, t) => `<div class="phase-cell"><small>${l}</small><span>${esc(t || '—')}</span></div>`;
+        return `<div class="wdg-cap" style="margin:0 0 4px">${Wst.stIdx === null ? '🎲 Strain del giorno' : '🎲 Strain casuale'}</div>
+<div class="st-name">${esc(s.name)}</div>
+<div class="st-badges"><span>${esc(s.type)}</span><span>${esc(s.difficulty || '')}</span></div>
+<div class="phase-grid">${tile('THC', s.thc)}${tile('CBD', s.cbd)}${tile('Fioritura', s.flowerTime)}${tile('Resa', s.yield)}</div>
+<p class="wdg-sub" style="margin:10px 0 4px">${esc(s.desc || '')}</p>
+${s.terpenes && s.terpenes.length ? `<div class="wdg-cap" style="margin:0 0 10px">🍋 ${s.terpenes.map(esc).join(' · ')}</div>` : ''}
+<div class="wdg-actions"><button type="button" class="wdg-btn grow" onclick="Wdg.stNext()">🎲 Un'altra</button><button type="button" class="wdg-btn ghost" onclick="Wdg.stOpen()">Apri ›</button><button type="button" class="wdg-btn ghost" aria-label="Confronta strain" onclick="go('compare')">⚖️</button></div>`;
+    },
+    timer(){
+        const s = tmState(), r = tmRemaining(s), pct = s.total ? Math.round((1 - r / s.total) * 100) : 0, running = !!s.end;
+        const pre = [[300, '5 min'], [600, '10 min'], [900, '15 min'], [1800, '30 min'], [3600, '1 h'], [7200, '2 h']].map(([sec, l]) => `<button type="button" class="wdg-chip ${s.total === sec ? 'on' : ''}" onclick="Wdg.tmSet(${sec})">${l}</button>`).join('');
+        return `<div class="tm-disp ${s.done ? 'done' : ''}" id="wTmDisp" aria-live="off">${s.done ? '⏰ Tempo!' : tmFmt(r)}</div>
+<div class="prog" style="margin-bottom:12px"><div class="prog-f" id="wTmBar" style="width:${s.done ? 100 : pct}%;background:var(--wc);box-shadow:0 0 10px rgba(var(--wcr),.5)"></div></div>
+<div class="wdg-chips">${pre}</div>
+<div class="wdg-actions"><button type="button" class="wdg-btn grow" onclick="Wdg.tmToggle()">${running ? '⏸ Pausa' : (s.done ? '↻ Riavvia' : '▶ Avvia')}</button><button type="button" class="wdg-btn ghost" onclick="Wdg.tmReset()" aria-label="Azzera">↺</button></div>
+<div class="wdg-cap" style="margin-top:8px">Per irrigazioni e cicli luce lunghi (24h, 48h…) usa la pagina Timer.</div>`;
+    },
+    dash(){
+        const plants = lsGet('grow-plants', []);
+        if(!plants.length) return wdgNeedPlant();
+        const logs = plants.reduce((a, p) => a + (p.logs || []).length, 0), bad = plants.reduce((a, p) => a + (p.logs || []).filter(l => l.isProblem).length, 0);
+        const total = phases.reduce((a, p) => a + p.steps.length, 0);
+        const rows = plants.slice(0, 5).map(p => {
+            const pct = Math.round(Object.values(p.progress || {}).filter(Boolean).length / total * 100) || 0;
+            return `<div class="dh-row"><span>${esc(p.name)}</span><div class="prog"><div class="prog-f" style="width:${pct}%;background:var(--wc)"></div></div><b>${pct}%</b></div>`;
+        }).join('');
+        return `<div class="hm-stats"><div><b>${plants.length}</b><small>Piante</small></div><div><b>${logs}</b><small>Note</small></div><div><b style="${bad ? 'color:#ff6600' : ''}">${bad}</b><small>Problemi</small></div></div>${rows}
+<div class="wdg-cap" style="margin-top:10px">Avanzamento della guida per pianta.</div>`;
+    },
+    library(){
+        const n = libraryData.length, i = Wst.libIdx !== null ? Wst.libIdx % n : wdgDayOfYear() % n, it = libraryData[i];
+        const cats = [['guida', 'Guide'], ['tecnica', 'Tecniche'], ['scienza', 'Scienza'], ['varietà', 'Varietà'], ['post-harvest', 'Post-harvest'], ['problemi', 'Problemi']];
+        return `<div class="wdg-cap" style="margin:0 0 6px">${Wst.libIdx === null ? '📌 Letto del giorno' : '🎲 Lettura casuale'}</div>
+<div class="st-name" style="font-size:15px">${it.icon || '📚'} ${esc(it.title)}</div>
+<div class="st-badges"><span>${esc(it.category)}</span></div>
+<p class="wdg-sub" style="margin:0 0 12px">${esc(it.desc || '')}</p>
+<div class="wdg-actions"><button type="button" class="wdg-btn grow" onclick="Wdg.libOpen(${it.id})">📖 Leggi</button><button type="button" class="wdg-btn ghost" onclick="Wdg.libNext()" aria-label="Altro articolo">🎲</button></div>
+<div class="wdg-cap" style="margin:12px 0 6px">Esplora per tema</div>
+<div class="wdg-chips" style="margin-bottom:0">${cats.map(([v, l]) => `<button type="button" class="wdg-chip" onclick="Wdg.libGo('${v}')">${l}</button>`).join('')}<button type="button" class="wdg-chip" onclick="go('coa')">📋 COA</button></div>`;
+    },
+    shop(){
+        const {pl} = wdgPlant(), p = pl ? pl.phase : 0;
+        const grp = p <= 3 ? ['setup', 'veg'] : p <= 6 ? ['bloom'] : ['curing'];
+        let pool = shopItems.filter(s => grp.includes(s.phase)).sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        if(!pool.length) pool = [...shopItems].sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
+        const it = pool[(Wst.shIdx !== null ? Wst.shIdx : wdgDayOfYear()) % Math.min(pool.length, 4)];
+        const phLbl = pl ? esc(phases[Math.min(p, phases.length - 1)].name) : 'inizio';
+        return `<div class="wdg-cap" style="margin:0 0 6px">🛒 Utile in fase ${phLbl}</div>
+<div class="st-name" style="font-size:15px">${esc(it.name)}</div>
+<div class="st-badges"><span>${esc(it.category)}</span><span>${esc(it.price || '')}</span></div>
+<p class="wdg-sub" style="margin:0 0 12px">${esc(String(it.desc || '').slice(0, 130))}${String(it.desc || '').length > 130 ? '…' : ''}</p>
+<div class="wdg-actions"><button type="button" class="wdg-btn grow" onclick="go('shop')">🛒 Vedi attrezzatura</button><button type="button" class="wdg-btn ghost" onclick="Wdg.shNext()" aria-label="Altro consiglio">🎲</button><button type="button" class="wdg-btn ghost" aria-label="Sensori" onclick="go('iot')">📡</button></div>`;
+    },
+    community(){
+        const posts = lsGet('grow-community', []).slice(0, 2);
+        const rows = posts.length ? posts.map(p => `<div class="jr-item"><span class="jr-dot"></span><div><div class="jr-t">${esc(String(p.title || '').slice(0, 80))}</div><small>💬 ${(p.replies || []).length} · ▲ ${p.upvotes || 0}</small></div></div>`).join('') : '<div class="wdg-muted">Nessuna domanda ancora. Hai un dubbio? Chiedi alla community.</div>';
+        return `${rows}<div class="wdg-actions" style="margin-top:10px"><button type="button" class="wdg-btn grow" onclick="go('community')">💬 Apri la community</button><button type="button" class="wdg-btn ghost" onclick="go('entities')" aria-label="Entità">🏢</button></div>`;
+    }
+});
+
+Object.assign(Wdg, {
+    tab(t){ Wst.tab = t; lsSet('grow-w-tab', t); Wdg.redraw(); },
+    // guida
+    gdOpen(ph){ guideState.activePhase = ph; guideState.tab = 'steps'; go('guide'); },
+    // diagnosi
+    dgSym(v){ Wst.dg.s = Wst.dg.s === v ? '' : v; Wst.dg.d = ''; refreshWidget('diag'); },
+    dgDist(v){ Wst.dg.d = v; refreshWidget('diag'); },
+    dgOpen(){
+        diagInput.symptom = Wst.dg.s; diagInput.distribution = Wst.dg.d;
+        diagResults = diagnosisEngine.evaluate(diagInput);
+        go('diagnosis');
+    },
+    // tools
+    tlTab(k){ Wst.tl = k; refreshWidget('tools'); },
+    tlIn(k, v){ Wst.tlv[k] = v; const o = document.getElementById('wTlOut'); if(o) o.innerHTML = tlOutHtml(); },
+    // strains
+    stNext(){ Wst.stIdx = Math.floor(Math.random() * strains.length); refreshWidget('strain'); },
+    stOpen(){ go('strains'); },
+    // libreria
+    libOpen(id){ go('library'); openLibraryItem(id); },
+    libNext(){ Wst.libIdx = Math.floor(Math.random() * libraryData.length); refreshWidget('library'); },
+    libGo(cat){ libraryFilter = cat; libraryView = 'list'; libraryOpenId = null; go('library'); },
+    // attrezzatura
+    shNext(){ Wst.shIdx = (Wst.shIdx === null ? wdgDayOfYear() : Wst.shIdx) + 1; refreshWidget('shop'); },
+    // timer
+    tmSet(sec){ tmSave({total:sec, left:sec, end:null, done:false}); refreshWidget('timer'); },
+    tmToggle(){
+        const s = tmState();
+        if(s.end){ s.left = tmRemaining(s); s.end = null; }
+        else{
+            let r = s.done || s.left <= 0 ? s.total : s.left;
+            s.left = r; s.end = Date.now() + r * 1000; s.done = false;
+            try{ if('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); }catch(e){}
+        }
+        tmSave(s); refreshWidget('timer');
+    },
+    tmReset(){ const s = tmState(); tmSave({total:s.total, left:s.total, end:null, done:false}); refreshWidget('timer'); },
+    tmTick(){
+        const s = tmState();
+        if(!s.end) return;
+        const r = tmRemaining(s);
+        if(r <= 0){
+            tmSave({total:s.total, left:0, end:null, done:true});
+            Toast.show('⏰ Timer finito!', 'success', 5000);
+            try{ navigator.vibrate && navigator.vibrate([300, 150, 300]); }catch(e){}
+            try{
+                if('Notification' in window && Notification.permission === 'granted' && navigator.serviceWorker)
+                    navigator.serviceWorker.ready.then(reg => reg.showNotification('GROW 420', {body:'⏰ Timer finito!', tag:'grow-timer', icon:'assets/icon-192.png'}));
+            }catch(e){}
+            refreshWidget('timer');
+            return;
+        }
+        const d = document.getElementById('wTmDisp'), b = document.getElementById('wTmBar');
+        if(d) d.textContent = tmFmt(r);
+        if(b) b.style.width = Math.round((1 - r / s.total) * 100) + '%';
+    }
+});
+setInterval(() => Wdg.tmTick(), 1000);
+
+// ═══════════════════════════════════════════════════════════
+// 🍔 v8 — MENU BURGER: pannello con joint (easter egg) e impostazioni rapide
+// (la navigazione tra le sezioni resta nella barra in basso e nei widget Home)
+// ═══════════════════════════════════════════════════════════
+const MN_QUOTES = [
+    'Il pH è la vita. Misuralo sempre.', 'La pazienza è un nutriente.', 'Se dubiti, aspetta un giorno e rimisura.',
+    'Luce, aria, acqua: il resto è marketing.', 'Il curing non si salta, si rispetta.', 'Chi tiene un journal sbaglia una volta sola.',
+    'Meno è meglio: ogni overfeeding è una lezione.', 'Una pianta felice vale più di mille additivi.', 'Tricomi ancora chiari? Respira e ricontrolla domani.',
+    'Il flush non risolve tutto, ma la calma sì.', 'Mai potare di fretta: le piante ricordano.', 'Il 4:20 è sempre da qualche parte. 🌍'
+];
+const MN_BADGES = {
+    first:['🌱', 'Primo tiro'], time:['🕓', 'Puffata delle 4:20'], roll5:['🔄', '5 joint finiti'], legend:['🏆', '420 tiri: leggenda']
+};
+function jtState(){
+    const s = Object.assign({burn:0, total:0, today:0, day:'', rolled:0, badges:[]}, lsGet('grow-joint', {}) || {});
+    const key = wdgKey(new Date());
+    if(s.day !== key){ s.day = key; s.today = 0; }
+    if(!Array.isArray(s.badges)) s.badges = [];
+    return s;
+}
+function mnIs420(){ const d = new Date(), h = d.getHours(), m = d.getMinutes(); return (h === 4 || h === 16) && m === 20; }
+function mnNotifLabel(){
+    if(!('Notification' in window)) return 'Non supportate';
+    return {granted:'Attive', denied:'Bloccate', default:'Tocca per attivare'}[Notification.permission] || '';
+}
+function mnJointHtml(s){
+    const size = lsGet('stoner-mode', false) ? 130 : 220;
+    return `<div class="mn-jbox" id="mnJbox">${renderJointProgress(s.burn, size)}</div>`;
+}
+function mnBadgesHtml(s){
+    return s.badges.filter(k => MN_BADGES[k]).map(k => `<span class="mn-badge">${MN_BADGES[k][0]} ${MN_BADGES[k][1]}</span>`).join('');
+}
+// ═══════════════════════════════════════════════════════════
+// 🧭 v9 — Dati ambientali · Trend · Centro avvisi · Grow Insights
+// Tutto è DERIVATO dai dati già salvati (grow-plants / Dexie): nessun nuovo storage,
+// nessun dato inventato. Se i dati non bastano, lo dichiara.
+// ═══════════════════════════════════════════════════════════
+const V9D = 864e5, V9H = 36e5;
+const ENV_DEFS = {
+    temp:    {l:'Temp', full:'Temperatura',      u:'°C',   dec:1, c:'#ff8a5c', rgb:'255,138,92',  lo:0, hi:60},
+    humidity:{l:'UR',   full:'Umidità relativa', u:'%',    dec:0, c:'#5aaeff', rgb:'90,174,255',  lo:0, hi:100},
+    vpd:     {l:'VPD',  full:'VPD',              u:' kPa', dec:2, c:'#b388ff', rgb:'179,136,255', lo:0, hi:6},
+    ph:      {l:'pH',   full:'pH',               u:'',     dec:1, c:'#4fd8e8', rgb:'79,216,232',  lo:0, hi:14},
+    ec:      {l:'EC',   full:'EC',               u:'',     dec:1, c:'#e0a8ff', rgb:'224,168,255', lo:0, hi:15}
+};
+// "25/11/2026, 14:30:15" (it-IT) → timestamp locale
+function wdgLogTs(s){
+    const m = String(s || '').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})(?:[,\s]+(\d{1,2})[:.](\d{2}))?/);
+    if(m) return new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 12), +(m[5] || 0)).getTime();
+    const d = new Date(s);
+    return isNaN(d) ? null : d.getTime();
+}
+const envNum = v => (v === undefined || v === null || v === '') ? null : parseMetricValue(String(v).replace(',', '.'));
+// serie temporale reale di un parametro, ordinata per data. VPD = derivato da temp+UR dello stesso log.
+function envSeries(pl, m){
+    const d = ENV_DEFS[m], out = [];
+    ((pl && pl.logs) || []).forEach(l => {
+        const mt = l.metrics || {}, t = wdgLogTs(l.date);
+        if(t === null) return;
+        let v = null;
+        if(m === 'vpd'){
+            const T = envNum(mt.temp), RH = envNum(mt.humidity);
+            if(T !== null && RH !== null && T >= 0 && T <= 60 && RH >= 0 && RH <= 100) v = Math.max(0, vpdCalc(T, RH));
+        }else v = envNum(mt[m]);
+        if(v !== null && v >= d.lo && v <= d.hi) out.push({t, v});
+    });
+    return out.sort((a, b) => a.t - b.t);
+}
+function envBand(pl, m){
+    const ph = phases[(pl && pl.phase)] || phases[3];
+    if(m === 'temp') return wdgRange(ph.temp);
+    if(m === 'humidity') return wdgRange(ph.humidity);
+    if(m === 'vpd') return VPD_RANGES[vpdKeyForPhase(pl ? pl.phase : 3)] || null;
+    if(m === 'ph') return [6.0, 6.5];
+    return null;
+}
+const envNumStr = (m, v) => v.toFixed(ENV_DEFS[m].dec);
+const envFmt = (m, v) => envNumStr(m, v) + ENV_DEFS[m].u;
+function agoText(t){
+    const mi = Math.round((Date.now() - t) / 6e4);
+    if(mi < 1) return 'adesso';
+    if(mi < 60) return mi + ' min fa';
+    const h = Math.round(mi / 60);
+    if(h < 24) return h + (h === 1 ? ' ora fa' : ' ore fa');
+    const d = Math.round(h / 24);
+    return d === 1 ? 'ieri' : d + ' gg fa';
+}
+// curva monotona (Fritsch–Carlson): morbida ma senza "rimbalzi" oltre i valori reali
+function smoothPath(P){
+    const n = P.length, f = v => v.toFixed(1);
+    if(n < 2) return '';
+    if(n === 2) return `M${f(P[0][0])} ${f(P[0][1])}L${f(P[1][0])} ${f(P[1][1])}`;
+    const dx = [], m = [], t = [];
+    for(let i = 0; i < n - 1; i++){ dx[i] = P[i + 1][0] - P[i][0] || 1e-6; m[i] = (P[i + 1][1] - P[i][1]) / dx[i]; }
+    t[0] = m[0]; t[n - 1] = m[n - 2];
+    for(let i = 1; i < n - 1; i++) t[i] = m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2;
+    for(let i = 0; i < n - 1; i++){
+        if(m[i] === 0){ t[i] = t[i + 1] = 0; continue; }
+        const a = t[i] / m[i], b = t[i + 1] / m[i], s = a * a + b * b;
+        if(s > 9){ const k = 3 / Math.sqrt(s); t[i] = k * a * m[i]; t[i + 1] = k * b * m[i]; }
+    }
+    let d = `M${f(P[0][0])} ${f(P[0][1])}`;
+    for(let i = 0; i < n - 1; i++){
+        const h = dx[i] / 3;
+        d += `C${f(P[i][0] + h)} ${f(P[i][1] + t[i] * h)} ${f(P[i + 1][0] - h)} ${f(P[i + 1][1] - t[i + 1] * h)} ${f(P[i + 1][0])} ${f(P[i + 1][1])}`;
+    }
+    return d;
+}
+function niceTicks(mn, mx, n){
+    const span = (mx - mn) || 1, raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
+    const step = (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p, t = [];
+    for(let v = Math.ceil(mn / step) * step; v <= mx + 1e-9; v += step) t.push(+v.toFixed(6));
+    return t;
+}
+function phaseDays(s){
+    const m = String(s || '').match(/(\d+)(?:\s*[–-]\s*(\d+))?\s*(giorn|settiman|mes)/i);
+    if(!m) return null;
+    const k = /giorn/i.test(m[3]) ? 1 : /settiman/i.test(m[3]) ? 7 : 30;
+    return {lo: +m[1] * k, hi: +(m[2] || m[1]) * k};
+}
+// storico cambi fase (additivo: pl.phaseLog). Per piante già esistenti parte dal primo cambio registrato.
+function recordPhase(pl, oldP, newP){
+    if(!pl || oldP === newP) return;
+    pl.phaseLog = Array.isArray(pl.phaseLog) ? pl.phaseLog : [];
+    if(!pl.phaseLog.length && pl.startDate){
+        const s = new Date(pl.startDate + 'T00:00:00');
+        if(!isNaN(s)) pl.phaseLog.push({p:oldP, d:s.toISOString(), start:true});
+    }
+    pl.phaseLog.push({p:newP, d:new Date().toISOString()});
+}
+function plantDayAt(pl, t){
+    if(!pl || !pl.startDate || !isFinite(t)) return null;
+    const s = new Date(pl.startDate + 'T00:00:00'); if(isNaN(s)) return null;
+    const d = new Date(t), el = Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - s) / V9D);
+    return el < 0 ? null : (parseInt(pl.day, 10) || 1) + el;
+}
+function phaseAt(pl, t){
+    let q = null;
+    ((pl && pl.phaseLog) || []).forEach(e => { if(Date.parse(e.d) <= t) q = e.p; });
+    return q;
+}
+
+// ── TREND AMBIENTE (widget) ──
+const TR_W = 320, TR_H = 158, TR_L = 34, TR_R = 14, TR_T = 12, TR_B = 22;
+function trendBody(){
+    const {pl} = wdgPlant();
+    if(!pl) return wdgNeedPlant();
+    if(!ENV_DEFS[Wst.trend]) Wst.trend = 'temp';
+    const m = Wst.trend, d = ENV_DEFS[m];
+    const RS = [['7', '7 g'], ['14', '14 g'], ['30', '30 g'], ['all', 'Tutto']];
+    if(!RS.some(r => r[0] === Wst.trR)) Wst.trR = '14';
+    const head = `<div class="tr-head"><div class="wdg-chips tr-chips" role="group" aria-label="Parametro">${Object.keys(ENV_DEFS).map(k => `<button type="button" class="wdg-chip ${k === m ? 'on' : ''}" aria-pressed="${k === m}" onclick="Wdg.setTrend('${k}')">${ENV_DEFS[k].l}</button>`).join('')}</div><div class="tr-seg" role="group" aria-label="Periodo">${RS.map(([k, l]) => `<button type="button" class="${Wst.trR === k ? 'on' : ''}" aria-pressed="${Wst.trR === k}" onclick="Wdg.setTrR('${k}')">${l}</button>`).join('')}</div></div>`;
+    const all = envSeries(pl, m);
+    if(all.length < 2){
+        return head + `<div class="tr-empty"><svg class="tr-ghost" viewBox="0 0 320 70" aria-hidden="true"><path d="M2 50C40 50 52 20 92 24S152 56 192 40 262 12 318 18" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 6" stroke-linecap="round"/></svg><div class="tr-et">${all.length ? 'Una sola misura di ' + d.full : 'Ancora nessuna misura di ' + d.full}</div><div class="wdg-cap">${m === 'vpd' ? 'Il VPD si calcola da temperatura e umidità registrate nello stesso log. ' : ''}Servono almeno 2 registrazioni per mostrare l'andamento.</div><button type="button" class="wdg-btn sm" style="padding:0 18px" onclick="Wdg.focusQuick()">＋ Registra una misura</button></div>`;
+    }
+    const now = Date.now(), span = Wst.trR === 'all' ? Infinity : (+Wst.trR) * V9D;
+    const pts = all.filter(p => now - p.t <= span);
+    const prevPts = span === Infinity ? [] : all.filter(p => now - p.t > span && now - p.t <= 2 * span);
+    if(pts.length < 2){
+        return head + `<div class="tr-empty"><div class="tr-et">Poche misure negli ultimi ${Wst.trR} giorni</div><div class="wdg-cap">${pts.length} nel periodo · ${all.length} in totale.</div><button type="button" class="wdg-btn sm" style="padding:0 18px" onclick="Wdg.setTrR('all')">Mostra tutto</button></div>`;
+    }
+    const ph = phases[pl.phase] || phases[3], band = envBand(pl, m);
+    const vals = pts.map(p => p.v), n = vals.length, sum = vals.reduce((a, b) => a + b, 0), avg = sum / n;
+    const mn = Math.min(...vals), mx = Math.max(...vals);
+    const sd = Math.sqrt(vals.reduce((a, b) => a + (b - avg) * (b - avg), 0) / n);
+    const last = pts[n - 1], prev = pts[n - 2];
+    // dominio
+    const x0 = span === Infinity ? pts[0].t : now - span, x1 = span === Infinity ? last.t : now;
+    let y0 = mn, y1 = mx;
+    if(band){ y0 = Math.min(y0, band[0]); y1 = Math.max(y1, band[1]); }
+    const pad = (y1 - y0) * 0.14 || Math.max(Math.abs(y1) * 0.05, 0.5);
+    y0 -= pad; y1 += pad;
+    if(d.lo === 0 && y0 < 0) y0 = 0;
+    const iw = TR_W - TR_L - TR_R, ih = TR_H - TR_T - TR_B;
+    let px = -1e9;
+    const X = t => { const x = TR_L + (t - x0) / ((x1 - x0) || 1) * iw; px = Math.max(x, px + 0.4); return px; };
+    const Y = v => TR_T + (1 - (v - y0) / (y1 - y0)) * ih;
+    const P = pts.map(p => [X(p.t), Y(p.v)]);
+    const line = smoothPath(P), base = TR_T + ih;
+    const area = line + `L${P[n - 1][0].toFixed(1)} ${base}L${P[0][0].toFixed(1)} ${base}Z`;
+    const inBand = v => !band || (v >= band[0] && v <= band[1]);
+    // griglia + etichette
+    const ticks = niceTicks(y0, y1, 3).filter(v => Y(v) >= TR_T - 1 && Y(v) <= base + 1);
+    const grid = ticks.map(v => `<line x1="${TR_L}" x2="${TR_W - TR_R}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" class="tr-gl"/><text x="${TR_L - 6}" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end" class="tr-yt">${(+v.toFixed(2))}</text>`).join('');
+    const fx = t => wdgFmt(new Date(t));
+    const xl = `<text x="${TR_L}" y="${TR_H - 6}" class="tr-xt">${fx(x0)}</text><text x="${(TR_L + iw / 2).toFixed(1)}" y="${TR_H - 6}" text-anchor="middle" class="tr-xt">${fx((x0 + x1) / 2)}</text><text x="${TR_W - TR_R}" y="${TR_H - 6}" text-anchor="end" class="tr-xt">${span !== Infinity ? 'oggi' : fx(x1)}</text>`;
+    const bandSvg = band ? `<rect x="${TR_L}" y="${Y(band[1]).toFixed(1)}" width="${iw}" height="${Math.max(1, Y(band[0]) - Y(band[1])).toFixed(1)}" class="tr-band"/><line x1="${TR_L}" x2="${TR_W - TR_R}" y1="${Y(band[1]).toFixed(1)}" y2="${Y(band[1]).toFixed(1)}" class="tr-bl"/><line x1="${TR_L}" x2="${TR_W - TR_R}" y1="${Y(band[0]).toFixed(1)}" y2="${Y(band[0]).toFixed(1)}" class="tr-bl"/><text x="${TR_W - TR_R - 3}" y="${(Y(band[1]) + 9).toFixed(1)}" text-anchor="end" class="tr-bt">target</text>` : '';
+    const showDots = n <= 30;
+    const dots = pts.map((p, i) => {
+        const isLast = i === n - 1;
+        if(!showDots && !isLast) return '';
+        const out = !inBand(p.v);
+        return `<circle cx="${P[i][0].toFixed(1)}" cy="${P[i][1].toFixed(1)}" r="${isLast ? 4.6 : 2.4}" class="${out ? 'tr-dot out' : 'tr-dot'}"/>`;
+    }).join('');
+    const lx = P[n - 1][0].toFixed(1), ly = P[n - 1][1].toFixed(1);
+    const lastOut = !inBand(last.v);
+    const halo = `<circle cx="${lx}" cy="${ly}" r="9" class="tr-halo ${lastOut ? 'out' : ''}"/>`;
+    const data = JSON.stringify(pts.map((p, i) => [+P[i][0].toFixed(1), +P[i][1].toFixed(1), +p.v.toFixed(4), p.t]));
+    const gid = 'trg-' + m;
+    const svg = `<svg id="trSvg" class="tr-svg ${Wst.trAnim ? 'tr-anim' : ''}" viewBox="0 0 ${TR_W} ${TR_H}" data-m="${m}" data-pts="${data}" role="img" aria-label="Andamento ${d.full}: ${n} misure, ultima ${envFmt(m, last.v)}">
+<defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${d.c}" stop-opacity=".38"/><stop offset=".7" stop-color="${d.c}" stop-opacity=".07"/><stop offset="1" stop-color="${d.c}" stop-opacity="0"/></linearGradient></defs>
+${grid}${bandSvg}<path d="${area}" fill="url(#${gid})" class="tr-area"/><path d="${line}" class="tr-line" pathLength="1" style="stroke:${d.c}"/>${xl}${halo}${dots}
+<line class="tr-g off" x1="0" x2="0" y1="${TR_T}" y2="${base}"/><circle class="tr-c off" r="5" cx="0" cy="0"/>
+<rect x="0" y="0" width="${TR_W}" height="${TR_H}" fill="transparent" class="tr-hit"/></svg>`;
+    // lettura corrente
+    const dv = last.v - prev.v, q = Math.pow(10, d.dec);
+    const flat = Math.abs(Math.round(dv * q)) === 0;
+    let dirCls = 'flat';
+    if(!flat){
+        dirCls = dv > 0 ? 'up' : 'down';
+        if(band && lastOut){ const toward = (last.v > band[1] && dv < 0) || (last.v < band[0] && dv > 0); dirCls += toward ? ' good' : ' bad'; }
+    }
+    const sgn = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d.dec);
+    const st = !band ? '' : last.v < band[0] ? '<span class="tr-chip lo">Sotto target</span>' : last.v > band[1] ? '<span class="tr-chip hi">Sopra target</span>' : '<span class="tr-chip ok">In target</span>';
+    const read = `<div class="tr-read"><div class="tr-big ${lastOut ? 'out' : ''}">${envNumStr(m, last.v)}<small>${d.u.trim()}</small></div><div class="tr-meta">${st}<span class="tr-dl ${dirCls}">${flat ? '＝ invariato' : (dv > 0 ? '▲ ' : '▼ ') + sgn(dv)}</span><span class="tr-when">${flat ? 'rispetto alla misura precedente · ' : 'dalla misura precedente · '}${agoText(last.t)}</span></div></div>`;
+    // statistiche
+    const pAvg = prevPts.length >= 2 ? prevPts.reduce((a, p) => a + p.v, 0) / prevPts.length : null;
+    const inN = band ? vals.filter(inBand).length : null;
+    const stab = Insights.stab(m, sd);
+    const tiles = [
+        `<div class="tr-t"><small>Media</small><b>${envNumStr(m, avg)}</b><em>${pAvg !== null ? sgn(avg - pAvg) + ' vs periodo prec.' : 'periodo prec.: n/d'}</em></div>`,
+        `<div class="tr-t"><small>Min – Max</small><b>${envNumStr(m, mn)}–${envNumStr(m, mx)}</b><em>escursione ${(mx - mn).toFixed(d.dec)}</em></div>`,
+        band
+            ? `<div class="tr-t"><small>In target</small><b>${Math.round(inN / n * 100)}%</b><span class="tr-pb"><i style="width:${Math.round(inN / n * 100)}%"></i></span><em>${inN}/${n} misure</em></div>`
+            : `<div class="tr-t"><small>Stabilità</small><b>σ ${sd.toFixed(d.dec + 1)}</b><em>${stab[0]}</em></div>`,
+        `<div class="tr-t"><small>Misure</small><b>${n}</b><em>${span === Infinity ? 'in totale' : 'ultimi ' + Wst.trR + ' gg'}</em></div>`
+    ].join('');
+    const cap = band ? `Fascia verde = target fase «${esc(ph.name)}» (${band[0]}–${band[1]}${d.u}).${m === 'ph' ? ' Riferimento generale per l\'acqua.' : ''}` : 'Nessun target definito per questo parametro.';
+    return head + read + `<div class="tr-chart" style="--tc:${d.c};--tcr:${d.rgb}">${svg}<div class="tr-tip off" id="trTip" aria-hidden="true"></div></div><div class="tr-stats">${tiles}</div><div class="wdg-cap" style="margin-top:10px">${cap} Tocca il grafico per i singoli valori.</div>`;
+}
+
+// ── CENTRO AVVISI ──
+// Un solo punto per ciò che richiede attenzione. Gli avvisi sono CALCOLATI dai dati reali ad ogni
+// aggiornamento (nessuna coda da svuotare, quindi nessun duplicato); "Posticipa" li nasconde 24 h.
+const Alerts = {
+    all: [], _t: null,
+    snz(){
+        const s = lsGet('grow-alerts-snooze', {}) || {}, n = Date.now();
+        let ch = false;
+        Object.keys(s).forEach(k => { if(!(s[k] > n)){ delete s[k]; ch = true; } });
+        if(ch) lsSet('grow-alerts-snooze', s);
+        return s;
+    },
+    vis(){ const s = Alerts.snz(); return Alerts.all.filter(a => !s[a.id]); },
+    async compute(){
+        const out = [], now = Date.now(), {pl} = wdgPlant();
+        if(pl){
+            const ph = phases[pl.phase] || phases[0];
+            // 1) parametri fuori target (ultima misura, solo se recente)
+            const TOL = {temp:2, humidity:5, vpd:0.2, ph:0.3};
+            const bad = new Set();
+            ['temp', 'humidity', 'ph', 'vpd'].forEach(m => {
+                const s = envSeries(pl, m), p = s[s.length - 1];
+                if(!p || now - p.t > 72 * V9H) return;
+                const b = envBand(pl, m);
+                if(!b || (p.v >= b[0] && p.v <= b[1])) return;
+                if(m === 'vpd' && (bad.has('temp') || bad.has('humidity'))) return;   // VPD è derivato: niente doppione
+                bad.add(m);
+                const hi = p.v > b[1], dist = hi ? p.v - b[1] : b[0] - p.v;
+                out.push({id:`env-${m}-${p.t}`, sev:dist > TOL[m] ? 'warn' : 'info', ic:hi ? '🔺' : '🔻', ord:1,
+                    title:`${ENV_DEFS[m].full} ${hi ? 'sopra' : 'sotto'} il target`,
+                    text:`${envFmt(m, p.v)} · target ${b[0]}–${b[1]}${ENV_DEFS[m].u} (${ph.name}) · ${agoText(p.t)}`,
+                    act:{l:'Vedi trend', js:`Alerts.goWidget('trend','${m}')`}});
+            });
+            // 2) problema segnalato di recente
+            const probs = (pl.logs || []).map(l => ({l, t: wdgLogTs(l.date)})).filter(o => o.l.isProblem && o.t !== null && now - o.t < 48 * V9H).sort((a, b) => b.t - a.t);
+            if(probs[0]) out.push({id:`prob-${probs[0].t}`, sev:'warn', ic:'⚠️', ord:0, title:'Problema segnalato di recente',
+                text:`${String(probs[0].l.text || '').slice(0, 90)} · ${agoText(probs[0].t)}`, act:{l:'Apri Diagnosi', js:"Alerts.goPage('diagnosis')"}});
+            // 3) dati non aggiornati (un solo avviso: o log fermi, o misure ambientali ferme)
+            const logTs = (pl.logs || []).map(l => wdgLogTs(l.date)).filter(t => t !== null).sort((a, b) => a - b);
+            const lastLog = logTs.length ? logTs[logTs.length - 1] : null;
+            const startT = pl.startDate ? new Date(pl.startDate + 'T00:00:00').getTime() : null;
+            const ref = lastLog !== null ? lastLog : startT;
+            if(ref && (now - ref) / V9D >= (pl.phase >= 8 ? 7 : 3)){
+                out.push({id:`stale-log-${lastLog || 'none'}`, sev:'info', ic:'🕒', ord:3, title:'Nessun aggiornamento recente',
+                    text:lastLog !== null ? `Ultimo log ${agoText(lastLog)}. Registrazioni regolari rendono trend e insight più affidabili.` : `Nessun log registrato per «${pl.name}» dall'inizio.`,
+                    act:{l:'Aggiungi log', js:"Alerts.goWidget('quick')"}});
+            }else if(pl.phase <= 6){
+                const envLast = Math.max(0, ...['temp', 'humidity'].map(m => { const s = envSeries(pl, m); return s.length ? s[s.length - 1].t : 0; }));
+                if(envLast && now - envLast > 5 * V9D) out.push({id:`stale-env-${envLast}`, sev:'info', ic:'🕒', ord:3, title:'Dati ambientali non aggiornati',
+                    text:`Ultima misura di temperatura/umidità ${agoText(envLast)}.`, act:{l:'Registra misura', js:"Alerts.goWidget('quick')"}});
+            }
+            // 4) annaffiatura in ritardo rispetto al TUO intervallo abituale
+            const w = (pl.water || []).map(t => new Date(t)).filter(d => !isNaN(d)).sort((a, b) => a - b);
+            if(w.length >= 3 && pl.phase <= 6){
+                const iv = [];
+                for(let i = 1; i < w.length; i++) iv.push((wdgDay(w[i]) - wdgDay(w[i - 1])) / V9D);
+                const rec = iv.slice(-6), avg = rec.reduce((a, b) => a + b, 0) / rec.length;
+                const ago = Math.round((wdgDay(new Date()) - wdgDay(w[w.length - 1])) / V9D), due = Math.round(avg) - ago;
+                if(avg >= 0.5 && due < 0) out.push({id:`water-${w[w.length - 1].getTime()}`, sev:-due >= 2 ? 'warn' : 'info', ic:'💧', ord:2, title:'Annaffiatura in ritardo',
+                    text:`Il tuo intervallo medio è ${avg.toFixed(1)} gg · ultima ${ago === 0 ? 'oggi' : ago + ' gg fa'} (ritardo ${-due} gg).`,
+                    act:{l:'Annaffiato ora', js:'Wdg.addWater();Alerts.refresh()'}});
+            }
+            // 5) fase più lunga del tipico (solo da cambi fase realmente registrati)
+            const pLog = pl.phaseLog || [], lp = pLog[pLog.length - 1], dur = phaseDays(ph.duration);
+            if(lp && !lp.start && lp.p === pl.phase && dur){
+                const since = Date.parse(lp.d), days = Math.floor((now - since) / V9D);
+                if(!isNaN(since) && days > dur.hi) out.push({id:`phase-${pl.phase}-${lp.d}`, sev:'info', ic:'🧭', ord:4, title:`Da ${days} giorni in ${ph.name}`,
+                    text:`Durata tipica ${ph.duration}. Se gli step sono completati, valuta il passaggio di fase.`, act:{l:'Vedi step', js:"Alerts.goWidget('today')"}});
+            }
+        }
+        // 6) promemoria in scadenza (entro 24 h) — la notifica vera resta quella dei Promemoria
+        try{
+            if(db){
+                const rs = await db.reminders.where('active').equals(1).toArray();
+                rs.forEach(r => {
+                    const t = new Date(r.datetime).getTime();
+                    if(isNaN(t) || t - now > 24 * V9H) return;
+                    const late = t <= now;
+                    out.push({id:`rem-${r.id}-${t}`, sev:late ? 'warn' : 'info', ic:'⏰', ord:late ? 0 : 5, title:late ? 'Promemoria scaduto' : 'Promemoria in arrivo',
+                        text:`${r.title} · ${late ? agoText(t) : new Date(t).toLocaleString('it-IT', {weekday:'short', hour:'2-digit', minute:'2-digit'})}`, act:{l:'Apri promemoria', js:"Alerts.goPage('reminders')"}});
+                });
+            }
+        }catch(e){}
+        out.sort((a, b) => (a.sev === 'warn' ? 0 : 1) - (b.sev === 'warn' ? 0 : 1) || a.ord - b.ord);
+        return out.slice(0, 10);
+    },
+    async refresh(){
+        try{ Alerts.all = await Alerts.compute(); }catch(e){ console.warn('alerts', e); Alerts.all = []; }
+        Alerts.paintBadge();
+        const sh = document.getElementById('alertSheet');
+        if(sh && sh.classList.contains('open')) Alerts.paintSheet();
+    },
+    kick(){ clearTimeout(Alerts._t); Alerts._t = setTimeout(Alerts.refresh, 180); },
+    paintBadge(){
+        const v = Alerts.vis(), n = v.length, warn = v.some(a => a.sev === 'warn');
+        const b = document.getElementById('alertBadge');
+        if(b){ b.hidden = !n; b.textContent = n > 9 ? '9+' : n; b.classList.toggle('warn', warn); }
+        const btn = document.getElementById('alertBtn');
+        if(btn) btn.setAttribute('aria-label', n ? `Centro avvisi: ${n} ${n === 1 ? 'avviso' : 'avvisi'}` : 'Centro avvisi: nessun avviso');
+        document.querySelectorAll('.al-chip').forEach(c => { c.innerHTML = Alerts.chipHtml(); c.classList.toggle('warn', warn); c.classList.toggle('ok', !n); });
+    },
+    chipHtml(){ const n = Alerts.vis().length; return n ? `🔔 <b>${n}</b> ${n === 1 ? 'avviso' : 'avvisi'}` : '✓ Nessun avviso'; },
+    ensureSheet(){
+        let sh = document.getElementById('alertSheet');
+        if(sh) return sh;
+        sh = document.createElement('div');
+        sh.id = 'alertSheet'; sh.className = 'sheet-ov';
+        sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true'); sh.setAttribute('aria-labelledby', 'alTitle');
+        sh.onclick = e => { if(e.target === sh) Alerts.close(); };
+        sh.innerHTML = '<div class="sheet"><div class="sheet-grab" aria-hidden="true"></div><div class="sheet-h"><h2 id="alTitle">Centro avvisi</h2><button type="button" class="sheet-x" onclick="Alerts.close()" aria-label="Chiudi">✕</button></div><div class="sheet-b" id="alBody"></div></div>';
+        document.body.appendChild(sh);
+        document.addEventListener('keydown', e => { if(e.key === 'Escape' && sh.classList.contains('open')) Alerts.close(); });
+        return sh;
+    },
+    paintSheet(){
+        const box = document.getElementById('alBody'); if(!box) return;
+        const s = Alerts.snz(), vis = Alerts.all.filter(a => !s[a.id]), hid = Alerts.all.length - vis.length;
+        const item = a => `<div class="al-it ${a.sev}"><span class="al-ic" aria-hidden="true">${a.ic}</span><div class="al-tx"><b>${esc(a.title)}</b><span>${esc(a.text)}</span><div class="al-ac">${a.act ? `<button type="button" class="al-b" onclick="${a.act.js}">${a.act.l}</button>` : ''}<button type="button" class="al-b ghost" onclick="Alerts.snooze('${a.id}')">Posticipa 24 h</button></div></div></div>`;
+        const grp = (t, arr) => arr.length ? `<div class="al-g">${t}</div>${arr.map(item).join('')}` : '';
+        const warn = vis.filter(a => a.sev === 'warn'), info = vis.filter(a => a.sev !== 'warn');
+        const {pl} = wdgPlant();
+        let h = vis.length ? grp('Richiedono attenzione', warn) + grp('Da sapere', info)
+            : `<div class="al-empty"><div class="al-ok">✓</div><b>Tutto sotto controllo</b><span>${pl ? 'Nessun avviso: i parametri registrati rientrano nei target e non ci sono scadenze vicine.' : 'Aggiungi una pianta dal Journal per ricevere avvisi sui suoi parametri.'}</span></div>`;
+        h += `<div class="al-foot">Gli avvisi nascono solo dai dati che registri e scompaiono quando il problema rientra.${hid ? ` <button type="button" class="al-link" onclick="Alerts.unsnooze()">Mostra ${hid} posticipat${hid === 1 ? 'o' : 'i'}</button>` : ''}</div>`;
+        box.innerHTML = h;
+    },
+    open(){
+        const sh = Alerts.ensureSheet();
+        Alerts.paintSheet();
+        sh.classList.add('open');
+        document.body.classList.add('sheet-lock');
+        Alerts.refresh();
+        const x = sh.querySelector('.sheet-x'); if(x) setTimeout(() => x.focus({preventScroll:true}), 50);
+    },
+    close(){
+        const sh = document.getElementById('alertSheet');
+        if(sh) sh.classList.remove('open');
+        document.body.classList.remove('sheet-lock');
+    },
+    snooze(id){ const s = Alerts.snz(); s[id] = Date.now() + 24 * V9H; lsSet('grow-alerts-snooze', s); Alerts.paintBadge(); Alerts.paintSheet(); },
+    unsnooze(){ lsSet('grow-alerts-snooze', {}); Alerts.paintBadge(); Alerts.paintSheet(); },
+    goPage(p){ Alerts.close(); go(p); },
+    goWidget(id, metric){
+        Alerts.close();
+        if(metric){ Wst.trend = metric; lsSet('grow-w-trend', metric); Wst.trAnim = true; }
+        const d = WDG_DEFS.find(x => x.id === id);
+        if(d){
+            if(Wst.tab !== 'all' && Wst.tab !== d.grp){ Wst.tab = 'all'; lsSet('grow-w-tab', 'all'); }
+            if(Wst.col[d.grp]){ Wst.col[d.grp] = false; lsSet('grow-w-col', Wst.col); }
+        }
+        if(currentPage !== 'home') go('home'); else renderPage();
+        setTimeout(() => { const el = document.getElementById('wdg-' + id); if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }, 380);
+    }
+};
+
+// ── GROW INSIGHTS ──
+// Solo statistiche calcolate sui log reali. Una metrica compare solo con ≥3 misure nella finestra;
+// il confronto col periodo precedente solo se anche quello ha ≥3 misure. Nessuna correlazione o causa dedotta.
+const Insights = {
+    MIN: 3,
+    stab(m, sd){
+        const T = {temp:[1, 2], humidity:[3, 6], vpd:[0.1, 0.25], ph:[0.15, 0.3], ec:[0.15, 0.3]}[m] || [1, 2];
+        return sd <= T[0] ? ['Molto stabile', 'ok'] : sd <= T[1] ? ['Stabile', 'ok'] : ['Variabile', 'warn'];
+    },
+    compute(pl, days){
+        const now = Date.now(), W = (days || 7) * V9D, MIN = Insights.MIN;
+        const avgOf = a => a.reduce((x, p) => x + p.v, 0) / a.length;
+        const metrics = Object.keys(ENV_DEFS).map(k => {
+            const s = envSeries(pl, k), cur = s.filter(p => now - p.t <= W), prev = s.filter(p => now - p.t > W && now - p.t <= 2 * W);
+            const o = {k, n:cur.length, np:prev.length, ok:cur.length >= MIN, band:envBand(pl, k), spark:s.slice(-14)};
+            if(o.ok){
+                o.avg = avgOf(cur); o.min = Math.min(...cur.map(p => p.v)); o.max = Math.max(...cur.map(p => p.v));
+                o.sd = Math.sqrt(cur.reduce((a, p) => a + (p.v - o.avg) * (p.v - o.avg), 0) / cur.length);
+                o.stab = Insights.stab(k, o.sd);
+                if(o.band) o.inPct = Math.round(cur.filter(p => p.v >= o.band[0] && p.v <= o.band[1]).length / cur.length * 100);
+                if(prev.length >= MIN) o.delta = o.avg - avgOf(prev);
+            }
+            return o;
+        });
+        const logT = (pl.logs || []).map(l => wdgLogTs(l.date)).filter(t => t !== null);
+        const watT = (pl.water || []).map(t => new Date(t).getTime()).filter(t => !isNaN(t));
+        const inW = (t, k) => now - t > (k ? W : 0) && now - t <= (k ? 2 * W : W);
+        const dk = new Set();
+        logT.concat(watT).filter(t => inW(t, 0)).forEach(t => dk.add(wdgKey(new Date(t))));
+        const act = {
+            logs:logT.filter(t => inW(t, 0)).length, logsPrev:logT.filter(t => inW(t, 1)).length,
+            water:watT.filter(t => inW(t, 0)).length, waterPrev:watT.filter(t => inW(t, 1)).length,
+            days:dk.size, problems:(pl.logs || []).filter(l => l.isProblem && inW(wdgLogTs(l.date) || 0, 0)).length,
+            total:logT.length
+        };
+        return {days:days || 7, metrics, act, any:metrics.some(m => m.ok)};
+    },
+    delta(m, v){
+        const d = ENV_DEFS[m], q = Math.pow(10, d.dec);
+        if(Math.round(v * q) === 0) return '<span class="in-d flat">＝ invariato</span>';
+        return `<span class="in-d ${v > 0 ? 'up' : 'down'}">${v > 0 ? '▲ +' : '▼ −'}${Math.abs(v).toFixed(d.dec)}</span>`;
+    },
+    row(o){
+        const d = ENV_DEFS[o.k];
+        if(!o.ok) return `<div class="in-row off"><div class="in-top"><span class="in-l" style="--c:${d.c}">${d.l}</span><span class="in-na">dati insufficienti · ${o.n}/${Insights.MIN} misure</span></div></div>`;
+        const bar = o.inPct !== undefined ? `<span class="in-bar" title="Misure in target"><i style="width:${o.inPct}%"></i></span><span class="in-s">${o.inPct}% in target</span>` : '';
+        return `<div class="in-row"><div class="in-top"><span class="in-l" style="--c:${d.c}">${d.l}</span><b class="in-v">${envNumStr(o.k, o.avg)}<small>${d.u.trim()}</small></b>${o.delta !== undefined ? Insights.delta(o.k, o.delta) : '<span class="in-d na">prec.: n/d</span>'}</div><div class="in-sub">${bar}<span class="in-s">${o.min.toFixed(d.dec)}–${o.max.toFixed(d.dec)} · σ ${o.sd.toFixed(d.dec + 1)} <em class="${o.stab[1]}">${o.stab[0]}</em></span></div></div>`;
+    },
+    actLine(a, days){
+        const cmp = (v, p) => p ? ` <em>(prima ${p})</em>` : '';
+        return `<div class="in-act"><div><b>${a.logs}</b><small>registrazioni${cmp(a.logs, a.logsPrev)}</small></div><div><b>${a.water}</b><small>annaffiature${cmp(a.water, a.waterPrev)}</small></div><div><b>${a.days}<i>/${days}</i></b><small>giorni attivi</small></div></div>`;
+    }
+};
+
+Object.assign(WDG_BODY, {
+    trend: trendBody,
+    insights(){
+        const {pl} = wdgPlant();
+        if(!pl) return wdgNeedPlant();
+        const r = Insights.compute(pl, 7);
+        const good = r.metrics.filter(m => m.ok), lack = r.metrics.filter(m => !m.ok);
+        let h = `<div class="wdg-sub">Ultimi 7 giorni · <b style="color:#ddd">${esc(pl.name)}</b></div>`;
+        if(!r.any){
+            h += `<div class="in-empty"><b>Dati insufficienti</b><span>Servono almeno ${Insights.MIN} misure negli ultimi 7 giorni per mostrare medie e variazioni. Registrate finora: ${r.metrics.map(m => ENV_DEFS[m.k].l + ' ' + m.n).join(' · ')}.</span></div>`;
+        }else{
+            h += good.slice(0, 4).map(Insights.row).join('');
+            if(lack.length) h += `<div class="in-lack">Dati insufficienti per: ${lack.map(m => ENV_DEFS[m.k].l).join(', ')}</div>`;
+        }
+        h += Insights.actLine(r.act, 7);
+        return h + `<button type="button" class="wdg-link" onclick="go('profile')">Analisi completa ›</button>`;
+    },
+    gallery(){
+        const {pl} = wdgPlant();
+        if(!pl) return wdgNeedPlant();
+        return `<div id="wGal">${Gal.widgetHtml()}</div>`;
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+// 📅 DIARIO VISIVO (estende la Timeline: log + fasi + foto + acqua, senza doppie registrazioni)
+// ═══════════════════════════════════════════════════════════
+const Diary = {
+    f:'all', photos:[],
+    FILTERS:[['all', 'Tutto'], ['log', '📝 Log'], ['phase', '🧭 Fasi'], ['photo', '📷 Foto'], ['water', '💧 Acqua'], ['prob', '⚠️ Problemi']],
+    chips(){
+        return `<div class="wdg-chips dy-chips" id="diaryChips" role="group" aria-label="Filtro diario">${Diary.FILTERS.map(([k, l]) => `<button type="button" class="dy-chip ${Diary.f === k ? 'on' : ''}" aria-pressed="${Diary.f === k}" onclick="Diary.setF('${k}')">${l}</button>`).join('')}</div>`;
+    },
+    setF(k){
+        Diary.f = k;
+        const c = document.getElementById('diaryChips'); if(c) c.outerHTML = Diary.chips();
+        Diary.paint();
+    },
+    paint(){
+        const pl = lsGet('grow-plants', [])[journalEditId], c = document.getElementById('logTimeline');
+        if(pl && c) c.innerHTML = Diary.html(pl);
+    },
+    logCard(log){
+        const isProblem = log.isProblem;
+        const tags = (log.tags || []).map(t => `<span class="log-tag">#${esc(t)}</span>`).join('');
+        const metrics = log.metrics ? Object.entries(log.metrics).filter(([k, v]) => v !== undefined && v !== null && v !== '').map(([k, v]) => {
+            let color = '#888';
+            if(k === 'ph') color = 'var(--nc)';
+            if(k === 'ec') color = 'var(--np)';
+            if(k === 'temp') color = 'var(--no)';
+            if(k === 'humidity') color = 'var(--ng)';
+            return `<span class="timeline-metric" style="color:${color};border-color:${color}30">${k.toUpperCase()}: ${esc(v)}</span>`;
+        }).join('') : '';
+        const tm = String(log.date || '').split(',')[1];
+        return `<div class="timeline-item"><div class="timeline-dot ${isProblem ? 'problem' : ''}"></div><div class="timeline-card">
+<div class="timeline-date">${esc(tm ? tm.trim().slice(0, 5) : '')} ${isProblem ? '<span style="color:var(--no);margin-left:8px">⚠️ PROBLEMA</span>' : ''}</div>
+<div class="timeline-text">${esc(log.text)}</div>
+${tags ? `<div class="timeline-tags">${tags}</div>` : ''}
+${metrics ? `<div class="timeline-metrics">${metrics}</div>` : ''}
+</div></div>`;
+    },
+    html(pl){
+        const f = Diary.f, days = new Map();
+        const dk = t => wdgKey(new Date(t));
+        const day = t => { const k = t ? dk(t) : 0; if(!days.has(k)) days.set(k, {t, k, items:[], water:0, photos:[]}); return days.get(k); };
+        if(pl.startDate && (f === 'all' || f === 'phase')){
+            const t = new Date(pl.startDate + 'T00:00:00').getTime();
+            if(!isNaN(t)){ const s = (pl.phaseLog || []).find(e => e.start); day(t).items.push({o:9, h:`<div class="timeline-item"><div class="timeline-dot start"></div><div class="dy-ev start"><b>🌱 Inizio coltivazione</b>${s && phases[s.p] ? `<span>Fase iniziale: ${esc(phases[s.p].name)}</span>` : ''}</div></div>`}); }
+        }
+        if(f === 'all' || f === 'phase') (pl.phaseLog || []).forEach(e => {
+            if(e.start) return;
+            const t = Date.parse(e.d), ph = phases[e.p]; if(isNaN(t) || !ph) return;
+            day(t).items.push({o:8, h:`<div class="timeline-item"><div class="timeline-dot phase" style="--pc:${ph.color}"></div><div class="dy-ev phase" style="--pc:${ph.color}"><b>🧭 Nuova fase · ${esc(ph.name)}</b><span>${esc(ph.subtitle || '')}</span></div></div>`});
+        });
+        if(f === 'all' || f === 'log' || f === 'prob') (pl.logs || []).forEach((l, i) => {
+            if(f === 'prob' && !l.isProblem) return;
+            const t = wdgLogTs(l.date); day(t === null ? 0 : t).items.push({o:5, i, h:Diary.logCard(l)});
+        });
+        if(f === 'all' || f === 'water') (pl.water || []).forEach(s => { const t = new Date(s).getTime(); if(!isNaN(t)) day(t).water++; });
+        const pIdx = journalEditId;
+        if(f === 'all' || f === 'photo') (Diary.photos || []).filter(p => String(p.plantId) === String(pIdx)).forEach(p => { const t = Date.parse(p.createdAt); if(!isNaN(t)) day(t).photos.push(p); });
+        const list = Array.from(days.values()).filter(d => d.items.length || d.water || d.photos.length).sort((a, b) => b.k - a.k);
+        if(!list.length){
+            const msg = {all:'Il diario si riempie da solo con log, fasi, foto e annaffiature.', log:'Nessun log ancora.', phase:'Nessun cambio fase registrato: da ora ogni passaggio comparirà qui.', photo:'Nessuna foto per questa pianta.', water:'Nessuna annaffiatura registrata.', prob:'Nessun problema segnalato. 🎉'}[f];
+            return `<div class="dy-empty">${msg}</div>`;
+        }
+        let h = '<div class="timeline-line"></div>';
+        list.forEach(d => {
+            const dt = d.t ? new Date(d.t) : null, dn = d.t ? plantDayAt(pl, d.t) : null, ph = d.t ? phaseAt(pl, d.t + V9D - 1) : null;
+            const sub = [dn ? 'Giorno ' + dn : '', ph !== null && phases[ph] ? phases[ph].name : ''].filter(Boolean).join(' · ');
+            h += `<div class="dy"><div class="dy-h"><b>${dt ? dt.toLocaleDateString('it-IT', {weekday:'short', day:'numeric', month:'short'}) : 'Senza data'}</b>${sub ? `<span>${esc(sub)}</span>` : ''}</div>`;
+            h += d.items.sort((a, b) => b.o - a.o || (b.i || 0) - (a.i || 0)).map(x => x.h).join('');
+            if(d.water) h += `<div class="timeline-item"><div class="timeline-dot water"></div><div class="dy-ev water">💧 Annaffiatura${d.water > 1 ? ' ×' + d.water : ''}</div></div>`;
+            if(d.photos.length) h += `<div class="timeline-item"><div class="timeline-dot photo"></div><div class="dy-ph">${d.photos.slice(0, 4).map((p, i) => `<button type="button" class="dy-th" onclick="Gal.openPlant(${pIdx},${p.id})" aria-label="Apri foto"><img src="${p.data}" alt="" loading="lazy" decoding="async">${i === 3 && d.photos.length > 4 ? `<span>+${d.photos.length - 4}</span>` : ''}</button>`).join('')}</div></div>`;
+            h += '</div>';
+        });
+        return h;
+    }
+};
+// la vecchia funzione resta (stessa firma): ora disegna il Diario
+function renderTimelineHTML(pl){ return Diary.html(pl); }
+
+// ═══════════════════════════════════════════════════════════
+// 🖼️ GALLERIA — tutte le foto già salvate (Dexie "photos"), con filtri e confronto
+// ═══════════════════════════════════════════════════════════
+const Gal = {
+    st:{plant:'all', phase:'all', range:'all', sort:'new', cmp:false, sel:[], lim:48, mode:'slide'},
+    all:null, view:[], vi:0, err:false, busy:false,
+    async load(force){
+        if(force || !Gal.all){
+            try{ Gal.all = db ? await db.photos.toArray() : []; Gal.err = false; }
+            catch(e){ Gal.all = []; Gal.err = true; }
+        }
+        return Gal.all;
+    },
+    meta(p){
+        const pl = lsGet('grow-plants', [])[p.plantId] || null, t = Date.parse(p.createdAt);
+        let phase = typeof p.phase === 'number' ? p.phase : null;
+        if(phase === null && pl && !isNaN(t)) phase = phaseAt(pl, t);
+        return {p, pl, t:isNaN(t) ? 0 : t, phase, day:pl && t ? plantDayAt(pl, t) : null, name:pl ? pl.name : 'Pianta rimossa'};
+    },
+    list(){
+        const s = Gal.st;
+        let a = (Gal.all || []).map(Gal.meta);
+        if(s.plant !== 'all') a = a.filter(m => String(m.p.plantId) === String(s.plant));
+        if(s.phase !== 'all') a = a.filter(m => s.phase === 'x' ? m.phase === null : String(m.phase) === String(s.phase));
+        if(s.range !== 'all'){ const lim = Date.now() - (+s.range) * V9D; a = a.filter(m => m.t >= lim); }
+        return a.sort((x, y) => s.sort === 'new' ? y.t - x.t : x.t - y.t);
+    },
+    phaseTag(m){ return m.phase !== null && phases[m.phase] ? esc(phases[m.phase].name) : ''; },
+    html(){
+        const s = Gal.st, plants = lsGet('grow-plants', []), all = (Gal.all || []).map(Gal.meta);
+        const chip = (on, label, js, extra) => `<button type="button" class="wdg-chip ${on ? 'on' : ''}" aria-pressed="${on}" onclick="${js}">${label}${extra || ''}</button>`;
+        const cnt = id => all.filter(m => String(m.p.plantId) === String(id)).length;
+        let h = `<div class="ga-bar"><div class="ga-act"><button type="button" class="wdg-btn sm ${s.cmp ? '' : 'ghost'}" style="padding:0 14px" aria-pressed="${s.cmp}" onclick="Gal.toggleCmp()">⚖️ ${s.cmp ? 'Annulla confronto' : 'Confronta'}</button><button type="button" class="wdg-btn sm" style="padding:0 14px" onclick="Gal.pick()">📷 Aggiungi</button></div>`;
+        h += `<div class="ga-fl"><div class="ga-fh">Pianta</div><div class="wdg-chips">${chip(s.plant === 'all', 'Tutte', "Gal.set('plant','all')")}${plants.map((p, i) => chip(String(s.plant) === String(i), esc(p.name), `Gal.set('plant',${i})`, ` <small>${cnt(i)}</small>`)).join('')}</div></div>`;
+        const pset = [...new Set(all.map(m => m.phase))].filter(v => v !== null).sort((a, b) => a - b), hasX = all.some(m => m.phase === null);
+        if(all.length) h += `<div class="ga-fl"><div class="ga-fh">Fase</div><div class="wdg-chips">${chip(s.phase === 'all', 'Tutte', "Gal.set('phase','all')")}${pset.map(v => chip(String(s.phase) === String(v), esc(phases[v] ? phases[v].name : 'Fase ' + v), `Gal.set('phase',${v})`)).join('')}${hasX ? chip(s.phase === 'x', 'Non indicata', "Gal.set('phase','x')") : ''}</div></div>`;
+        h += `<div class="ga-fl"><div class="ga-fh">Periodo</div><div class="wdg-chips">${[['all', 'Sempre'], ['30', '30 giorni'], ['7', '7 giorni']].map(([k, l]) => chip(s.range === k, l, `Gal.set('range','${k}')`)).join('')}<button type="button" class="wdg-chip" onclick="Gal.set('sort','${s.sort === 'new' ? 'old' : 'new'}')">${s.sort === 'new' ? '↓ Più recenti' : '↑ Più vecchie'}</button></div></div></div>`;
+        if(s.cmp) h += `<div class="ga-cmpbar" role="status">⚖️ ${s.sel.length === 0 ? 'Scegli la prima foto da confrontare' : 'Scegli la seconda foto (' + s.sel.length + '/2)'}</div>`;
+        const list = Gal.list();
+        if(Gal.err) return h + `<div class="ga-empty"><div class="ga-ei">⚠️</div><b>Impossibile leggere le foto</b><span>Il database del dispositivo non risponde. Ricarica la pagina; i dati non sono stati toccati.</span><button type="button" class="wdg-btn" onclick="Gal.reload()">Riprova</button></div>`;
+        if(!all.length) return h + `<div class="ga-empty"><div class="ga-ei">📷</div><b>Nessuna foto ancora</b><span>Scatta o carica le foto delle tue piante: qui le ritroverai in ordine, filtrabili per pianta e fase, e potrai confrontarle nel tempo.</span><button type="button" class="wdg-btn" onclick="Gal.pick()">📷 Aggiungi la prima foto</button></div>`;
+        if(!list.length) return h + `<div class="ga-empty"><div class="ga-ei">🔎</div><b>Nessuna foto con questi filtri</b><button type="button" class="wdg-btn ghost" onclick="Gal.reset()">Azzera filtri</button></div>`;
+        h += `<div class="ga-sum">${list.length} ${list.length === 1 ? 'foto' : 'foto'}${list.length > 1 ? ' · dal ' + wdgFmt(new Date(Math.min(...list.map(m => m.t)))) + ' al ' + wdgFmt(new Date(Math.max(...list.map(m => m.t)))) : ''}</div>`;
+        let cur = '', shown = list.slice(0, s.lim);
+        shown.forEach(m => {
+            const d = new Date(m.t), mk = m.t ? d.toLocaleDateString('it-IT', {month:'long', year:'numeric'}) : 'Senza data';
+            if(mk !== cur){ if(cur) h += '</div>'; cur = mk; h += `<div class="ga-m">${esc(mk)}</div><div class="ga-grid">`; }
+            const si = s.sel.indexOf(m.p.id);
+            h += `<button type="button" class="ga-c ${si >= 0 ? 'sel' : ''}" onclick="Gal.tap(${m.p.id})" aria-label="Foto ${esc(m.name)} ${m.t ? d.toLocaleDateString('it-IT') : ''}"><img src="${m.p.data}" alt="" loading="lazy" decoding="async"><span class="ga-d">${m.t ? wdgFmt(d) : ''}</span>${Gal.phaseTag(m) ? `<span class="ga-p">${Gal.phaseTag(m)}</span>` : ''}${si >= 0 ? `<span class="ga-n">${si + 1}</span>` : ''}</button>`;
+        });
+        if(cur) h += '</div>';
+        if(list.length > shown.length) h += `<button type="button" class="wdg-btn ghost block" style="margin-top:14px" onclick="Gal.more()">Mostra altre ${Math.min(48, list.length - shown.length)} di ${list.length - shown.length}</button>`;
+        return h;
+    },
+    paint(){ const r = document.getElementById('galRoot'); if(r) r.innerHTML = Gal.html(); },
+    set(k, v){ Gal.st[k] = v; Gal.st.lim = 48; Gal.paint(); },
+    reset(){ Object.assign(Gal.st, {plant:'all', phase:'all', range:'all', lim:48}); Gal.paint(); },
+    more(){ Gal.st.lim += 48; Gal.paint(); },
+    async reload(){ const r = document.getElementById('galRoot'); if(r) r.innerHTML = '<div class="ga-grid">' + '<i class="sk ga-sk"></i>'.repeat(6) + '</div>'; await Gal.load(true); Gal.paint(); },
+    toggleCmp(){ Gal.st.cmp = !Gal.st.cmp; Gal.st.sel = []; Gal.paint(); },
+    tap(id){
+        const s = Gal.st;
+        if(s.cmp){
+            const i = s.sel.indexOf(id);
+            if(i >= 0) s.sel.splice(i, 1); else s.sel.push(id);
+            if(s.sel.length === 2){ Gal.paint(); Gal.openCmp(); return; }
+            Gal.paint(); return;
+        }
+        Gal.view = Gal.list(); Gal.openAt(id);
+    },
+    // ── caricamento ──
+    pick(){
+        let inp = document.getElementById('galInput');
+        if(!inp){ inp = document.createElement('input'); inp.type = 'file'; inp.id = 'galInput'; inp.accept = 'image/*'; inp.multiple = true; inp.hidden = true; inp.onchange = () => Gal.upload(inp); document.body.appendChild(inp); }
+        inp.click();
+    },
+    async upload(inp){
+        const files = Array.from(inp.files || []); if(!files.length) return;
+        const plants = lsGet('grow-plants', []);
+        if(!plants.length){ notify('Aggiungi prima una pianta dal Journal.'); inp.value = ''; return; }
+        const idx = Gal.st.plant !== 'all' && plants[Gal.st.plant] ? +Gal.st.plant : getActivePlantIndex();
+        let ok = 0;
+        for(const f of files){ try{ await addPhoto(idx, f); ok++; }catch(e){ console.warn('foto', e); } }
+        inp.value = '';
+        Toast.show(ok ? `📷 ${ok} ${ok === 1 ? 'foto aggiunta' : 'foto aggiunte'} a ${plants[idx].name}` : 'Foto non valida', ok ? 'success' : 'error');
+        await Gal.load(true); Gal.afterChange();
+    },
+    afterChange(){ if(currentPage === 'gallery') Gal.paint(); else if(currentPage === 'home') refreshWidget('gallery'); else renderPage(); },
+    // ── visualizzatore ──
+    ensure(id, cls){
+        let el = document.getElementById(id);
+        if(!el){ el = document.createElement('div'); el.id = id; el.className = cls; el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); document.body.appendChild(el); }
+        return el;
+    },
+    async openPlant(plantIdx, id){
+        await Gal.load();
+        Gal.view = (Gal.all || []).filter(p => String(p.plantId) === String(plantIdx)).map(Gal.meta).sort((a, b) => b.t - a.t);
+        Gal.openAt(id);
+    },
+    openAt(id){
+        const i = Gal.view.findIndex(m => m.p.id === id); if(i < 0) return;
+        Gal.vi = i; Gal.ensure('galV', 'gv').classList.add('open'); document.body.classList.add('sheet-lock');
+        Gal.paintV();
+        if(!Gal._k){ Gal._k = true; document.addEventListener('keydown', e => { const v = document.getElementById('galV'), c = document.getElementById('galC'); if(e.key === 'Escape'){ if(c && c.classList.contains('open')) Gal.closeCmp(); else if(v && v.classList.contains('open')) Gal.closeV(); } if(v && v.classList.contains('open') && !(c && c.classList.contains('open'))){ if(e.key === 'ArrowLeft') Gal.step(-1); if(e.key === 'ArrowRight') Gal.step(1); } }); }
+    },
+    ctx(m){
+        if(!m.pl || !m.t) return '';
+        const k = wdgKey(new Date(m.t));
+        const ls = (m.pl.logs || []).filter(l => { const t = wdgLogTs(l.date); return t !== null && wdgKey(new Date(t)) === k; }).slice(0, 2);
+        if(!ls.length) return '<div class="gv-ctx off">Nessuna registrazione del Journal in questo giorno.</div>';
+        return `<div class="gv-ctx"><small>Dal Journal · stesso giorno</small>${ls.map(l => `<div>${esc(String(l.text || '').slice(0, 140))}${l.metrics && Object.keys(l.metrics).length ? ` <em>${Object.entries(l.metrics).filter(([k, v]) => v !== '' && v != null && ['temp', 'humidity', 'ph', 'ec'].includes(k)).map(([k, v]) => k.toUpperCase() + ' ' + esc(v)).join(' · ')}</em>` : ''}</div>`).join('')}</div>`;
+    },
+    paintV(){
+        const v = document.getElementById('galV'), m = Gal.view[Gal.vi]; if(!v || !m) return;
+        const n = Gal.view.length, d = m.t ? new Date(m.t) : null;
+        v.innerHTML = `<div class="gv-top"><span class="gv-cnt">${Gal.vi + 1} / ${n}</span><button type="button" class="sheet-x" onclick="Gal.closeV()" aria-label="Chiudi">✕</button></div>
+<div class="gv-stage" id="gvStage">${n > 1 ? '<button type="button" class="gv-nav l" onclick="Gal.step(-1)" aria-label="Precedente">‹</button><button type="button" class="gv-nav r" onclick="Gal.step(1)" aria-label="Successiva">›</button>' : ''}<img src="${m.p.data}" alt="Foto di ${esc(m.name)}"></div>
+<div class="gv-info"><div class="gv-t"><b>${esc(m.name)}</b>${Gal.phaseTag(m) ? `<span class="gv-badge">${Gal.phaseTag(m)}</span>` : ''}${m.day ? `<span class="gv-badge d">Giorno ${m.day}</span>` : ''}</div>
+<div class="gv-dt">${d ? d.toLocaleString('it-IT', {weekday:'long', day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'}) : 'Data non disponibile'}</div>${Gal.ctx(m)}
+<div class="gv-act"><button type="button" class="wdg-btn grow" onclick="Gal.startCmp(${m.p.id})">⚖️ Confronta</button>${m.pl ? `<button type="button" class="wdg-btn ghost" onclick="Gal.toPlant(${m.p.plantId})">🌿 Pianta</button>` : ''}<button type="button" class="wdg-btn ghost sm" onclick="Gal.del(${m.p.id})" aria-label="Elimina foto">🗑️</button></div></div>`;
+        const st = document.getElementById('gvStage'); let x0 = null;
+        st.onpointerdown = e => { x0 = e.clientX; };
+        st.onpointerup = e => { if(x0 === null) return; const dx = e.clientX - x0; x0 = null; if(Math.abs(dx) > 50) Gal.step(dx < 0 ? 1 : -1); };
+    },
+    step(dir){ const n = Gal.view.length; if(n < 2) return; Gal.vi = (Gal.vi + dir + n) % n; Gal.paintV(); },
+    closeV(){ const v = document.getElementById('galV'); if(v) v.classList.remove('open'); if(!document.querySelector('#galC.open,#alertSheet.open')) document.body.classList.remove('sheet-lock'); },
+    toPlant(idx){ Gal.closeV(); journalView = 'detail'; journalEditId = idx; go('journal'); },
+    async del(id){
+        if(!await confirmAsync('Eliminare questa foto?', {title:'Elimina foto', okText:'Elimina'})) return;
+        try{ await deletePhoto(id); }catch(e){ notify('Impossibile eliminare la foto'); return; }
+        Gal.st.sel = Gal.st.sel.filter(x => x !== id);
+        await Gal.load(true);
+        Gal.view = Gal.view.filter(m => m.p.id !== id);
+        if(Gal.view.length){ Gal.vi = Math.min(Gal.vi, Gal.view.length - 1); Gal.paintV(); } else Gal.closeV();
+        Gal.afterChange();
+    },
+    // ── confronto ──
+    startCmp(id){
+        Gal.closeV();
+        if(currentPage !== 'gallery'){ Gal.st.cmp = true; Gal.st.sel = [id]; go('gallery'); return; }
+        Gal.st.cmp = true; Gal.st.sel = [id]; Gal.paint();
+    },
+    openCmp(){
+        const ms = Gal.st.sel.map(id => (Gal.all || []).find(p => p.id === id)).filter(Boolean).map(Gal.meta).sort((a, b) => a.t - b.t);
+        if(ms.length < 2) return;
+        Gal.cmp = ms; Gal.ensure('galC', 'gv gc').classList.add('open'); document.body.classList.add('sheet-lock'); Gal.paintC();
+    },
+    cap(m, lbl){ return `<div class="gc-cap"><b>${lbl}</b><span>${esc(m.name)}${m.day ? ' · Giorno ' + m.day : ''}</span><span>${m.t ? new Date(m.t).toLocaleDateString('it-IT', {day:'numeric', month:'short', year:'numeric'}) : ''}${Gal.phaseTag(m) ? ' · ' + Gal.phaseTag(m) : ''}</span></div>`; },
+    paintC(){
+        const c = document.getElementById('galC'); if(!c || !Gal.cmp) return;
+        const [a, b] = Gal.cmp, dd = Math.round((b.t - a.t) / V9D), same = a.pl && b.pl && a.p.plantId === b.p.plantId, mode = Gal.st.mode;
+        c.innerHTML = `<div class="gv-top"><span class="gv-cnt">Confronto${a.t && b.t ? ' · ' + (dd === 0 ? 'stesso giorno' : dd + (dd === 1 ? ' giorno' : ' giorni') + ' di distanza') : ''}${same ? '' : ' · piante diverse'}</span><button type="button" class="sheet-x" onclick="Gal.closeCmp()" aria-label="Chiudi">✕</button></div>
+<div class="gc-seg" role="group" aria-label="Modalità"><button type="button" class="${mode === 'slide' ? 'on' : ''}" aria-pressed="${mode === 'slide'}" onclick="Gal.setMode('slide')">Cursore</button><button type="button" class="${mode === 'side' ? 'on' : ''}" aria-pressed="${mode === 'side'}" onclick="Gal.setMode('side')">Affiancate</button></div>
+${mode === 'slide'
+    ? `<div class="gc-stage" id="gcStage" style="--x:50%"><img class="gc-b" src="${b.p.data}" alt="Dopo"><img class="gc-a" src="${a.p.data}" alt="Prima"><span class="gc-lb l">PRIMA</span><span class="gc-lb r">DOPO</span><span class="gc-bar"></span><input class="gc-rng" type="range" min="0" max="100" value="50" aria-label="Cursore di confronto" oninput="Gal.cmpMove(this.value)"></div><div class="gc-caps">${Gal.cap(a, 'PRIMA')}${Gal.cap(b, 'DOPO')}</div>`
+    : `<div class="gc-side"><figure><img src="${a.p.data}" alt="Prima">${Gal.cap(a, 'PRIMA')}</figure><figure><img src="${b.p.data}" alt="Dopo">${Gal.cap(b, 'DOPO')}</figure></div>`}
+<div class="gv-act" style="padding:0 16px 16px"><button type="button" class="wdg-btn ghost block" onclick="Gal.closeCmp()">Chiudi confronto</button></div>`;
+    },
+    setMode(m){ Gal.st.mode = m; Gal.paintC(); },
+    cmpMove(v){ const s = document.getElementById('gcStage'); if(s) s.style.setProperty('--x', v + '%'); },
+    closeCmp(){ const c = document.getElementById('galC'); if(c) c.classList.remove('open'); Gal.st.sel = []; Gal.st.cmp = false; if(!document.querySelector('#galV.open,#alertSheet.open')) document.body.classList.remove('sheet-lock'); if(currentPage === 'gallery') Gal.paint(); },
+    closeAll(){ ['galV', 'galC', 'alertSheet'].forEach(i => { const e = document.getElementById(i); if(e) e.classList.remove('open'); }); document.body.classList.remove('sheet-lock'); },
+    // widget Home: disegnato in modo sincrono dalla cache (niente sfarfallio nei re-render); la cache si carica una volta
+    widgetHtml(){
+        const {pl, idx} = wdgPlant();
+        if(!Gal.all) return '<div class="gw-strip"><i class="sk"></i><i class="sk"></i><i class="sk"></i><i class="sk"></i></div>';
+        if(Gal.err) return '<div class="wdg-muted">Foto non leggibili in questo momento.</div>';
+        const mine = Gal.all.filter(p => String(p.plantId) === String(idx)).map(Gal.meta).sort((a, b) => b.t - a.t);
+        if(!mine.length) return `<div class="wdg-empty"><div class="wdg-empty-ic">📷</div><div>Nessuna foto di ${esc(pl ? pl.name : 'questa pianta')}</div><button type="button" class="wdg-btn" onclick="go('gallery')">Apri la galleria</button></div>`;
+        return `<div class="gw-strip">${mine.slice(0, 4).map((m, i) => `<button type="button" class="gw-th" onclick="Gal.openPlant(${idx},${m.p.id})" aria-label="Apri foto"><img src="${m.p.data}" alt="" loading="lazy" decoding="async">${i === 3 && mine.length > 4 ? `<span>+${mine.length - 4}</span>` : ''}</button>`).join('')}</div><div class="wdg-cap" style="margin-top:10px">${mine.length} ${mine.length === 1 ? 'foto' : 'foto'} · ultima ${agoText(mine[0].t)}${mine.length > 1 && mine[0].t !== mine[mine.length - 1].t ? ` · primo scatto ${wdgFmt(new Date(mine[mine.length - 1].t))}` : ''}</div>`;
+    },
+    async widgetFill(){ await Gal.load(); refreshWidget('gallery'); }
+};
+function renderGallery(){
+    return `<div><div style="margin-bottom:18px"><h1 class="t-graffiti gp" style="font-size:30px;margin-bottom:4px">Galleria</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">Le foto delle tue piante nel tempo</p></div><div id="galRoot"><div class="ga-grid">${'<i class="sk ga-sk"></i>'.repeat(6)}</div></div></div>`;
+}
+async function initGallery(){
+    await Gal.load();
+    if(currentPage === 'gallery') Gal.paint();
+}
+
+// ═══════════════════════════════════════════════════════════
+// 👤 PROFILO — statistiche sobrie sull'attività, niente punti né classifiche
+// ═══════════════════════════════════════════════════════════
+const Profile = {
+    sel:null,
+    streaks(map){
+        const keys = Array.from(map.keys()).sort((a, b) => a - b);
+        const toD = k => new Date(Math.floor(k / 10000), Math.floor(k % 10000 / 100) - 1, k % 100, 12).getTime();
+        let best = 0, run = 0, prev = null;
+        keys.forEach(k => { const t = toD(k); run = prev !== null && Math.round((t - prev) / V9D) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = t; });
+        let cur = 0, c = wdgPlus(new Date(), 0);
+        if(!map.get(wdgKey(c))) c = wdgPlus(c, -1);
+        while(map.get(wdgKey(c))){ cur++; c = wdgPlus(c, -1); }
+        return {cur, best};
+    },
+    stats(){
+        const plants = lsGet('grow-plants', []), act = wdgActivity();
+        const logs = plants.reduce((a, p) => a + (p.logs || []).length, 0), water = plants.reduce((a, p) => a + (p.water || []).length, 0);
+        const starts = plants.map(p => p.startDate ? new Date(p.startDate + 'T00:00:00').getTime() : NaN).filter(t => !isNaN(t));
+        const since = starts.length ? Math.max(0, Math.floor((Date.now() - Math.min(...starts)) / V9D)) : null;
+        const dry = plants.reduce((a, p) => a + (p.logs || []).reduce((b, l) => b + (envNum(l.metrics && l.metrics.dry) || 0), 0), 0);
+        const done = plants.filter(p => p.phase >= phases.length - 1).length;
+        const maxDay = plants.reduce((a, p) => Math.max(a, calcPlantDay(p)), 0);
+        return {plants, logs, water, days:act.size, since, dry, done, maxDay, streak:Profile.streaks(act)};
+    },
+    miles(s, photos){
+        const tier = (n, arr) => { const hit = arr.filter(x => n >= x), nx = arr.find(x => n < x); return {hit:hit[hit.length - 1], nx}; };
+        const L = tier(s.logs, [10, 50, 100, 250, 500]);
+        const out = [
+            {ok:s.plants.length >= 1, t:'Prima coltivazione registrata', d:s.plants.length ? `${s.plants.length} ${s.plants.length === 1 ? 'pianta' : 'piante'} nel Journal` : 'Aggiungi una pianta dal Journal'},
+            {ok:!!L.hit, t:L.hit ? `${L.hit} registrazioni` : '10 registrazioni', d:L.nx ? `${s.logs} di ${L.nx}` : `${s.logs} registrazioni totali`},
+            {ok:s.streak.best >= 7, t:'7 giorni consecutivi di attività', d:`Miglior serie: ${s.streak.best} ${s.streak.best === 1 ? 'giorno' : 'giorni'}`},
+            {ok:s.maxDay >= 30, t:'Primo mese di coltivazione', d:`Pianta più avanzata: giorno ${s.maxDay}`},
+            {ok:s.dry > 0, t:'Prima resa registrata', d:s.dry > 0 ? `${+s.dry.toFixed(1)} g di peso secco registrati` : 'Registra il peso secco nel Journal'},
+            {ok:s.done > 0, t:'Ciclo completo fino al Curing', d:s.done ? `${s.done} ${s.done === 1 ? 'pianta' : 'piante'}` : 'Porta una pianta all\'ultima fase'},
+            {ok:photos > 0, t:'Diario fotografico avviato', d:photos ? `${photos} foto in galleria` : 'Aggiungi una foto dalla Galleria'}
+        ];
+        return out;
+    },
+    html(){
+        const s = Profile.stats(), pls = s.plants;
+        if(Profile.sel === null || !pls[Profile.sel]) Profile.sel = pls.length ? getActivePlantIndex() : null;
+        const tile = (v, l, sub) => `<div class="pf-t"><b>${v}</b><span>${l}</span>${sub ? `<em>${sub}</em>` : ''}</div>`;
+        let h = `<div class="pf-tiles">${tile(pls.length, 'Coltivazioni', s.done ? s.done + ' concluse' : 'registrate')}${tile(s.logs, 'Registrazioni', 'log nel Journal')}${tile(s.days, 'Giorni di attività', s.streak.cur ? 'serie attuale ' + s.streak.cur : 'con log o acqua')}${tile(s.water, 'Annaffiature', 'registrate')}${tile('<i id="pfPh">…</i>', 'Foto', 'in galleria')}${tile(s.since === null ? '—' : s.since, 'Giorni di grow', s.since === null ? 'nessuna data inizio' : 'dalla prima pianta')}</div>`;
+        h += `<div class="pf-sec"><h3>Insights</h3>`;
+        if(!pls.length) h += `<div class="in-empty"><b>Nessuna pianta</b><span>Gli Insights si calcolano sui log di una pianta. Aggiungila dal Journal e inizia a registrare.</span></div>`;
+        else{
+            if(pls.length > 1) h += `<div class="wdg-chips">${pls.map((p, i) => `<button type="button" class="wdg-chip ${Profile.sel === i ? 'on' : ''}" onclick="Profile.pick(${i})">${esc(p.name)}</button>`).join('')}</div>`;
+            const pl = pls[Profile.sel], r = Insights.compute(pl, 7);
+            h += `<div class="wdg-sub">Ultimi 7 giorni, confrontati con i 7 precedenti · <b style="color:#ddd">${esc(pl.name)}</b></div>`;
+            h += r.any ? '' : `<div class="in-empty"><b>Dati insufficienti</b><span>Servono almeno ${Insights.MIN} misure per parametro negli ultimi 7 giorni. Il confronto con la settimana precedente richiede altre ${Insights.MIN} misure.</span></div>`;
+            h += `<div class="pf-in">${r.metrics.map(Insights.row).join('')}</div>${Insights.actLine(r.act, 7)}`;
+            h += `<div class="wdg-cap" style="margin-top:10px">Medie, intervalli e deviazione standard (σ) sono calcolati solo sulle misure che hai inserito. «Stabile/Variabile» confronta σ con soglie fisse per parametro; non indica cause.</div>`;
+        }
+        h += '</div>';
+        h += `<div class="pf-sec"><h3>Traguardi</h3><div class="pf-ms" id="pfMs">${Profile.miles(s, 0).map(Profile.ms).join('')}</div></div>`;
+        if(pls.length) h += `<div class="pf-sec"><h3>Per pianta</h3>${pls.map((p, i) => { const ph = phases[p.phase] || phases[0]; return `<button type="button" class="pf-pl" onclick="journalView='detail';journalEditId=${i};go('journal')"><div><b>${esc(p.name)}</b><span>${esc(p.strain || '')} · ${esc(ph.name)}</span></div><div class="pf-pn"><b>${calcPlantDay(p)}</b><small>giorno</small></div><div class="pf-pn"><b>${(p.logs || []).length}</b><small>log</small></div><div class="pf-pn"><b>${(p.water || []).length}</b><small>acqua</small></div></button>`; }).join('')}</div>`;
+        return h;
+    },
+    ms(m){ return `<div class="pf-m ${m.ok ? 'ok' : ''}"><span class="pf-mi" aria-hidden="true">${m.ok ? '✓' : ''}</span><div><b>${esc(m.t)}</b><span>${esc(m.d)}</span></div></div>`; },
+    pick(i){ Profile.sel = i; const r = document.getElementById('pfRoot'); if(r){ r.innerHTML = Profile.html(); Profile.fillPhotos(); } },
+    async fillPhotos(){
+        let n = 0;
+        try{ n = db ? await db.photos.count() : 0; }catch(e){}
+        const e = document.getElementById('pfPh'); if(e) e.textContent = n;
+        const m = document.getElementById('pfMs'); if(m) m.innerHTML = Profile.miles(Profile.stats(), n).map(Profile.ms).join('');
+    }
+};
+function renderProfile(){
+    return `<div><div style="margin-bottom:18px"><h1 class="t-graffiti gn" style="font-size:30px;margin-bottom:4px">Profilo</h1><p class="t-tech" style="font-size:11px;text-transform:uppercase;letter-spacing:3px;opacity:.6">La tua attività su Grow 420</p></div><div id="pfRoot">${Profile.html()}</div></div>`;
+}
+function initProfile(){ Profile.fillPhotos(); }
+
+// ── Home: azioni dei widget v9 ──
+Object.assign(Wdg, {
+    setTrend(k){ Wst.trend = k; lsSet('grow-w-trend', k); Wst.trAnim = true; refreshWidget('trend'); },
+    setTrR(k){ Wst.trR = k; lsSet('grow-w-trr', k); Wst.trAnim = true; refreshWidget('trend'); },
+    focusQuick(){
+        if(Wst.tab !== 'all' && Wst.tab !== 'now'){ Wst.tab = 'all'; lsSet('grow-w-tab', 'all'); Wdg.redraw(); }
+        const el = document.getElementById('wdg-quick'); if(!el) return;
+        el.scrollIntoView({behavior:'smooth', block:'center'});
+        const i = el.querySelector('input'); if(i) setTimeout(() => i.focus({preventScroll:true}), 450);
+    },
+    trBind(){
+        const svg = document.getElementById('trSvg');
+        if(!svg || svg._tr) return;
+        svg._tr = 1;
+        const hide = () => {
+            const g = svg.querySelector('.tr-g'), c = svg.querySelector('.tr-c'), tp = document.getElementById('trTip');
+            if(g) g.classList.add('off'); if(c) c.classList.add('off'); if(tp) tp.classList.add('off');
+        };
+        const show = e => {
+            let pts; try{ pts = JSON.parse(svg.dataset.pts || '[]'); }catch(_){ return; }
+            if(!pts.length) return;
+            const r = svg.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * TR_W;
+            let best = 0, bd = 1e9;
+            pts.forEach((p, i) => { const dd = Math.abs(p[0] - vx); if(dd < bd){ bd = dd; best = i; } });
+            const p = pts[best], m = svg.dataset.m, g = svg.querySelector('.tr-g'), c = svg.querySelector('.tr-c'), tp = document.getElementById('trTip');
+            g.setAttribute('x1', p[0]); g.setAttribute('x2', p[0]); c.setAttribute('cx', p[0]); c.setAttribute('cy', p[1]);
+            g.classList.remove('off'); c.classList.remove('off');
+            tp.innerHTML = `<b>${envFmt(m, p[2])}</b><span>${new Date(p[3]).toLocaleString('it-IT', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})}</span>`;
+            tp.style.left = (p[0] / TR_W * 100) + '%';
+            tp.style.top = Math.max(0, p[1] / TR_H * 100 - 4) + '%';
+            tp.classList.toggle('r', p[0] > TR_W * 0.62);
+            tp.classList.remove('off');
+        };
+        svg.addEventListener('pointermove', show);
+        svg.addEventListener('pointerdown', show);
+        svg.addEventListener('pointerleave', hide);
+        svg.addEventListener('pointercancel', hide);
+        svg.addEventListener('pointerup', e => { if(e.pointerType !== 'mouse') setTimeout(hide, 1600); });
+    },
+    sec(k){ Wst.col[k] = !Wst.col[k]; lsSet('grow-w-col', Wst.col); Wdg.redraw(); }
+});
+
+const Menu = {
+    render(){
+        const box = document.getElementById('menuPanel');
+        if(!box) return;
+        const s = jtState(), stoner = lsGet('stoner-mode', false);
+        const fin = s.burn >= 100;
+        const sw = on => `<span class="mn-sw ${on ? 'on' : ''}" aria-hidden="true"></span>`;
+        box.innerHTML = `<section class="mn-card joint" aria-label="Pausa 420">
+<div class="mn-h"><b>🌿 Pausa 420</b><small id="mnCount">tiri oggi ${s.today} · totale ${s.total}</small></div>
+${mnIs420() ? '<div class="mn-banner" role="status">🕓 4:20 — È L\'ORA!</div>' : ''}
+<div class="mn-stage" role="button" tabindex="0" aria-label="Dai un tiro" onclick="Menu.puff()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();Menu.puff()}">${mnJointHtml(s)}</div>
+<div class="mn-quote" id="mnQuote" aria-live="polite">${fin ? 'Cicca finita! 🚬 Rollane un altro.' : 'Tocca il joint per dare un tiro.'}</div>
+<div class="mn-actions"><button type="button" class="mn-btn" onclick="Menu.puff()">💨 Dai un tiro</button><button type="button" class="mn-btn ghost" onclick="Menu.roll()" aria-label="Rollane un altro">🔄</button></div>
+<div class="mn-badges" id="mnBadges">${mnBadgesHtml(s)}</div>
+</section>
+<section class="mn-card" aria-label="Impostazioni rapide">
+<div class="mn-h"><b style="color:#9a9a9a">Impostazioni rapide</b></div>
+<button type="button" class="mn-row" onclick="Menu.stoner()" role="switch" aria-checked="${stoner}"><span class="ic">🌈</span><span>Stoner Mode</span>${sw(stoner)}</button>
+<button type="button" class="mn-row" id="menuInstall" onclick="installApp()" style="${installHidden() ? 'display:none' : ''}"><span class="ic">📲</span><span>Installa l'app</span><span class="st">Home screen</span></button>
+<button type="button" class="mn-row" onclick="Menu.notif()"><span class="ic">🔔</span><span>Notifiche promemoria</span><span class="st" id="mnNotif">${mnNotifLabel()}</span></button>
+<button type="button" class="mn-row" onclick="Menu.backup()"><span class="ic">📥</span><span>Backup dei dati</span><span class="st">JSON</span></button>
+<button type="button" class="mn-row" onclick="Menu.resetWidgets()"><span class="ic">↺</span><span>Ripristina i widget</span></button>
+</section>
+<div class="mn-foot">GROW 420 · v8${navigator.onLine ? '' : ' · OFFLINE'}</div>`;
+    },
+    puff(){
+        const s = jtState();
+        if(s.burn >= 100){ Menu.say('Cicca finita! 🚬 Rollane un altro.'); return; }
+        s.burn = Math.min(100, s.burn + 8); s.total++; s.today++;
+        const add = k => { if(!s.badges.includes(k)){ s.badges.push(k); return true; } return false; };
+        let msg = MN_QUOTES[Math.floor(Math.random() * MN_QUOTES.length)], unlocked = null;
+        if(s.total === 1 && add('first')) unlocked = 'first';
+        if(mnIs420() && add('time')) unlocked = 'time';
+        if(s.total >= 420 && add('legend')) unlocked = 'legend';
+        if(s.burn >= 100){ s.rolled++; msg = 'Cicca finita! 🚬 Rollane un altro.'; if(s.rolled >= 5 && add('roll5')) unlocked = 'roll5'; }
+        lsSet('grow-joint', s);
+        try{ navigator.vibrate && navigator.vibrate(15); }catch(e){}
+        // aggiorna sul posto così il joint si consuma con la transizione
+        const burn = Math.min(s.burn * 0.92, 92);
+        const img = document.querySelector('#mnJbox .joint-img');
+        if(img) img.style.clipPath = `inset(${burn}% 0 0 0)`;
+        const sm = document.querySelector('#mnJbox .joint-smoke');
+        if(sm) sm.style.left = burn + '%';
+        const box = document.getElementById('mnJbox');
+        if(box && !window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+            for(let i = 0; i < 5; i++){
+                const p = document.createElement('i'); p.className = 'mn-puff';
+                p.style.left = burn + '%'; p.style.setProperty('--dx', (Math.random() * 50 - 25) + 'px'); p.style.animationDelay = (i * 0.12) + 's';
+                box.appendChild(p); setTimeout(() => p.remove(), 2200);
+            }
+        }
+        if(s.burn >= 100) Menu.render();     // smoke off + stato finale
+        const c = document.getElementById('mnCount'); if(c) c.textContent = `tiri oggi ${s.today} · totale ${s.total}`;
+        const b = document.getElementById('mnBadges'); if(b) b.innerHTML = mnBadgesHtml(s);
+        Menu.say(unlocked ? `${MN_BADGES[unlocked][0]} Sbloccato: ${MN_BADGES[unlocked][1]}!` : msg);
+    },
+    say(t){ const q = document.getElementById('mnQuote'); if(q) q.textContent = t; },
+    roll(){
+        const s = jtState(); s.burn = 0; lsSet('grow-joint', s);
+        Menu.render(); Menu.say('Nuovo joint pronto. 🌿');
+    },
+    stoner(){ toggleStonerMode(); Menu.render(); },
+    async notif(){
+        if(!('Notification' in window)){ Toast.show('Notifiche non supportate su questo browser', 'warn', 2400); return; }
+        if(Notification.permission === 'default'){ try{ await Notification.requestPermission(); }catch(e){} }
+        else if(Notification.permission === 'denied') Toast.show('Notifiche bloccate: riattivale dalle impostazioni del browser', 'warn', 3200);
+        const el = document.getElementById('mnNotif'); if(el) el.textContent = mnNotifLabel();
+    },
+    backup(){ closeMenu(); exportAllData(); },
+    async resetWidgets(){
+        const ok = await showModal({title:'Ripristina widget', body:'Riordino e riattivo tutti i widget della Home?', okText:'Ripristina'});
+        if(!ok) return;
+        Wdg.reset(); Toast.show('Widget ripristinati', 'success', 1800);
+    }
+};
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMenu(); });
+
 // aggiornamenti automatici: ciclo luce ogni minuto, e al ritorno sull'app
 setInterval(() => { if(currentPage === 'home' && !document.hidden) refreshWidget('light'); }, 60000);
 document.addEventListener('visibilitychange', () => {
@@ -6192,6 +7659,9 @@ renderBottomNav();
 renderPage();
 updateInstallUI();
 initReminders();
+Alerts.refresh();
+setInterval(() => { if(!document.hidden) Alerts.refresh(); }, 60000);
+window.addEventListener('focus', Alerts.kick);
 </script>
 <script>
 // Catch globale: se c'è un errore JS mostra qualcosa invece di pagina nera

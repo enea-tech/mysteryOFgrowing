@@ -1,11 +1,11 @@
-// GROW 420 — Service Worker v7
+// GROW 420 — Service Worker v9
 // Strategie:
 //  • pagina (navigate)   → network-first (timeout 5s) con fallback su cache: gli aggiornamenti arrivano
 //                          subito, ma l'app si apre anche offline
 //  • asset same-origin / CDN / font → stale-while-revalidate: risposta istantanea dalla cache,
 //                          aggiornamento in background
 //  • Supabase, Open-Meteo (meteo) / richieste non-GET → mai toccate (il widget Meteo salva da solo l'ultimo dato)
-const CACHE_NAME = 'grow420-v7';
+const CACHE_NAME = 'grow420-v9';
 const MAX_RUNTIME_ENTRIES = 160;
 
 const PHASE_ICONS = ['01_Setup', '02_Germinazione', '03_Seedling', '04_Vegetativa', '05_Pre-Fioritura',
