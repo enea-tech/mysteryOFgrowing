@@ -1,0 +1,189 @@
+##### pg_sql
+PASS 01_schema.sql eseguito senza errori su PostgreSQL
+PASS 01_schema.sql idempotente (seconda esecuzione ok)
+PASS insert come utente A: user_id=auth.uid() automatico, version=1, server_seq assegnato  → {"version":1,"server_seq":1,"user_id":"11111111-1111-1111-1111-111111111111
+PASS A non può inserire righe a nome di B (RLS with check)  → new row violates row-level security policy for table "plants"
+PASS B non vede le piante di A
+PASS A vede le proprie piante
+PASS B non può modificare righe di A (0 righe)
+PASS anon non può leggere (permission denied)  → permission denied for table plants
+PASS DELETE vietato anche al proprietario (solo tombstone)  → permission denied for table plants
+PASS update con version=base+1 e filtro version=base: 1 riga
+PASS stesso update con base obsoleta: 0 righe (conflitto rilevabile dal client)
+PASS salto di versione rifiutato dal trigger (40001)  → version_conflict: atteso 3, ricevuto 9
+PASS user_id non trasferibile  → user_id non modificabile
+PASS server_seq cresce tra tabelle (cursore incrementale valido)
+PASS soft delete (tombstone) consentito
+PASS reminders insert
+PASS settings insert
+PASS photos insert
+PASS Storage: A scrive nella propria cartella
+PASS Storage: A NON può scrivere nella cartella di B  → new row violates row-level security policy for table "objects"
+PASS Storage: B non vede i file di A
+PASS RLS attiva e forzata su tutte e 5 le tabelle
+PASS prima del lockdown la tabella legacy è leggibile da anon (situazione attuale)
+PASS dopo 02_legacy_lockdown.sql anon non legge più grow_sync  → permission denied for table grow_sync
+PASS lockdown non cancella dati (la riga legacy c'è ancora)
+PASS 03_verify_rls.sql eseguibile
+26/26 passati
+##### m1
+PASS modalità v10 attiva  → 
+PASS DB paralleli: Grow420DB e Grow420DB_v10 coesistono  → ["Grow420DB","Grow420DB_v10"]
+PASS piante 2
+PASS log 3 (da LS)  → 3
+PASS foto 4 (con orfana)
+PASS promemoria 2
+PASS ID foto originali preservati  → [1,2,3,4]
+PASS ID promemoria originali preservati
+PASS contenuto foto identico byte per byte
+PASS foto collegate alla pianta giusta (uuid)
+PASS foto orfana segnalata, non cancellata
+PASS log tutti riferiti a una pianta esistente
+PASS UUID univoci
+PASS LS: uuid additivi su piante e log, resto invariato
+PASS DB v9 intatto (foto, promemoria, log identici)
+PASS log legacy non collegato conservato nel registro (non perso)
+PASS copia originale LS nel registro di migrazione
+PASS registro: complete+verified con conteggi  → {"plants":2,"logsLS":3,"legacyPlantsRows":0,"legacyLogsRows":2,"photos":4,"reminders":2,"legacySettings":0,"orphanPhoto
+PASS impostazioni condivise (coa, community) in v10
+PASS migrazione non accoda nulla (il primo sync è esplicito)  → 0
+PASS secondo avvio: nessuna nuova migrazione, ID stabili, nulla duplicato  → {"starts":1,"photos":4,"plants":2,"uuid":"8d946099-0079-420b-a647-b53ffe1ea978","q":0}
+PASS getPlantPhotos(0) restituisce le 2 foto con plantId=0  → {"pl":2,"ph":[0,0]}
+22/22 passati
+--- errori console ---
+(nessuno)
+##### m2
+PASS nuova pianta: riga v10 con uuid + coda upsert nella stessa transazione  → ["plant:upsert"]
+PASS log da addLog(): uuid stabile, versione 1, collegato, in coda  → {"n":1,"ver":1,"same":true,"plantOk":true,"q":1}
+PASS modifica: versione incrementata, una sola voce in coda per entità  → {"ver":2,"body":"cambiata 2","q":1}
+PASS elimina pianta: soft delete + log tombstone + coda delete, dati conservati  → {"del":true,"body":true,"ldel":true,"q":"delete","live":2}
+PASS foto: scrittura v10 + specchio v9 con stesso id + coda  → {"id":5,"rowPlant":true,"legacy":true,"q":"upsert","plantId":1,"tomb":true,"legGone":true,"q2":"delete","
+PASS foto: eliminazione = tombstone senza contenuto + rimossa dallo specchio + coda delete  → {"id":5,"rowPlant":true,"legacy":true,"q":"upsert","plantId":1,"tomb":true
+PASS promemoria: add/toggle/delete via DL, specchio, tombstone, versioni  → {"same":true,"a":0,"gone":true,"tomb":true,"ver":3,"total":2}
+PASS dati condivisi (coa): versione++ in v10  → {"v":"NUOVO","ver":2}
+PASS LS azzerato: piante, log e dati condivisi ricostruiti da v10  → {"hyd":true,"pl":["Alpha:2","Beta:1"],"coa":[{"name":"NUOVO"}]}
+PASS ROLLBACK v9: vede piante, foto (anche quelle scattate in v10) e promemoria  → {"pl":["Alpha","Beta"],"photos":3,"all":5,"rem":["Annaffia","Fatto"]}
+PASS ritorno alla v10: foto aggiunta in v9 recuperata (delta), niente doppioni  → {"delta":{"photos":1,"reminders":0},"n":6,"q":3}
+11/11 passati
+--- errori console ---
+(nessuno)
+##### m3
+PASS backup v1 reale generato dalla v9  → grow420-backup-2026-11-27.json
+PASS prima del ripristino viene salvata una copia di sicurezza automatica  → grow420-copia-prima-del-ripristino-2026-11-270530.json
+PASS import v1: piante, log, foto, promemoria, dati condivisi e preferenze ripristinati  → {"pl":["Alpha:2","Beta:1"],"ph":4,"rem":2,"coa":[{"name":"COA1","thc":"20"}],
+PASS import v1: ID stabili assegnati, ID foto originali mantenuti, tutto in coda per il primo sync  → {"p":2,"l":3,"q":13}
+PASS import v1: foto collegate alla pianta corretta  → 2
+PASS export V2: formato, versione, manifest e checksum presenti  → grow420-backup-v2-2026-11-270530.json
+PASS export V2: conteggi = dati reali (piante, log, foto con contenuto, promemoria)  → {"plants":{"total":2,"live":2},"logs":{"total":3,"live":3},"photos":{"total":4,"l
+PASS export V2: ogni foto ha sha256 e contenuto  → 
+PASS export V2: nessun token/credenziale
+PASS export V2: token Supabase e grow-user-id esclusi dalle preferenze
+PASS validazione: backup integro accettato
+PASS validazione: foto alterata rifiutata  → ["foto id 1: contenuto non corrisponde al checksum"]
+PASS validazione: log alterato rifiutato  → ["sezione \"logs\" non corrisponde al checksum"]
+PASS validazione: foto mancante rifiutata (conteggio/checksum)  → ["elenco foto non corrisponde al checksum","conteggio \"photos\" non corrisponde al manifest"]
+PASS validazione: manifest alterato rifiutato  → ["checksum del manifest non valido: file modificato o corrotto","conteggio \"plants\" non corrisponde al manifest"]
+PASS validazione: checksum assente rifiutato  → ["checksum mancante"]
+PASS validazione: log con pianta inesistente rifiutato  → ["sezione \"logs\" non corrisponde al checksum","log 02054272-d85d-4630-995a-4868a3d5fe4b collegato a una pian
+PASS import di file corrotto: rifiutato e NESSUN dato modificato
+PASS import di file non-backup/JSON rotto: rifiutato
+PASS backup con foto senza contenuto marcato INCOMPLETO (mai presentato come completo)  → ["foto id 1 senza contenuto"]
+PASS ripristino V2 su dispositivo vuoto: dati completi, foto identiche, ID stabili conservati  → {"pl":["Alpha:2","Beta:1"],"ph":4,"same":"1387,1463,1503,1503","rem":2,
+PASS ripristino V2: specchio v9 aggiornato (rollback possibile)  → 4
+PASS LS illeggibile: migrazione annullata, modalità sicura, dati originali identici  → {"mode":"legacy","err":"Dati locali illeggibili (Expected property name or '}' i
+PASS modalità sicura: foto leggibili dal DB v9 e motivo registrato  → ["start","failed"]
+PASS modalità sicura: le foto continuano a funzionare sul DB v9  → {"id":5,"n":5}
+PASS verifica dati in modalità sicura segnala il problema  → ["Modalità sicura: i dati restano nel formato precedente (Dati locali illeggibili (Expected property name
+26/26 passati
+--- errori console ---
+(nessuno)
+##### s1
+PASS senza account: stato "cloud non attivo", nessuna chiamata di rete a Supabase  → {"status":"signedout"}
+PASS registrazione: account creato, richiede verifica email  → {"ok":true,"verified":false,"msg":"Account creato. Ti abbiamo inviato una email: apri il link di conferma
+PASS accesso con email NON verificata rifiutato (nessuna sync)  → Email non ancora verificata: apri il link che ti abbiamo inviato
+PASS password debole rifiutata  → La password deve avere almeno 8 caratteri
+PASS password errata rifiutata con messaggio chiaro  → Email o password non corrette
+PASS accesso con email verificata  → {"ok":true}
+PASS primo sync (cloud vuoto): piante, log, foto, promemoria e dati condivisi sul server  → {"p":2,"l":3,"ph":4,"r":2,"s":2}
+PASS righe del server con user_id dell'utente, versione 1 e ID stabili = ID locali
+PASS file foto nello Storage nella cartella <user_id>/  → 4
+PASS coda svuotata dopo l'invio; righe locali marcate sincronizzate  → {"q":0,"synced":true,"ph":true}
+PASS token di sessione NON presente nel backup
+PASS dispositivo B vuoto: scarica piante e log (stessi ID di A)  → ["Alpha:2","Beta:1"]
+PASS foto scaricate identiche (dimensioni e collegamento alla pianta)  → {"n":4}
+PASS promemoria e dati condivisi sincronizzati su B; nessuna coda residua  → {"pl":["Alpha:2","Beta:1"],"uu":["117ad74e-4285-4847-acba-f738ae509dca","9e7d4c65-956b-44ac
+PASS foto: contenuto byte per byte uguale (verificato con SHA-256 al download)
+PASS B → A: nuovo log arriva su A (LocalStorage ricostruito)  → ["Annaffiata #acqua","Foglie gialle","Scritto su B"]
+PASS A → B: nuova foto arriva su B collegata alla pianta giusta  → {"n":5,"p1":2}
+PASS foto eliminata su B: tombstone sul server e file rimosso dallo Storage  → {"del":1,"files":4}
+PASS cancellazione foto propagata ad A
+PASS pianta eliminata su A: tombstone sul server (non DELETE) con i suoi log
+PASS cancellazione pianta propagata a B  → ["Alpha"]
+PASS RLS: un secondo utente non vede nulla dei dati del primo  → {"pl":0,"ph":0}
+PASS Storage: un secondo utente non può scaricare le foto del primo
+PASS sessione ripristinata al riavvio senza nuovo login
+PASS esci: i dati restano sul dispositivo  → {"st":"signedout","pl":1}
+25/25 passati
+--- errori console ---
+(nessuno)
+##### s2
+PASS offline: stato "Offline", operazioni accodate (log + foto + promemoria), nessuna perdita  → {"status":"offline","q":3,"chip":"Offline · 3 in coda"}
+PASS offline: nulla è arrivato al server
+PASS riapertura con coda persistita: le operazioni ripartono da sole all'avvio (senza Background Sync)  → {"q":0,"st":"idle"}
+PASS ritorno online: l'evento "online" riprende la sincronizzazione
+PASS conflitto reale rilevato (pianta, log, promemoria): nessuna sovrascrittura silenziosa  → {"st":"conflict","n":3,"list":["log:edit-edit","plant:edit-edit","reminder
+PASS la versione locale resta intatta e il server conserva quella di A  → NOTE da B
+PASS pannello conflitti: confronto locale/cloud affiancato con le scelte  → ["local/remote/both","local/remote/both","local/remote/both"]
+PASS "Tieni entrambe": la pianta resta con la versione cloud e nasce la copia locale con i suoi log  → ["Alpha|NOTE da A|4","Beta|x|1","Alpha (copia locale)|NOTE da B|4
+PASS "Tieni questa" (log): la scelta locale viene inviata al server
+PASS "Usa cloud" (promemoria eliminato altrove): applicata l'eliminazione
+PASS le 3 risoluzioni sono registrate con entrambe le versioni conservate  → ["log:local:true:true","plant:both:true:true","reminder:remote:true:true"]
+PASS dopo la risoluzione A e B convergono allo stesso stato
+PASS eliminata su B e modificata su A → conflitto "delete-edit", non cancellazione silenziosa  → ["plant:delete-edit"]
+PASS scelta "cloud": la pianta modificata torna su B
+PASS stessa modifica su due dispositivi: risolta da sola, nessun conflitto
+PASS RACE: modifica locale durante l'apply remoto NON viene persa e il log remoto NON viene cancellato  → {"notesLS":"EDIT durante apply","notesDB":"EDIT durante apply"
+PASS RACE su stesso campo: versione locale conservata e messa "in attesa di conflitto" (non inviata)  → {"race":1,"held":true,"qs":"conflict","notes":"LOCALE"}
+17/17 passati
+--- errori console ---
+(nessuno)
+##### s3
+PASS primo collegamento con dati su entrambi i lati: l'app CHIEDE cosa fare (nessun merge/sovrascrittura automatica)  → Primo collegamento al cloud
+PASS nel frattempo nulla è stato inviato né scaricato
+PASS "Decido dopo": sync in pausa, dati locali intatti  → {"st":"needs-choice","pl":1}
+PASS "Unisci": tiene sia i dati locali sia quelli del cloud  → {"pl":"Alpha,Beta,Locale1","ph":5}
+PASS "Unisci": i dati locali sono finiti sul server, quelli del cloud non sono stati toccati
+PASS "Usa il cloud": prima viene salvata una copia di sicurezza completa  → grow420-copia-prima-del-cloud-2026-11-270531.json
+PASS "Usa il cloud": il dispositivo ora coincide con il cloud, Locale2 non è stata inviata  → {"pl":"Alpha,Beta,Locale1","ph":5,"q":0}
+PASS import cloud precedente: aggiunge solo ciò che manca, non sovrascrive e non duplica  → {"pl":"Alpha,Beta,Vecchia","coa":2,"alpha":"Gelato"}
+PASS import cloud precedente: copia di sicurezza prima, registrazione nel log, ID stabili assegnati
+PASS foto corrotta nello Storage: rifiutata (impronta SHA-256 diversa), segnalata, stato errore  → {"st":"error","err":"foto 2f215841-fdd2-425a-be14-e27214650d26: impro
+PASS foto corrotta NON salvata sul dispositivo
+PASS ripristinato il file: al ciclo successivo la foto viene scaricata e tutto è completo  → {"st":"idle","n":5}
+PASS RLS/permessi negati: errore chiaro, dati locali al sicuro, operazione resta in coda  → {"st":"error","err":"Permesso negato dal server (RLS): hai eseguito gli scri
+PASS dopo la correzione dei permessi l'operazione parte da sola
+PASS sessione scaduta/revocata: ritorna "non connesso", i dati restano  → {"st":"signedout","pl":4}
+PASS pannello Account & Sync: nessun overflow orizzontale, mostra account e stato  → {"w":390,"vw":390,"txt":"✕\nAccount & Sincronizzazione\n✅ Sincronizzato 06:31\n
+16/16 passati
+--- errori console ---
+(nessuno)
+##### p1
+PASS Service Worker v10 attivo e controlla la pagina  → {"version":"10.0","cache":"grow420-v10"}
+PASS shell in cache (index, sw, librerie incl. supabase-js fissato)  → 6
+PASS vecchie cache v9 eliminate  → ["grow420-v10"]
+PASS app aperta OFFLINE da cache: Data Layer attivo, piante e foto leggibili  → {"mode":"v10","pl":2,"ph":4,"badge":true,"txt":"🛜 Offline — dati salvati sul dispos
+PASS indicatore offline visibile  → 🛜 Offline — dati salvati sul dispositivo
+PASS scritture offline persistono dopo il riavvio dell'app offline  → {"logs":3,"ph":5,"q":2}
+PASS nuovo SW resta IN ATTESA (nessun cambio di versione a metà sessione) e compare il banner  → {"waiting":true,"banner":"🆕 Nuova versione disponibile · i tuoi da
+PASS aggiornamento: nessun dato perso (anche la modifica non ancora scritta), database intatto  → {"notes":"PRIMA DELL'AGGIORNAMENTO","dbNotes":"PRIMA DELL'AGGIORNAMENT
+8/8 passati
+--- errori console ---
+(nessuno)
+##### m4
+PASS migrazione di 250 foto (~75 MB) verificata byte per byte  → {"ms":1943,"photoMB":75,"heapMB":92}
+PASS backup V2 di 75 MB completato  → {"MB":75,"ms":2011}
+PASS validazione checksum di 250 foto  → {"ms":7071,"err":[]}
+PASS DL.photos.all() (usata dalla Galleria) con 250 foto  → {"n":250,"ms":319}
+4/4 passati
+--- errori console ---
+(nessuno)

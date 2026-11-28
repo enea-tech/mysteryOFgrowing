@@ -1,11 +1,12 @@
-// GROW 420 — Service Worker v9
+// GROW 420 — Service Worker v10
 // Strategie:
 //  • pagina (navigate)   → network-first (timeout 5s) con fallback su cache: gli aggiornamenti arrivano
 //                          subito, ma l'app si apre anche offline
 //  • asset same-origin / CDN / font → stale-while-revalidate: risposta istantanea dalla cache,
 //                          aggiornamento in background
 //  • Supabase, Open-Meteo (meteo) / richieste non-GET → mai toccate (il widget Meteo salva da solo l'ultimo dato)
-const CACHE_NAME = 'grow420-v9';
+const CACHE_NAME = 'grow420-v10';
+const SW_VERSION = '10.0';
 const MAX_RUNTIME_ENTRIES = 160;
 
 const PHASE_ICONS = ['01_Setup', '02_Germinazione', '03_Seedling', '04_Vegetativa', '05_Pre-Fioritura',
@@ -23,7 +24,7 @@ const STATIC_ASSETS = [
   './assets/bud-pixel-1.png', './assets/bud-pixel-2.png', './assets/bud-pixel-3.png',
   ...PHASE_ICONS.map(n => './assets/' + n + '.png'),
   'https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
+  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2',
   'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js',
   'https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;800&display=swap'
 ];
@@ -33,8 +34,12 @@ const CDN_HOSTS = ['cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.co
 // Install: precache "shell". Per-asset (allSettled): se un file manca o la rete balbetta, gli altri
 // vengono comunque salvati e l'installazione non fallisce (cache.addAll() è atomico).
 // Path RELATIVI: funzionano anche su GitHub Pages in sottocartella (/mysteryOFgrowing/).
+// v10: NIENTE skipWaiting automatico. Una nuova versione resta "in attesa" finché l'app è aperta: l'utente la attiva
+// dal banner «Aggiorna» DOPO che i dati in coda sono stati scritti (nessuna versione mista a metà sessione).
+// Alla prima installazione (nessun worker precedente) si attiva comunque subito.
 self.addEventListener('install', event => {
-  self.skipWaiting();
+  // Passaggio una tantum dalla v9 (che si attivava da sola): se esiste la sua cache, la v10 si attiva subito.
+  event.waitUntil(caches.has('grow420-v9-1').then(had => { if (had) self.skipWaiting(); }).catch(() => {}));
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache =>
       Promise.allSettled(
@@ -57,6 +62,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
+  if (event.data && event.data.type === 'GET_VERSION' && event.ports && event.ports[0]) event.ports[0].postMessage({version:SW_VERSION, cache:CACHE_NAME});
 });
 
 async function trimCache(cache, max) {
@@ -78,12 +84,14 @@ async function networkFirstPage(request) {
       new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
     ]);
     if (res && res.ok) {
+      // aggiorna TUTTE le chiavi con cui la pagina può essere ritrovata offline (prima './' restava quella dell'installazione)
       cache.put('./index.html', res.clone()).catch(() => {});
+      cache.put('./', res.clone()).catch(() => {});
     }
     return res;
   } catch (err) {
-    const cached = (await cache.match(request, { ignoreSearch: true })) ||
-                   (await cache.match('./index.html')) ||
+    const cached = (await cache.match('./index.html')) ||
+                   (await cache.match(request, { ignoreSearch: true })) ||
                    (await cache.match('./'));
     if (cached) return cached;
     try { return await net; } catch (e) {
@@ -129,7 +137,7 @@ self.addEventListener('fetch', event => {
   }
 });
 
-// Background Sync: promemoria e log
+// Background Sync (opzionale, solo dove supportato — iOS no): l'app NON ci fa affidamento, sincronizza da sola ad apertura/online/ritorno in primo piano
 self.addEventListener('sync', event => {
   if (event.tag === 'grow-sync') event.waitUntil(syncGrowData());
 });

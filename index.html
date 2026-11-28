@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.4/dist/dexie.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
 /* === PWA & UTILITIES === */
@@ -145,7 +145,7 @@ html,body{min-height:100vh;min-height:100dvh;background:var(--d2)}
 #leaves{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
 .falling-bud{position:fixed;pointer-events:none;z-index:1;width:36px;height:36px;background-size:contain;background-repeat:no-repeat;opacity:.55;animation:lf linear infinite;image-rendering:pixelated;filter:drop-shadow(0 0 10px rgba(191,0,255,.5))}
 .page{max-width:1120px;margin-left:auto;margin-right:auto;padding:20px;padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));min-height:100vh;min-height:100dvh;position:relative;z-index:2;animation:fadeIn .4s ease}
-.page-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+.page-bg{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity .3s}
 .card{background:rgba(17,17,17,.55);border:1px solid rgba(34,34,34,.6);border-radius:16px;overflow:hidden;transition:transform .2s,border-color .2s}
 .card:active{transform:scale(.98)}
 .btn{padding:14px 28px;border-radius:12px;border:none;font-weight:800;font-size:14px;cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:1px;font-family:'Orbitron',sans-serif}
@@ -800,12 +800,37 @@ body.sheet-lock{overflow:hidden}
 .bottom-nav.fade-r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
 .bottom-nav.fade-l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 34px);mask-image:linear-gradient(90deg,transparent,#000 34px)}
 .bottom-nav.fade-l.fade-r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,transparent,#000 34px,#000 calc(100% - 34px),transparent)}
+
+/* ── v10 · Account & Sync ── */
+.sy-chip{display:inline-flex;align-items:center;gap:6px;font:600 11px/1 Inter,system-ui,sans-serif;padding:7px 12px;border-radius:99px;border:1px solid var(--v9-line2,#2a2a2a);background:rgba(255,255,255,.04);color:#9a9a9a;cursor:pointer}
+.sy-chip.ok{color:var(--ng);border-color:rgba(57,255,20,.35)}.sy-chip.warn{color:var(--no,#ff6600);border-color:rgba(255,102,0,.45)}.sy-chip.err{color:#ff4466;border-color:rgba(255,68,102,.5)}.sy-chip.busy{color:var(--nc,#0ff)}
+.sy-ov{position:fixed;inset:0;z-index:330;background:#050505;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
+.sy-in-wrap{max-width:560px;margin:0 auto}
+.sy-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}.sy-top h2{font:700 17px Orbitron,Inter,sans-serif;color:#fff;margin:0}
+.sy-x{width:40px;height:40px;border-radius:12px;border:1px solid #2a2a2a;background:#111;color:#bbb;font-size:16px;cursor:pointer}
+.sy-status{padding:12px 14px;border-radius:14px;border:1px solid #2a2a2a;background:#0d0d0d;color:#bbb;font-size:13px;margin-bottom:12px}
+.sy-status.ok{border-color:rgba(57,255,20,.35);color:var(--ng)}.sy-status.warn{border-color:rgba(255,102,0,.45);color:var(--no,#ff6600)}.sy-status.err{border-color:rgba(255,68,102,.5);color:#ff4466}
+.sy-err{padding:10px 12px;border-radius:12px;background:rgba(255,68,102,.1);border:1px solid rgba(255,68,102,.4);color:#ff8a9e;font-size:13px;margin-bottom:12px}
+.sy-ok{padding:10px 12px;border-radius:12px;background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.3);color:var(--ng);font-size:13px;margin-bottom:12px}
+.sy-sec{border:1px solid #222;border-radius:16px;background:#0b0b0b;padding:14px;margin-bottom:14px}.sy-sec h3{font:700 13px Orbitron,Inter,sans-serif;color:#ddd;margin:0 0 8px}
+.sy-note{font-size:12px;color:#8a8a8a;line-height:1.55;margin:6px 0}
+.sy-l{display:block;font-size:12px;color:#999;margin:10px 0 0}.sy-in{display:block;width:100%;box-sizing:border-box;margin-top:5px;padding:12px;border-radius:12px;border:1px solid #333;background:#111;color:#fff;font-size:16px}
+.sy-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.sy-btns .wdg-btn{flex:1 1 140px}
+.sy-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #181818;font-size:13px;color:#999}.sy-row b{color:#ddd;font-weight:600;text-align:right;word-break:break-all}
+.sy-conf{border:1px solid rgba(255,102,0,.35);border-radius:14px;padding:12px;margin-top:10px;background:rgba(255,102,0,.04)}.sy-ct{font-size:12px;color:var(--no,#ff6600);font-weight:700;margin-bottom:8px}
+.sy-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sy-col{background:#0e0e0e;border:1px solid #222;border-radius:12px;padding:10px;font-size:12px;color:#bbb;line-height:1.5;word-break:break-word;min-width:0}
+.sy-tag{display:block;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--ng);margin-bottom:4px}.sy-tag.cl{color:var(--nc,#0ff)}
+.sy-dlg{position:fixed;inset:0;z-index:340;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:18px}
+.sy-box{max-width:460px;width:100%;max-height:88vh;overflow:auto;background:#0d0d0d;border:1px solid #2a2a2a;border-radius:18px;padding:18px}.sy-h{font:700 16px Orbitron,Inter,sans-serif;color:#fff;margin-bottom:10px}.sy-b{font-size:13px;color:#aaa;line-height:1.55}.sy-b p{margin:0 0 10px}
+@media (max-width:380px){.sy-cols{grid-template-columns:1fr}}
+
 </style>
 <base target="_self">
 </head>
 <script>if(window.CSS&&CSS.registerProperty)document.documentElement.classList.add("hue-ok")</script>
 <body>
 <div class="grunge"></div>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
 <div class="offline-badge" id="offlineBadge">🛜 Offline — dati salvati localmente</div>
 
 <div class="hero-glow"></div>
@@ -870,39 +895,1564 @@ try {
 // ── 2. SUPABASE (standby) ─────────────────────────────────
 const SUPABASE_URL = 'https://khrawcayqduqufiirntm.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtocmF3Y2F5cWR1cXVmaWlybnRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMTE2MTksImV4cCI6MjEwMTg4NzYxOX0.HdoKw24zO4_rEPhSMSTKshtU3fSS8ykqZvJ5QIRPrng';
-let supabaseClient = null;
-if (typeof supabase !== 'undefined' && SUPABASE_URL && SUPABASE_KEY) {
-    try { supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY); }
-    catch(e) { console.warn('Supabase non configurato'); }
+let supabaseClient = null;   // creato da Sync.init() con sessione utente (persistSession)
+
+// ═══════════════════════════════════════════════════════════
+// V10 · DATA LAYER — Grow420DB_v10 (shadow) + ID stabili + coda di sync
+//  • Grow420DB (v9) NON viene mai modificato né cancellato: resta sorgente di migrazione e specchio per il rollback.
+//  • LocalStorage "grow-plants" resta una cache sincrona compatibile (fase 1): ogni scrittura passa da lsSet → DL.
+//  • Ogni modifica sincronizzabile aggiorna la coda (syncQueue) NELLA STESSA transazione IndexedDB.
+// ═══════════════════════════════════════════════════════════
+const APP_VERSION = '10.0';
+const SHARED_KEYS = ['grow-coa', 'grow-community', 'grow-progress'];
+const DEVICE_PREF_EXCLUDE = /^(grow-(plants|user-id|device-id|cloud|v10|v9|sync|auth|backup)|sb-)/;
+function isDevicePrefKey(k){
+    if(k === 'stoner-mode') return true;
+    return typeof k === 'string' && k.indexOf('grow-') === 0 && !DEVICE_PREF_EXCLUDE.test(k) && SHARED_KEYS.indexOf(k) < 0;
 }
+const DL = (function(){
+    const DBN = 'Grow420DB_v10';
+    const TABLES = ['plants', 'logs', 'photos', 'reminders', 'settings', 'syncQueue', 'syncMeta', 'migrationLog'];
+    const st = {persist:null, err:null, migrated:false, hydrated:false, mirrorErr:null, delta:null, lastCommit:null, commitErr:null};
+    const listeners = [];
+    let v10 = null, mode = 'init', readyRes;
+    const ready = new Promise(r => { readyRes = r; });
+    const iso = () => new Date().toISOString();
+    function uuid(){
+        try{ if(crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+        const b = new Uint8Array(16);
+        try{ crypto.getRandomValues(b); }catch(e){ for(let i = 0; i < 16; i++) b[i] = Math.floor(Math.random() * 256); }
+        b[6] = (b[6] & 15) | 64; b[8] = (b[8] & 63) | 128;
+        const h = Array.from(b).map(x => x.toString(16).padStart(2, '0')).join('');
+        return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
+    }
+    function stable(o){
+        if(o === null || typeof o !== 'object') return JSON.stringify(o) === undefined ? 'null' : JSON.stringify(o);
+        if(Array.isArray(o)) return '[' + o.map(stable).join(',') + ']';
+        return '{' + Object.keys(o).filter(k => o[k] !== undefined).sort().map(k => JSON.stringify(k) + ':' + stable(o[k])).join(',') + '}';
+    }
+    function deviceId(){
+        let d = null;
+        try{ d = localStorage.getItem('grow-device-id'); }catch(e){}
+        if(!d){ d = uuid(); try{ localStorage.setItem('grow-device-id', d); }catch(e){} }
+        return d;
+    }
+    function openV10(){
+        const d = new Dexie(DBN);
+        d.version(1).stores({
+            plants: '&uuid, ord, updatedAt',
+            logs: '&uuid, plantUuid, updatedAt',
+            photos: '++id, &uuid, plantUuid, legacyId, updatedAt',
+            reminders: '++id, &uuid, legacyId, active, updatedAt',
+            settings: 'key, kind, updatedAt',
+            syncQueue: '++seq, [entity+uuid], ts',
+            syncMeta: 'key',
+            migrationLog: '++id, ts, step'
+        });
+        return d;
+    }
+    const clone = v => JSON.parse(JSON.stringify(v));
+    const lsRaw = k => { try{ return localStorage.getItem(k); }catch(e){ return null; } };
+    const mirror = async fn => { try{ if(db) return await fn(); }catch(e){ st.mirrorErr = String((e && e.message) || e); console.warn('mirror legacy', e); } return undefined; };
+
+    // ── ID stabili ──
+    function prepPlants(arr){
+        if(!Array.isArray(arr)) return false;
+        const seen = new Set(); let changed = false;
+        arr.forEach(p => {
+            if(!p || typeof p !== 'object') return;
+            if(!p.uuid || seen.has(p.uuid)){ p.uuid = uuid(); changed = true; }
+            seen.add(p.uuid);
+            if(Array.isArray(p.logs)) p.logs.forEach(l => {
+                if(!l || typeof l !== 'object') return;
+                if(!l.uuid || seen.has(l.uuid)){ l.uuid = uuid(); changed = true; }
+                seen.add(l.uuid);
+            });
+        });
+        return changed;
+    }
+
+    // ── coda ──
+    const holds = new Set();   // entità con conflitto da risolvere: le nuove modifiche restano in coda ma NON partono
+    async function enqueue(entity, id, op){
+        const old = await v10.syncQueue.where('[entity+uuid]').equals([entity, id]).first();
+        await v10.syncQueue.where('[entity+uuid]').equals([entity, id]).delete();
+        await v10.syncQueue.add({entity, uuid:id, op, ts:iso(), attempts:0, lastError:null, status:(holds.has(id) || (old && old.status === 'conflict')) ? 'conflict' : 'pending'});
+    }
+
+    // ── piante/log: diff e commit ──
+    function diffPlants(arr, curP, curL){
+        const now = iso(), dev = deviceId(), outP = [], outL = [], q = [], seenP = new Set(), seenL = new Set();
+        arr.forEach((pl, i) => {
+            if(!pl || typeof pl !== 'object') return;
+            const body = Object.assign({}, pl); delete body.uuid; delete body.logs;
+            seenP.add(pl.uuid);
+            const o = curP.get(pl.uuid);
+            if(!o || o.deletedAt || o.ord !== i || stable(o.body) !== stable(body)){
+                outP.push({uuid:pl.uuid, ord:i, body, version:(o ? o.version : 0) + 1, updatedAt:now, deletedAt:null, deviceId:dev, synced:o ? (o.synced || 0) : 0});
+                q.push(['plant', pl.uuid, 'upsert']);
+            }
+            (Array.isArray(pl.logs) ? pl.logs : []).forEach((lg, j) => {
+                if(!lg || typeof lg !== 'object') return;
+                const lb = Object.assign({}, lg); delete lb.uuid;
+                seenL.add(lg.uuid);
+                const ol = curL.get(lg.uuid);
+                if(!ol || ol.deletedAt || ol.ord !== j || ol.plantUuid !== pl.uuid || stable(ol.body) !== stable(lb)){
+                    outL.push({uuid:lg.uuid, plantUuid:pl.uuid, ord:j, body:lb, version:(ol ? ol.version : 0) + 1, updatedAt:now, deletedAt:null, deviceId:dev, synced:ol ? (ol.synced || 0) : 0});
+                    q.push(['log', lg.uuid, 'upsert']);
+                }
+            });
+        });
+        curP.forEach((o, u) => { if(!seenP.has(u) && !o.deletedAt){ outP.push(Object.assign({}, o, {deletedAt:now, updatedAt:now, version:o.version + 1})); q.push(['plant', u, 'delete']); } });
+        curL.forEach((o, u) => { if(!seenL.has(u) && !o.deletedAt){ outL.push(Object.assign({}, o, {deletedAt:now, updatedAt:now, version:o.version + 1})); q.push(['log', u, 'delete']); } });
+        return {outP, outL, q};
+    }
+    async function commitPlants(arr){
+        let n = 0;
+        await v10.transaction('rw', [v10.plants, v10.logs, v10.syncQueue], async () => {
+            const curP = new Map((await v10.plants.toArray()).map(r => [r.uuid, r]));
+            const curL = new Map((await v10.logs.toArray()).map(r => [r.uuid, r]));
+            const d = diffPlants(arr, curP, curL);
+            if(d.outP.length) await v10.plants.bulkPut(d.outP);
+            if(d.outL.length) await v10.logs.bulkPut(d.outL);
+            for(const x of d.q) await enqueue(x[0], x[1], x[2]);
+            n = d.q.length;
+        });
+        return n;
+    }
+    async function commitShared(k, val){
+        let n = 0;
+        await v10.transaction('rw', [v10.settings, v10.syncQueue], async () => {
+            const old = await v10.settings.get(k);
+            if(old && !old.deletedAt && stable(old.value) === stable(val)) return;
+            await v10.settings.put({key:k, kind:'shared', value:val, version:(old ? old.version : 0) + 1, updatedAt:iso(), deletedAt:null, deviceId:deviceId(), synced:old ? (old.synced || 0) : 0});
+            await enqueue('setting', k, 'upsert');
+            n = 1;
+        });
+        return n;
+    }
+    function buildPlants(pRows, lRows){
+        const by = new Map();
+        lRows.filter(l => !l.deletedAt).forEach(l => { if(!by.has(l.plantUuid)) by.set(l.plantUuid, []); by.get(l.plantUuid).push(l); });
+        return pRows.filter(p => !p.deletedAt).sort((a, b) => a.ord - b.ord).map(p => {
+            const logs = (by.get(p.uuid) || []).sort((a, b) => a.ord - b.ord).map(l => Object.assign({}, l.body, {uuid:l.uuid}));
+            return Object.assign({}, p.body, {uuid:p.uuid, logs});
+        });
+    }
+    async function plantsFromV10(){ return buildPlants(await v10.plants.toArray(), await v10.logs.toArray()); }
+
+    // ── pump: scritture serializzate e coalescenti ──
+    let pendP = null, pendS = {}, running = false, retry = 0, applyLock = null;
+    function onLsSet(k, v){
+        if(mode === 'legacy' || mode === 'off') return;
+        if(k === 'grow-plants'){ if(!Array.isArray(v)) return; pendP = clone(v); }
+        else if(SHARED_KEYS.indexOf(k) >= 0){ pendS[k] = clone(v); }
+        else return;
+        try{ localStorage.setItem('grow-v10-pending', iso()); }catch(e){}
+        pump();
+    }
+    function pump(){
+        if(running) return;
+        running = true;
+        (async () => {
+            try{
+                await ready;
+                while(pendP || Object.keys(pendS).length){
+                    if(applyLock) await applyLock;
+                    if(mode !== 'v10'){ pendP = null; pendS = {}; break; }
+                    const p = pendP, s = pendS; pendP = null; pendS = {};
+                    try{
+                        let n = 0;
+                        if(p) n += await commitPlants(p);
+                        for(const k of Object.keys(s)) n += await commitShared(k, s[k]);
+                        st.lastCommit = iso(); st.commitErr = null; retry = 0;
+                        if(n) listeners.forEach(f => { try{ f(n); }catch(e){} });
+                    }catch(e){
+                        console.error('DL commit', e); st.commitErr = String((e && e.message) || e);
+                        if(p && !pendP) pendP = p; Object.keys(s).forEach(k => { if(!(k in pendS)) pendS[k] = s[k]; });
+                        if(++retry > 3){ pendP = null; pendS = {}; break; }   // il dato resta in LS: lo riprende la riconciliazione all'avvio
+                        await new Promise(r => setTimeout(r, 1500 * retry));
+                    }
+                }
+                if(!pendP && !Object.keys(pendS).length && !st.commitErr){ try{ localStorage.removeItem('grow-v10-pending'); }catch(e){} }
+            } finally { running = false; }
+        })();
+    }
+    async function flush(){ // attende che tutte le scritture accodate siano su IndexedDB
+        await ready;
+        for(let i = 0; i < 200 && (running || pendP || Object.keys(pendS).length); i++) await new Promise(r => setTimeout(r, 25));
+    }
+
+    // ── righe da dati legacy ──
+    function photoRowFromLegacy(r, uuidByIdx, dev, now){
+        const pu = Number.isInteger(r.plantId) && uuidByIdx[r.plantId] ? uuidByIdx[r.plantId] : null;
+        return {id:r.id, uuid:uuid(), plantUuid:pu, legacyPlantIdx:Number.isInteger(r.plantId) ? r.plantId : null, logId:r.logId || null, data:r.data,
+            createdAt:r.createdAt || now, phase:r.phase == null ? null : r.phase, version:1, updatedAt:r.createdAt || now, deletedAt:null, deviceId:dev, legacyId:r.id, synced:0};
+    }
+    function reminderRowFromLegacy(r, dev, now){
+        return {id:r.id, uuid:uuid(), title:r.title, datetime:r.datetime, repeat:r.repeat || 'once', active:r.active ? 1 : 0, createdAt:r.createdAt || now,
+            version:1, updatedAt:r.createdAt || now, deletedAt:null, deviceId:dev, legacyId:r.id, synced:0};
+    }
+    function matchLegacyLogs(legLogs, plants){
+        const un = [];
+        (legLogs || []).forEach(l => {
+            const p = Number.isInteger(l.plantId) ? plants[l.plantId] : null;
+            const hit = p && Array.isArray(p.logs) && p.logs.some(x => x && x.date === l.date && x.text === l.text);
+            if(!hit) un.push(l);
+        });
+        return un;
+    }
+
+    // ── migrazione shadow ──
+    async function mlog(step, info){ try{ await v10.migrationLog.add({ts:iso(), step, info:info === undefined ? null : info}); }catch(e){} }
+    async function wipeV10(){
+        await v10.transaction('rw', [v10.plants, v10.logs, v10.photos, v10.reminders, v10.settings, v10.syncQueue], async () => {
+            for(const t of ['plants', 'logs', 'photos', 'reminders', 'settings', 'syncQueue']) await v10[t].clear();
+        });
+    }
+    async function migrate(){
+        const t0 = iso(), dev = deviceId();
+        await mlog('start', {appVersion:APP_VERSION, t0});
+        // 1) lettura sorgenti (nessuna modifica)
+        const rawPlants = lsRaw('grow-plants');
+        let plants = [];
+        try{ plants = rawPlants ? JSON.parse(rawPlants) : []; if(!Array.isArray(plants)) throw new Error('grow-plants non è una lista'); }
+        catch(e){ await mlog('failed', {why:'LS grow-plants illeggibile: ' + e.message}); return {ok:false, err:'Dati locali illeggibili (' + e.message + '): migrazione annullata, nessun dato toccato.'}; }
+        const leg = {plants:[], logs:[], photoKeys:[], reminders:[], settings:[]};
+        try{
+            if(!db) throw new Error('database v9 non disponibile');
+            await db.open();
+            leg.plants = await db.plants.toArray(); leg.logs = await db.logs.toArray();
+            leg.photoKeys = await db.photos.toCollection().primaryKeys();
+            leg.reminders = await db.reminders.toArray(); leg.settings = await db.settings.toArray();
+        }catch(e){ await mlog('failed', {why:'DB legacy illeggibile: ' + e.message}); return {ok:false, err:'Database precedente illeggibile (' + e.message + '): migrazione annullata, nessun dato toccato.'}; }
+        // 2) spazio disponibile
+        try{
+            if(navigator.storage && navigator.storage.estimate){
+                const e = await navigator.storage.estimate();
+                if(e.quota && e.usage && (e.quota - e.usage) < e.usage * 0.9 + 5e6){ await mlog('failed', {why:'spazio insufficiente', estimate:{quota:e.quota, usage:e.usage}}); return {ok:false, err:'Spazio insufficiente sul dispositivo per la copia di sicurezza dei dati: migrazione rinviata, i dati restano nel formato precedente.'}; }
+            }
+        }catch(e){}
+        // 3) inventario + copia originale (testo grezzo) nel registro
+        const sharedRaw = {}; SHARED_KEYS.forEach(k => { sharedRaw[k] = lsRaw(k); });
+        const inv = {plants:plants.length, logsLS:plants.reduce((a, p) => a + (Array.isArray(p && p.logs) ? p.logs.length : 0), 0),
+            legacyPlantsRows:leg.plants.length, legacyLogsRows:leg.logs.length, photos:leg.photoKeys.length, reminders:leg.reminders.length, legacySettings:leg.settings.length};
+        await mlog('inventory', inv);
+        await mlog('pre-backup', {ls:{'grow-plants':rawPlants, shared:sharedRaw}});
+        // 4) copia
+        await wipeV10();
+        const hadIds = plants.some(p => p && !p.uuid);
+        prepPlants(plants);
+        const d = diffPlants(plants, new Map(), new Map());
+        const now = iso();
+        const uuidByIdx = plants.map(p => p && p.uuid);
+        await v10.transaction('rw', [v10.plants, v10.logs, v10.reminders, v10.settings], async () => {
+            if(d.outP.length) await v10.plants.bulkAdd(d.outP);
+            if(d.outL.length) await v10.logs.bulkAdd(d.outL);
+            if(leg.reminders.length) await v10.reminders.bulkAdd(leg.reminders.map(r => reminderRowFromLegacy(r, dev, now)));
+            for(const k of SHARED_KEYS){
+                if(sharedRaw[k] == null) continue;
+                let val; try{ val = JSON.parse(sharedRaw[k]); }catch(e){ continue; }
+                await v10.settings.put({key:k, kind:'shared', value:val, version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0});
+            }
+            for(const s of leg.settings) await v10.settings.put({key:'legacy:' + s.key, kind:'legacy-idb', value:s.value === undefined ? s : s.value, version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0});
+        });
+        let orphans = 0, photoBytes = 0;
+        for(let i = 0; i < leg.photoKeys.length; i += 20){
+            const batch = (await db.photos.bulkGet(leg.photoKeys.slice(i, i + 20))).filter(Boolean);
+            const rows = batch.map(r => photoRowFromLegacy(r, uuidByIdx, dev, now));
+            rows.forEach(r => { if(!r.plantUuid) orphans++; photoBytes += (r.data || '').length; });
+            await v10.photos.bulkAdd(rows);
+        }
+        const unmatched = matchLegacyLogs(leg.logs, plants);
+        if(unmatched.length || leg.plants.length) await mlog('legacy-extras', {unmatchedLogs:unmatched, legacyPlants:leg.plants});
+        // 5) verifica (conteggi, ID, riferimenti, contenuto foto)
+        const errs = [];
+        const cP = await v10.plants.count(), cL = await v10.logs.count(), cPh = await v10.photos.count(), cR = await v10.reminders.count();
+        if(cP !== plants.length) errs.push('piante ' + cP + '≠' + plants.length);
+        if(cL !== inv.logsLS) errs.push('log ' + cL + '≠' + inv.logsLS);
+        if(cPh !== leg.photoKeys.length) errs.push('foto ' + cPh + '≠' + leg.photoKeys.length);
+        if(cR !== leg.reminders.length) errs.push('promemoria ' + cR + '≠' + leg.reminders.length);
+        const v10PhIds = new Set(await v10.photos.toCollection().primaryKeys());
+        leg.photoKeys.forEach(k => { if(!v10PhIds.has(k)) errs.push('foto id ' + k + ' mancante'); });
+        const v10RIds = new Set(await v10.reminders.toCollection().primaryKeys());
+        leg.reminders.forEach(r => { if(!v10RIds.has(r.id)) errs.push('promemoria id ' + r.id + ' mancante'); });
+        const pRows = await v10.plants.toArray(), pSet = new Set(pRows.map(r => r.uuid));
+        const lRows = await v10.logs.toArray();
+        lRows.forEach(l => { if(!pSet.has(l.plantUuid)) errs.push('log senza pianta ' + l.uuid); });
+        plants.forEach((p, i) => {
+            const r = pRows.find(x => x.uuid === p.uuid); const body = Object.assign({}, p); delete body.uuid; delete body.logs;
+            if(!r || r.ord !== i || stable(r.body) !== stable(body)) errs.push('pianta ' + i + ' diversa');
+            const n = lRows.filter(l => l.plantUuid === p.uuid).length;
+            if(n !== (Array.isArray(p.logs) ? p.logs.length : 0)) errs.push('log pianta ' + i + ' ' + n);
+        });
+        for(let i = 0; i < leg.photoKeys.length && errs.length < 10; i += 20){
+            const ks = leg.photoKeys.slice(i, i + 20);
+            const a = await db.photos.bulkGet(ks), b = await v10.photos.bulkGet(ks);
+            ks.forEach((k, j) => {
+                if(!a[j] || !b[j]) return;
+                if(a[j].data !== b[j].data) errs.push('foto ' + k + ' contenuto diverso');
+                if(b[j].plantUuid && (!pSet.has(b[j].plantUuid))) errs.push('foto ' + k + ' riferimento rotto');
+            });
+        }
+        if(errs.length){
+            await mlog('failed', {why:'verifica non superata', errs:errs.slice(0, 20)});
+            try{ await wipeV10(); }catch(e){}
+            return {ok:false, err:'Verifica della migrazione non superata (' + errs.slice(0, 3).join('; ') + '). Dati originali intatti.'};
+        }
+        // 6) attivazione: solo ora scriviamo gli ID additivi nella cache LS
+        if(hadIds || plants.some(p => p && p.uuid)){ try{ localStorage.setItem('grow-plants', JSON.stringify(plants)); }catch(e){} }
+        const rep = Object.assign({}, inv, {orphanPhotos:orphans, photoBytes, unmatchedLegacyLogs:unmatched.length, verified:true, t0, t1:iso()});
+        await mlog('complete', rep);
+        st.migrated = true; st.report = rep;
+        return {ok:true, report:rep};
+    }
+
+    // ── delta: foto/promemoria creati dalla v9 dopo un rollback ──
+    async function deltaImport(){
+        if(!db) return;
+        try{
+            const lp = await db.photos.toCollection().primaryKeys(), have = new Set(await v10.photos.toCollection().primaryKeys());
+            const miss = lp.filter(k => !have.has(k));
+            const plants = lsGet('grow-plants', []) || [], uuidByIdx = plants.map(p => p && p.uuid), now = iso(), dev = deviceId();
+            let np = 0;
+            for(let i = 0; i < miss.length; i += 20){
+                const rows = (await db.photos.bulkGet(miss.slice(i, i + 20))).filter(Boolean).map(r => photoRowFromLegacy(r, uuidByIdx, dev, now));
+                if(rows.length){ await v10.transaction('rw', [v10.photos, v10.syncQueue], async () => { await v10.photos.bulkAdd(rows); for(const r of rows) await enqueue('photo', r.uuid, 'upsert'); }); np += rows.length; }
+            }
+            const lr = await db.reminders.toArray(), haveR = new Set(await v10.reminders.toCollection().primaryKeys());
+            const mr = lr.filter(r => !haveR.has(r.id));
+            if(mr.length){ await v10.transaction('rw', [v10.reminders, v10.syncQueue], async () => { for(const r of mr){ const row = reminderRowFromLegacy(r, dev, now); await v10.reminders.add(row); await enqueue('reminder', row.uuid, 'upsert'); } }); }
+            if(np || mr.length){ st.delta = {photos:np, reminders:mr.length}; await mlog('delta-import', st.delta); }
+        }catch(e){ console.warn('deltaImport', e); }
+    }
+
+    // ── riconciliazione LS ⇄ v10 all'avvio ──
+    async function reconcile(){
+        const raw = lsRaw('grow-plants'), pending = lsRaw('grow-v10-pending');
+        let arr = null;
+        try{ arr = raw == null ? null : JSON.parse(raw); }catch(e){ arr = null; st.lsCorrupt = true; }
+        const live = await v10.plants.filter(r => !r.deletedAt).count();
+        if(!Array.isArray(arr) || (arr.length === 0 && live > 0 && !pending)){
+            if(live > 0){
+                const rebuilt = await plantsFromV10();
+                try{ localStorage.setItem('grow-plants', JSON.stringify(rebuilt)); }catch(e){}
+                st.hydrated = true; await mlog('reconcile-hydrate', {live, lsCorrupt:!!st.lsCorrupt});
+            }
+        } else {
+            const ch = prepPlants(arr);
+            if(ch) try{ localStorage.setItem('grow-plants', JSON.stringify(arr)); }catch(e){}
+            const n = await commitPlants(arr);
+            if(n) await mlog('reconcile-commit', {changes:n, pending:!!pending});
+        }
+        for(const k of SHARED_KEYS){
+            const r = lsRaw(k), row = await v10.settings.get(k);
+            if(r == null){ if(row && !row.deletedAt){ try{ localStorage.setItem(k, JSON.stringify(row.value)); }catch(e){} } }
+            else { let val; try{ val = JSON.parse(r); }catch(e){ continue; } await commitShared(k, val); }
+        }
+        try{ localStorage.removeItem('grow-v10-pending'); }catch(e){}
+    }
+
+    async function init(){
+        try{
+            if(typeof Dexie === 'undefined') throw new Error('Dexie non disponibile');
+            v10 = openV10(); await v10.open();
+            try{ st.persist = (navigator.storage && navigator.storage.persist) ? await navigator.storage.persist() : null; }catch(e){}
+            const done = await v10.migrationLog.where('step').equals('complete').last();
+            if(!done){
+                const res = await migrate();
+                if(!res.ok){ mode = 'legacy'; st.err = res.err; return; }
+            } else { st.migrated = true; st.report = done.info; }
+            await reconcile();
+            await deltaImport();
+            mode = 'v10';
+        }catch(e){
+            console.error('DL init', e); st.err = String((e && e.message) || e);
+            mode = db ? 'legacy' : 'off';
+            try{ if(v10) await mlog('failed', {why:'init: ' + st.err}); }catch(_e){}
+        }finally{ readyRes(); }
+    }
+
+    // ── applicazione di modifiche REMOTE (sync): sezione critica che non perde mai una modifica locale concorrente ──
+    function mergePlant(c, b, r, race){
+        const bodyOf = p => { const o = Object.assign({}, p); delete o.logs; return o; };
+        const cb = stable(bodyOf(c)) !== stable(bodyOf(b)), rb = stable(bodyOf(r)) !== stable(bodyOf(b));
+        let body;
+        if(cb && rb && stable(bodyOf(c)) !== stable(bodyOf(r))){ race.push(c.uuid); body = bodyOf(c); } else body = cb ? bodyOf(c) : bodyOf(r);
+        const bl = new Map((b.logs || []).map(l => [l.uuid, l])), rl = new Map((r.logs || []).map(l => [l.uuid, l])), cl = new Map((c.logs || []).map(l => [l.uuid, l]));
+        const logs = [];
+        (c.logs || []).forEach(l => {
+            const bb = bl.get(l.uuid), rr = rl.get(l.uuid);
+            if(!rr){ if(bb && stable(bb) === stable(l)) return; logs.push(l); return; }
+            if(!bb){ logs.push(l); return; }
+            const lc = stable(l) !== stable(bb), rc = stable(rr) !== stable(bb);
+            if(lc && rc && stable(l) !== stable(rr)){ race.push(l.uuid); logs.push(l); } else logs.push(lc ? l : rr);
+        });
+        (r.logs || []).forEach(l => { if(!cl.has(l.uuid) && !bl.has(l.uuid)) logs.push(l); });
+        return Object.assign(body, {uuid:c.uuid, logs});
+    }
+    function mergePlants(cur, base, rebuilt, race){
+        const bm = new Map(base.map(p => [p.uuid, p])), rm = new Map(rebuilt.map(p => [p.uuid, p])), cm = new Map(cur.map(p => [p.uuid, p])), out = [];
+        cur.forEach(c => {
+            const b = bm.get(c.uuid), r = rm.get(c.uuid);
+            if(!r){ if(b && stable(b) === stable(c)) return; out.push(c); return; }   // cancellata altrove e non toccata qui → via
+            if(!b){ out.push(c); return; }
+            out.push(mergePlant(c, b, r, race));
+        });
+        rebuilt.forEach(r => { if(!cm.has(r.uuid) && !bm.has(r.uuid)) out.push(r); });
+        return out;
+    }
+    async function remoteApply(writer, hook){
+        await ready;
+        if(mode !== 'v10') throw new Error('Data Layer non attivo');
+        await flush();
+        let release; applyLock = new Promise(r => { release = r; });
+        try{
+            const baseRaw = lsRaw('grow-plants');
+            let baseArr = []; try{ baseArr = baseRaw ? JSON.parse(baseRaw) : []; }catch(e){}
+            const info = (await writer(v10)) || {};
+            if(hook) await hook();
+            info.race = [];
+            if(info.plants){
+                const rebuilt = await plantsFromV10();
+                const curRaw = lsRaw('grow-plants');
+                if(curRaw === baseRaw && !pendP){ try{ localStorage.setItem('grow-plants', JSON.stringify(rebuilt)); }catch(e){} }
+                else {
+                    let cur = []; try{ cur = curRaw ? JSON.parse(curRaw) : []; }catch(e){}
+                    const merged = mergePlants(cur, baseArr, rebuilt, info.race);
+                    info.race.forEach(u => holds.add(u));
+                    try{ localStorage.setItem('grow-plants', JSON.stringify(merged)); }catch(e){}
+                    pendP = clone(merged); st.merged = (st.merged || 0) + 1;
+                    try{ localStorage.setItem('grow-v10-pending', iso()); }catch(e){}
+                }
+            }
+            if(info.shared) Object.keys(info.shared).forEach(k => { try{ if(info.shared[k] === undefined) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(info.shared[k])); }catch(e){} });
+            return info;
+        } finally { applyLock = null; release(); if(pendP || Object.keys(pendS).length) pump(); }
+    }
+
+    // ── API foto ──
+    function idxMap(){ const m = new Map(); (lsGet('grow-plants', []) || []).forEach((p, i) => { if(p && p.uuid) m.set(p.uuid, i); }); return m; }
+    const outPhoto = (r, m) => ({id:r.id, uuid:r.uuid, plantUuid:r.plantUuid, plantId:m.has(r.plantUuid) ? m.get(r.plantUuid) : -1, logId:r.logId || null, data:r.data, createdAt:r.createdAt, phase:r.phase == null ? null : r.phase});
+    const live = r => r && !r.deletedAt;
+    const photos = {
+        async add(o){
+            await ready;
+            if(mode !== 'v10'){ if(!db) throw new Error('Database non disponibile'); return await db.photos.add({plantId:o.plantIdx, logId:o.logId || null, data:o.data, createdAt:o.createdAt, phase:o.phase}); }
+            const pl = (lsGet('grow-plants', []) || [])[o.plantIdx];
+            const lid = await mirror(() => db.photos.add({plantId:o.plantIdx, logId:o.logId || null, data:o.data, createdAt:o.createdAt, phase:o.phase}));
+            const row = {uuid:uuid(), plantUuid:(pl && pl.uuid) || null, logId:o.logId || null, data:o.data, createdAt:o.createdAt, phase:o.phase == null ? null : o.phase,
+                version:1, updatedAt:iso(), deletedAt:null, deviceId:deviceId(), legacyId:lid == null ? null : lid, synced:0};
+            let id;
+            const go = async withId => {
+                const r = withId && lid != null ? Object.assign({id:lid}, row) : row;
+                await v10.transaction('rw', [v10.photos, v10.syncQueue], async () => { id = await v10.photos.add(r); await enqueue('photo', row.uuid, 'upsert'); });
+            };
+            try{ await go(true); }catch(e){ if(lid != null && e && e.name === 'ConstraintError'){ row.legacyId = null; await go(false); } else throw e; }
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+            return id;
+        },
+        async all(){ await ready; if(mode !== 'v10') return db ? await db.photos.toArray() : []; const m = idxMap(); return (await v10.photos.toArray()).filter(live).map(r => outPhoto(r, m)); },
+        async byPlant(idx, limit){ await ready; if(mode !== 'v10') return await db.photos.where('plantId').equals(idx).reverse().limit(limit || 50).toArray();
+            const pl = (lsGet('grow-plants', []) || [])[idx]; if(!pl || !pl.uuid) return [];
+            const m = idxMap(); const rows = (await v10.photos.where('plantUuid').equals(pl.uuid).toArray()).filter(live).sort((a, b) => b.id - a.id).slice(0, limit || 50);
+            return rows.map(r => outPhoto(r, m)); },
+        async insertRemote(row){   // foto scaricata dal cloud: nessuna coda, specchio v9 per il rollback
+            const idx = idxMap().get(row.plantUuid);
+            const lid = await mirror(() => db.photos.add({plantId:idx == null ? -1 : idx, logId:row.logId || null, data:row.data, createdAt:row.createdAt, phase:row.phase == null ? null : row.phase}));
+            const r = Object.assign({}, row, {legacyId:lid == null ? null : lid}); if(lid != null) r.id = lid; else delete r.id;
+            try{ await v10.photos.add(r); }catch(e){ if(e && e.name === 'ConstraintError' && lid != null){ delete r.id; r.legacyId = null; await v10.photos.add(r); } else throw e; }
+        },
+        async tombstoneRemote(id){ const r = await v10.photos.get(id); if(!r) return; await mirror(() => db.photos.delete(id)); },
+        async count(){ await ready; if(mode !== 'v10') return db ? await db.photos.count() : 0; return (await v10.photos.filter(live).count()); },
+        async get(id){ await ready; if(mode !== 'v10') return db.photos.get(id); const r = await v10.photos.get(id); return live(r) ? outPhoto(r, idxMap()) : undefined; },
+        async update(id, patch){
+            await ready;
+            if(mode !== 'v10') return await db.photos.update(id, patch);
+            await v10.transaction('rw', [v10.photos, v10.syncQueue], async () => {
+                const r = await v10.photos.get(id); if(!live(r)) return;
+                const up = {version:r.version + 1, updatedAt:iso()};
+                if('logId' in patch) up.logId = patch.logId; if('phase' in patch) up.phase = patch.phase;
+                await v10.photos.update(id, up); await enqueue('photo', r.uuid, 'upsert');
+            });
+            await mirror(() => db.photos.update(id, patch));
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+        },
+        async remove(id){
+            await ready;
+            if(mode !== 'v10') return await db.photos.delete(id);
+            await v10.transaction('rw', [v10.photos, v10.syncQueue], async () => {
+                const r = await v10.photos.get(id); if(!live(r)) return;
+                await v10.photos.update(id, {data:null, deletedAt:iso(), updatedAt:iso(), version:r.version + 1});
+                await enqueue('photo', r.uuid, 'delete');
+            });
+            await mirror(() => db.photos.delete(id));
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+        }
+    };
+    // ── API promemoria ──
+    const outRem = r => r;
+    const reminders = {
+        async add(o){
+            await ready;
+            if(mode !== 'v10'){ if(!db) throw new Error('Database non disponibile'); return await db.reminders.add(o); }
+            const lid = await mirror(() => db.reminders.add(o));
+            const row = {uuid:uuid(), title:o.title, datetime:o.datetime, repeat:o.repeat || 'once', active:o.active ? 1 : 0, createdAt:o.createdAt || iso(),
+                version:1, updatedAt:iso(), deletedAt:null, deviceId:deviceId(), legacyId:lid == null ? null : lid, synced:0};
+            let id;
+            const go = async withId => {
+                const r = withId && lid != null ? Object.assign({id:lid}, row) : row;
+                await v10.transaction('rw', [v10.reminders, v10.syncQueue], async () => { id = await v10.reminders.add(r); await enqueue('reminder', row.uuid, 'upsert'); });
+            };
+            try{ await go(true); }catch(e){ if(lid != null && e && e.name === 'ConstraintError'){ row.legacyId = null; await go(false); } else throw e; }
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+            return id;
+        },
+        async listActive(){ await ready; if(mode !== 'v10') return db ? await db.reminders.where('active').equals(1).toArray() : []; return (await v10.reminders.where('active').equals(1).toArray()).filter(live).map(outRem); },
+        async listAll(){ await ready; if(mode !== 'v10') return db ? await db.reminders.reverse().toArray() : []; return (await v10.reminders.toArray()).filter(live).sort((a, b) => b.id - a.id).map(outRem); },
+        async get(id){ await ready; if(mode !== 'v10') return db.reminders.get(id); const r = await v10.reminders.get(id); return live(r) ? outRem(r) : undefined; },
+        async update(id, patch){
+            await ready;
+            if(mode !== 'v10') return await db.reminders.update(id, patch);
+            await v10.transaction('rw', [v10.reminders, v10.syncQueue], async () => {
+                const r = await v10.reminders.get(id); if(!live(r)) return;
+                const up = {version:r.version + 1, updatedAt:iso()};
+                ['title', 'datetime', 'repeat', 'active'].forEach(k => { if(k in patch) up[k] = patch[k]; });
+                await v10.reminders.update(id, up); await enqueue('reminder', r.uuid, 'upsert');
+            });
+            await mirror(() => db.reminders.update(id, patch));
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+        },
+        async remove(id){
+            await ready;
+            if(mode !== 'v10') return await db.reminders.delete(id);
+            await v10.transaction('rw', [v10.reminders, v10.syncQueue], async () => {
+                const r = await v10.reminders.get(id); if(!live(r)) return;
+                await v10.reminders.update(id, {deletedAt:iso(), updatedAt:iso(), version:r.version + 1});
+                await enqueue('reminder', r.uuid, 'delete');
+            });
+            await mirror(() => db.reminders.delete(id));
+            listeners.forEach(f => { try{ f(1); }catch(e){} });
+        }
+    };
+
+    // ── verifica di integrità (diagnostica per l'utente) ──
+    async function verify(){
+        await ready;
+        const out = {mode, ok:true, lines:[], issues:[]};
+        if(mode !== 'v10'){ out.ok = false; out.issues.push('Modalità sicura: i dati restano nel formato precedente' + (st.err ? ' (' + st.err + ')' : '')); return out; }
+        await flush();
+        const ls = lsGet('grow-plants', []) || [];
+        const pR = (await v10.plants.toArray()).filter(live), lR = (await v10.logs.toArray()).filter(live);
+        const lsLogs = ls.reduce((a, p) => a + (Array.isArray(p.logs) ? p.logs.length : 0), 0);
+        out.lines.push('Piante: ' + ls.length + ' in uso · ' + pR.length + ' nel database');
+        out.lines.push('Log: ' + lsLogs + ' in uso · ' + lR.length + ' nel database');
+        if(ls.length !== pR.length) out.issues.push('numero piante diverso');
+        if(lsLogs !== lR.length) out.issues.push('numero log diverso');
+        const uu = new Set(pR.map(p => p.uuid));
+        ls.forEach((p, i) => { if(!p.uuid || !uu.has(p.uuid)) out.issues.push('pianta ' + (i + 1) + ' senza ID stabile'); });
+        const ph = (await v10.photos.toArray()).filter(live);
+        const orph = ph.filter(p => !p.plantUuid || !uu.has(p.plantUuid)).length;
+        const noData = ph.filter(p => !p.data).length;
+        out.lines.push('Foto: ' + ph.length + (orph ? ' (' + orph + ' non collegate a una pianta attuale)' : ''));
+        if(noData) out.issues.push(noData + ' foto senza contenuto');
+        const rem = (await v10.reminders.toArray()).filter(live).length;
+        out.lines.push('Promemoria: ' + rem);
+        const qn = await v10.syncQueue.count();
+        out.lines.push('Operazioni in coda di sincronizzazione: ' + qn);
+        if(db){
+            try{ const lp = await db.photos.count(); out.lines.push('Copia di sicurezza (database precedente): ' + lp + ' foto'); }catch(e){}
+        }
+        out.ok = out.issues.length === 0;
+        return out;
+    }
+
+    return {
+        ready, init, flush, verify, st, holds, remoteApply, mergePlants, lsRaw, uuid, stable, prepPlants, onLsSet, diffPlants, buildPlants, enqueue, photoRowFromLegacy, reminderRowFromLegacy, matchLegacyLogs, deviceId, iso,
+        get mode(){ return mode; }, get db(){ return v10; },
+        on(f){ listeners.push(f); }, photos, reminders, plantsFromV10, commitPlants, commitShared, TABLES
+    };
+})();
+
+// ═══════════════════════════════════════════════════════════
+// V10 · BACKUP MANAGER — formato GROW420_BACKUP_V2 (+ import dei backup v1 della v9)
+//  • Contiene tutte le tabelle, tutte le foto, manifest con conteggi e checksum. Nessuna credenziale/token.
+//  • Validazione completa PRIMA di toccare qualsiasi dato; ripristino in un'unica transazione IndexedDB.
+// ═══════════════════════════════════════════════════════════
+const Backup = (function(){
+    const FORMAT = 'GROW420_BACKUP_V2';
+    function cyrb(str){ let h1 = 0xdeadbeef, h2 = 0x41c6ce57; for(let i = 0; i < str.length; i++){ const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+        return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0') + str.length.toString(16); }
+    const HAS_SUBTLE = () => { try{ return !!(crypto && crypto.subtle && crypto.subtle.digest); }catch(e){ return false; } };
+    async function hash(str, algo){
+        algo = algo || (HAS_SUBTLE() ? 'SHA-256' : 'CYRB53');
+        if(algo === 'SHA-256'){
+            if(!HAS_SUBTLE()) throw new Error('SHA-256 non disponibile in questo contesto');
+            const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join('');
+        }
+        return cyrb(str);
+    }
+    const S = DL.stable;
+    const live = r => r && !r.deletedAt;
+
+    function collectDevicePrefs(){
+        const o = {};
+        try{ for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(isDevicePrefKey(k)) o[k] = localStorage.getItem(k); } }catch(e){}
+        return o;
+    }
+    function download(blob, name){
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+    }
+
+    // ── esportazione ──
+    async function build(){
+        await DL.ready;
+        if(DL.mode !== 'v10') throw new Error('Modalità sicura attiva: backup V2 non disponibile');
+        await DL.flush();
+        const v = DL.db, T = [v.plants, v.logs, v.photos, v.reminders, v.settings];
+        // lettura in un'unica transazione di sola lettura = istantanea coerente
+        const snap = await v.transaction('r', T, async () => ({plants:await v.plants.toArray(), logs:await v.logs.toArray(), photos:await v.photos.toArray(), reminders:await v.reminders.toArray(), settings:await v.settings.toArray()}));
+        const algo = HAS_SUBTLE() ? 'SHA-256' : 'CYRB53';
+        const phHashes = [], phPieces = [];
+        let bytes = 0; const issues = [];
+        for(const p of snap.photos){
+            const h = p.data ? await hash(p.data, algo) : null;
+            if(p.data) bytes += p.data.length;
+            if(!p.deletedAt && !p.data) issues.push('foto id ' + p.id + ' senza contenuto');
+            phHashes.push(p.id + ':' + (h || '-'));
+            phPieces.push(JSON.stringify(Object.assign({}, p, {sha256:h})));
+        }
+        const prefs = collectDevicePrefs();
+        const sec = {plants:await hash(S(snap.plants), algo), logs:await hash(S(snap.logs), algo), reminders:await hash(S(snap.reminders), algo),
+            settings:await hash(S(snap.settings), algo), devicePrefs:await hash(S(prefs), algo), photos:await hash(phHashes.join('|'), algo)};
+        const cnt = a => ({total:a.length, live:a.filter(live).length});
+        const manifest = {format:FORMAT, formatVersion:2, appVersion:APP_VERSION, createdAt:new Date().toISOString(), deviceId:DL.deviceId(),
+            hashAlgo:algo, counts:{plants:cnt(snap.plants), logs:cnt(snap.logs), photos:Object.assign(cnt(snap.photos), {withData:snap.photos.filter(p => p.data).length}),
+                reminders:cnt(snap.reminders), settings:cnt(snap.settings), devicePrefs:{total:Object.keys(prefs).length}}, photoBytes:bytes, sections:sec,
+            complete:issues.length === 0, issues, containsCredentials:false};
+        const checksum = {algo, value:await hash(S(manifest), algo)};
+        const head = '{"format":' + JSON.stringify(FORMAT) + ',"formatVersion":2,"manifest":' + JSON.stringify(manifest) + ',"checksum":' + JSON.stringify(checksum) +
+            ',"devicePrefs":' + JSON.stringify(prefs) + ',"data":{"plants":' + JSON.stringify(snap.plants) + ',"logs":' + JSON.stringify(snap.logs) +
+            ',"reminders":' + JSON.stringify(snap.reminders) + ',"settings":' + JSON.stringify(snap.settings) + ',"photos":[';
+        const blob = new Blob([head, phPieces.join(','), ']}}'], {type:'application/json'});
+        return {blob, manifest, checksum, snap};
+    }
+    async function exportV2(opt){
+        opt = opt || {};
+        try{
+            const b = await build();
+            const name = (opt.name || 'grow420-backup-v2') + '-' + new Date().toISOString().slice(0, 16).replace(/[:T]/g, '') + '.json';
+            download(b.blob, name);
+            try{ await DL.db.syncMeta.put({key:'lastBackup', at:b.manifest.createdAt, name, counts:b.manifest.counts, checksum:b.checksum.value, complete:b.manifest.complete, auto:!!opt.auto}); }catch(e){}
+            if(!opt.auto){
+                if(b.manifest.complete) Toast.show('📥 Backup V2 completo salvato · ' + b.manifest.counts.plants.live + ' piante, ' + b.manifest.counts.logs.live + ' log, ' + b.manifest.counts.photos.live + ' foto', 'success', 3800);
+                else notify('⚠️ Backup INCOMPLETO: ' + b.manifest.issues.slice(0, 2).join('; '));
+            }
+            return {ok:true, manifest:b.manifest, name, complete:b.manifest.complete};
+        }catch(e){
+            console.error('exportV2', e);
+            if(!opt.auto) notify('Backup non riuscito: ' + e.message);
+            return {ok:false, err:e.message};
+        }
+    }
+
+    // ── lettura / validazione ──
+    function parse(text){
+        let j;
+        try{ j = JSON.parse(text); }catch(e){ throw new Error('File non valido: JSON illeggibile'); }
+        if(j && j.format === FORMAT) return {kind:'v2', j};
+        if(j && j.version === 1 && j.indexedDB && typeof j.indexedDB === 'object') return {kind:'v1', j};
+        throw new Error('Formato di backup non riconosciuto');
+    }
+    async function validateV2(j){
+        const errors = [], warnings = [];
+        const m = j.manifest, d = j.data;
+        if(j.formatVersion !== 2) errors.push('versione formato non supportata (' + j.formatVersion + ')');
+        if(!m || typeof m !== 'object') errors.push('manifest mancante');
+        if(!d || typeof d !== 'object') errors.push('sezione dati mancante');
+        if(errors.length) return {ok:false, errors, warnings};
+        ['plants', 'logs', 'photos', 'reminders', 'settings'].forEach(t => { if(!Array.isArray(d[t])) errors.push('sezione "' + t + '" mancante o non valida'); });
+        if(!j.checksum || !j.checksum.value) errors.push('checksum mancante');
+        if(errors.length) return {ok:false, errors, warnings};
+        const algo = (m.hashAlgo || (j.checksum && j.checksum.algo));
+        if(algo === 'SHA-256' && !HAS_SUBTLE()) { errors.push('SHA-256 non verificabile qui (serve HTTPS): importa da GitHub Pages'); return {ok:false, errors, warnings}; }
+        if(await hash(S(m), algo) !== j.checksum.value) errors.push('checksum del manifest non valido: file modificato o corrotto');
+        const prefs = j.devicePrefs || {};
+        const sec = m.sections || {};
+        const chk = async (name, val) => { if(sec[name] && await hash(S(val), algo) !== sec[name]) errors.push('sezione "' + name + '" non corrisponde al checksum'); };
+        const photosClean = d.photos.map(p => { const c = Object.assign({}, p); delete c.sha256; return c; });
+        await chk('plants', d.plants); await chk('logs', d.logs); await chk('reminders', d.reminders); await chk('settings', d.settings); await chk('devicePrefs', prefs);
+        const hs = [];
+        for(let i = 0; i < d.photos.length; i++){
+            const p = d.photos[i]; let h = null;
+            if(p.data){ h = await hash(p.data, algo); if(p.sha256 !== h){ errors.push('foto id ' + p.id + ': contenuto non corrisponde al checksum'); if(errors.length > 8) break; } if(!/^data:image\//.test(p.data)) errors.push('foto id ' + p.id + ': contenuto non è un\'immagine'); }
+            hs.push(p.id + ':' + (h || '-'));
+        }
+        if(!errors.length && sec.photos && await hash(hs.join('|'), algo) !== sec.photos) errors.push('elenco foto non corrisponde al checksum');
+        const c = m.counts || {};
+        const lv = a => a.filter(live).length;
+        const cmp = (n, arr) => { if(c[n] && (c[n].total !== arr.length || c[n].live !== lv(arr))) errors.push('conteggio "' + n + '" non corrisponde al manifest'); };
+        cmp('plants', d.plants); cmp('logs', d.logs); cmp('photos', d.photos); cmp('reminders', d.reminders); cmp('settings', d.settings);
+        // riferimenti e unicità
+        const pu = new Set(d.plants.map(p => p.uuid));
+        if(pu.size !== d.plants.length) errors.push('ID pianta duplicati');
+        if(new Set(d.logs.map(l => l.uuid)).size !== d.logs.length) errors.push('ID log duplicati');
+        if(new Set(d.photos.map(p => p.id)).size !== d.photos.length) errors.push('ID foto duplicati');
+        d.plants.forEach(p => { if(typeof p.uuid !== 'string' || !p.body || typeof p.body !== 'object') errors.push('pianta con struttura non valida'); });
+        d.logs.forEach(l => { if(!pu.has(l.plantUuid)) errors.push('log ' + l.uuid + ' collegato a una pianta inesistente'); });
+        let orph = 0; d.photos.forEach(p => { if(p.plantUuid && !pu.has(p.plantUuid)) errors.push('foto ' + p.id + ' con riferimento rotto'); if(!p.plantUuid && !p.deletedAt) orph++; });
+        if(orph) warnings.push(orph + ' foto non collegate a una pianta');
+        Object.keys(prefs).forEach(k => { if(!isDevicePrefKey(k)) { warnings.push('preferenza "' + k + '" ignorata'); delete prefs[k]; } });
+        if(m.complete === false) warnings.push('BACKUP INCOMPLETO dichiarato dal file: ' + (m.issues || []).slice(0, 3).join('; '));
+        return {ok:errors.length === 0, errors:errors.slice(0, 10), warnings, summary:{kind:'v2', date:m.createdAt, counts:m.counts, verified:true, complete:m.complete !== false}};
+    }
+    function convertV1(j){
+        const errors = [], warnings = [], ls = j.localStorage && typeof j.localStorage === 'object' ? j.localStorage : {}, idb = j.indexedDB || {};
+        let plants = [];
+        if(ls['grow-plants'] != null){ try{ plants = JSON.parse(ls['grow-plants']); if(!Array.isArray(plants)) throw 0; }catch(e){ errors.push('piante illeggibili nel backup'); } }
+        else if(!(idb.photos || []).length && !(idb.reminders || []).length) errors.push('il backup non contiene piante');
+        ['plants', 'logs', 'photos', 'reminders', 'settings'].forEach(t => { if(idb[t] !== undefined && !Array.isArray(idb[t])) errors.push('indexedDB.' + t + ' non è una lista'); });
+        if(errors.length) return {ok:false, errors, warnings};
+        const phs = idb.photos || [], rems = idb.reminders || [];
+        const ids = new Set();
+        phs.forEach(p => { if(!p || !Number.isInteger(p.id) || typeof p.data !== 'string' || !/^data:image\//.test(p.data)) errors.push('foto non valida' + (p && p.id != null ? ' (id ' + p.id + ')' : '')); else if(ids.has(p.id)) errors.push('ID foto duplicato ' + p.id); else ids.add(p.id); });
+        const rids = new Set();
+        rems.forEach(r => { if(!r || !Number.isInteger(r.id) || typeof r.title !== 'string' || isNaN(new Date(r.datetime))) errors.push('promemoria non valido'); else if(rids.has(r.id)) errors.push('ID promemoria duplicato'); else rids.add(r.id); });
+        if(errors.length) return {ok:false, errors:errors.slice(0, 10), warnings};
+        DL.prepPlants(plants);
+        const dev = DL.deviceId(), now = DL.iso();
+        const d = DL.diffPlants(plants, new Map(), new Map());
+        const uuidByIdx = plants.map(p => p && p.uuid);
+        const phRows = phs.map(p => DL.photoRowFromLegacy(p, uuidByIdx, dev, now));
+        const orph = phRows.filter(p => !p.plantUuid).length;
+        if(orph) warnings.push(orph + ' foto non collegate a una pianta (indice non più valido)');
+        const rRows = rems.map(r => DL.reminderRowFromLegacy(r, dev, now));
+        const sRows = [];
+        SHARED_KEYS.forEach(k => { if(ls[k] != null){ try{ sRows.push({key:k, kind:'shared', value:JSON.parse(ls[k]), version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0}); }catch(e){ warnings.push('"' + k + '" illeggibile, ignorato'); } } });
+        (idb.settings || []).forEach(s => sRows.push({key:'legacy:' + s.key, kind:'legacy-idb', value:s.value === undefined ? s : s.value, version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0}));
+        const un = DL.matchLegacyLogs(idb.logs || [], plants);
+        if(un.length) sRows.push({key:'legacy:logs-non-collegati', kind:'legacy-idb', value:un, version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0});
+        if((idb.logs || []).length - un.length > 0) warnings.push(((idb.logs || []).length - un.length) + ' log duplicati del vecchio database già presenti nel diario');
+        const prefs = {}; Object.keys(ls).forEach(k => { if(isDevicePrefKey(k)) prefs[k] = ls[k]; });
+        warnings.push('Backup v1: nessun checksum, verificata solo la struttura');
+        return {ok:true, errors, warnings, rows:{pRows:d.outP, lRows:d.outL, phRows, rRows, sRows}, devicePrefs:prefs,
+            summary:{kind:'v1', date:j.exportedAt, counts:{plants:{live:d.outP.length}, logs:{live:d.outL.length}, photos:{live:phRows.length}, reminders:{live:rRows.length}}, verified:false, complete:true}};
+    }
+    function normalizeV2(j){
+        const d = j.data;
+        return {pRows:d.plants, lRows:d.logs, phRows:d.photos.map(p => { const c = Object.assign({}, p); delete c.sha256; return c; }), rRows:d.reminders, sRows:d.settings};
+    }
+
+    // ── ripristino transazionale ──
+    async function applyRows(N, prefs){
+        const v = DL.db, now = DL.iso();
+        const sb = await exportV2({auto:true, name:'grow420-copia-prima-del-ripristino'});
+        if(!sb.ok){ if(!(await confirmAsync('Non è stato possibile creare la copia di sicurezza dei dati attuali (' + sb.err + '). Procedere comunque con il ripristino?', {title:'Copia di sicurezza', okText:'Procedi'}))) return false; }
+        await DL.flush();
+        const T = [v.plants, v.logs, v.photos, v.reminders, v.settings, v.syncQueue];
+        const bump = (rows, key, ov) => rows.map(r => Object.assign({}, r, {version:Math.max(r.version || 1, ov.get(r[key]) || 0) + 1, updatedAt:now, synced:0}));
+        await v.transaction('rw', T, async () => {
+            const ovP = new Map(), ovL = new Map(), ovPh = new Map(), ovR = new Map(), ovS = new Map();
+            await v.plants.each(r => ovP.set(r.uuid, r.version)); await v.logs.each(r => ovL.set(r.uuid, r.version));
+            await v.photos.each(r => ovPh.set(r.uuid, r.version)); await v.reminders.each(r => ovR.set(r.uuid, r.version)); await v.settings.each(r => ovS.set(r.key, r.version));
+            for(const t of T) await t.clear();
+            const P = bump(N.pRows, 'uuid', ovP), L = bump(N.lRows, 'uuid', ovL), PH = bump(N.phRows, 'uuid', ovPh), R = bump(N.rRows, 'uuid', ovR), SS = bump(N.sRows, 'key', ovS);
+            if(P.length) await v.plants.bulkAdd(P); if(L.length) await v.logs.bulkAdd(L); if(PH.length) await v.photos.bulkAdd(PH);
+            if(R.length) await v.reminders.bulkAdd(R); if(SS.length) await v.settings.bulkAdd(SS);
+            const q = []; let ts = now;
+            P.forEach(r => q.push({entity:'plant', uuid:r.uuid, op:r.deletedAt ? 'delete' : 'upsert', ts, attempts:0, lastError:null}));
+            L.forEach(r => q.push({entity:'log', uuid:r.uuid, op:r.deletedAt ? 'delete' : 'upsert', ts, attempts:0, lastError:null}));
+            PH.forEach(r => q.push({entity:'photo', uuid:r.uuid, op:r.deletedAt ? 'delete' : 'upsert', ts, attempts:0, lastError:null}));
+            R.forEach(r => q.push({entity:'reminder', uuid:r.uuid, op:r.deletedAt ? 'delete' : 'upsert', ts, attempts:0, lastError:null}));
+            SS.filter(r => r.kind === 'shared').forEach(r => q.push({entity:'setting', uuid:r.key, op:r.deletedAt ? 'delete' : 'upsert', ts, attempts:0, lastError:null}));
+            if(q.length) await v.syncQueue.bulkAdd(q);
+        });
+        // transazione riuscita → aggiorna la cache LS (dopo, mai prima)
+        const plants = DL.buildPlants(N.pRows, N.lRows);
+        try{ localStorage.setItem('grow-plants', JSON.stringify(plants)); }catch(e){ console.warn(e); }
+        SHARED_KEYS.forEach(k => { const r = N.sRows.find(x => x.key === k && !x.deletedAt); try{ if(r) localStorage.setItem(k, JSON.stringify(r.value)); else localStorage.removeItem(k); }catch(e){} });
+        Object.keys(prefs || {}).forEach(k => { if(isDevicePrefKey(k)) try{ localStorage.setItem(k, prefs[k]); }catch(e){} });
+        try{ localStorage.removeItem('grow-v10-pending'); }catch(e){}
+        // specchio per il rollback alla v9 (best effort, mai distruttivo)
+        const uidx = new Map(plants.map((p, i) => [p.uuid, i]));
+        try{
+            if(db){
+                const ph = N.phRows.filter(p => !p.deletedAt && p.data).map(p => ({id:p.id, plantId:uidx.has(p.plantUuid) ? uidx.get(p.plantUuid) : -1, logId:p.logId || null, data:p.data, createdAt:p.createdAt, phase:p.phase == null ? null : p.phase}));
+                const rm = N.rRows.filter(r => !r.deletedAt).map(r => ({id:r.id, title:r.title, datetime:r.datetime, repeat:r.repeat, active:r.active, createdAt:r.createdAt}));
+                await db.transaction('rw', db.photos, db.reminders, async () => { if(ph.length) await db.photos.bulkPut(ph); if(rm.length) await db.reminders.bulkPut(rm); });
+            }
+        }catch(e){ DL.st.mirrorErr = String(e && e.message || e); }
+        try{ await v.migrationLog.add({ts:now, step:'restore', info:{plants:plants.length, logs:N.lRows.filter(l => !l.deletedAt).length, photos:N.phRows.filter(p => !p.deletedAt).length, reminders:N.rRows.filter(r => !r.deletedAt).length}}); }catch(e){}
+        return true;
+    }
+    function describe(s){
+        const c = s.counts || {}, g = k => c[k] ? (c[k].live != null ? c[k].live : c[k].total) : 0;
+        return 'Backup ' + (s.kind === 'v2' ? 'V2' : 'v1 (della versione precedente)') + (s.date ? ' del ' + new Date(s.date).toLocaleString('it-IT') : '') + ': ' + g('plants') + ' piante, ' + g('logs') + ' log, ' + g('photos') + ' foto, ' + g('reminders') + ' promemoria. ' +
+            (s.verified ? 'Integrità verificata (checksum).' : 'Struttura verificata (nessun checksum nel formato v1).');
+    }
+    async function importFile(file){
+        try{
+            await DL.ready;
+            if(DL.mode !== 'v10'){ notify('Modalità sicura attiva: il ripristino non è disponibile'); return false; }
+            const parsed = parse(await file.text());
+            let rep, N, prefs;
+            if(parsed.kind === 'v2'){ rep = await validateV2(parsed.j); if(rep.ok){ N = normalizeV2(parsed.j); prefs = parsed.j.devicePrefs || {}; } }
+            else { rep = convertV1(parsed.j); if(rep.ok){ N = rep.rows; prefs = rep.devicePrefs; } }
+            if(!rep.ok){ Toast.show('Backup non importato — ' + rep.errors.slice(0, 3).join(' · '), 'error', 8000); return false; }
+            const warn = rep.warnings.filter(w => !/^Backup v1: nessun checksum/.test(w));
+            const msg = describe(rep.summary) + (warn.length ? ' Attenzione: ' + warn.slice(0, 3).join('; ') + '.' : '') + ' Il ripristino SOSTITUISCE i dati attuali; prima viene salvata automaticamente una copia di sicurezza. Continuare?';
+            if(!(await confirmAsync(msg, {title:'Ripristina backup', okText:'Ripristina'}))) return false;
+            const ok = await applyRows(N, prefs);
+            if(!ok) return false;
+            Toast.show('✅ Backup ripristinato · ricarico l\'app', 'success', 2200);
+            setTimeout(() => location.reload(), 900);
+            return true;
+        }catch(e){ console.warn('importFile', e); Toast.show('Importazione non riuscita: ' + e.message + ' — nessun dato è stato modificato', 'error', 7000); return false; }
+    }
+    return {exportV2, importFile, build, parse, validateV2, convertV1, hash, FORMAT};
+})();
+
+async function exportAllDataV1(){ // usato solo in modalità sicura (v10 non attivo)
+    const data = {version:1, exportedAt:new Date().toISOString(), localStorage:{}, indexedDB:{}};
+    for(let i = 0; i < localStorage.length; i++){ const k = localStorage.key(i); if(/^sb-/.test(k)) continue; data.localStorage[k] = localStorage.getItem(k); }
+    data.indexedDB.plants = await db.plants.toArray(); data.indexedDB.logs = await db.logs.toArray(); data.indexedDB.photos = await db.photos.toArray();
+    data.indexedDB.reminders = await db.reminders.toArray(); data.indexedDB.settings = await db.settings.toArray();
+    const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'grow420-backup-v1-' + new Date().toISOString().slice(0, 10) + '.json'; a.click(); URL.revokeObjectURL(url);
+    notify('Modalità sicura: salvato un backup nel formato precedente (v1)');
+}
+async function exportAllData(){
+    await DL.ready;
+    if(DL.mode === 'v10') return Backup.exportV2();
+    try{ return await exportAllDataV1(); }catch(e){ notify('Backup non riuscito: ' + e.message); }
+}
+async function importData(file){ return Backup.importFile(file); }
+async function exportCSV(){
+    const plants = lsGet('grow-plants', []) || [];
+    const rows = [];
+    const esc2 = s => { s = String(s == null ? '' : s); if(/^[=+\-@\t\r]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+    plants.forEach(p => (p.logs || []).forEach(l => {
+        const m = l.metrics || {}, fresh = parseFloat(m.fresh), dry = parseFloat(m.dry);
+        const y = (fresh && dry) ? ((dry / fresh) * 100).toFixed(1) : '';
+        rows.push([l.date, p.name, p.uuid || '', l.text, (l.tags || []).join(';'), m.ph, m.ec, m.temp, m.humidity, m.fresh, m.dry, y, l.isProblem ? 'sì' : ''].map(esc2).join(','));
+    }));
+    if(!rows.length){ notify('Nessun log da esportare'); return; }
+    const header = 'Data,Pianta,PiantaID,Testo,Tag,pH,EC,Temp,Umidita,PesoFresco_g,PesoSecco_g,Resa_pct,Problema\n';
+    const blob = new Blob(['﻿' + header + rows.join('\n')], {type:'text/csv'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'grow420-logs-' + new Date().toISOString().slice(0, 10) + '.csv'; a.click(); URL.revokeObjectURL(url);
+}
+async function dataIntegrityCheck(){
+    const r = await DL.verify();
+    let sv = null; try{ sv = await swVersion(); }catch(e){}
+    const m = DL.st;
+    const txt = (r.ok ? '✅ Tutto coerente. ' : '⚠️ ' + r.issues.join('; ') + '. ') + r.lines.join(' · ') + ' · App v' + APP_VERSION + (sv ? ' · ' + sv.cache : '') + (m.persist === true ? ' · Archiviazione persistente attiva' : m.persist === false ? ' · Archiviazione non persistente (il browser potrebbe liberare spazio)' : '');
+    await showModal({title:'Integrità dei dati', body:txt, okText:'Chiudi', danger:false});
+}
+
+// ═══════════════════════════════════════════════════════════
+// V10 · SYNC ENGINE — Supabase Auth (email+password, email verificata) + sync incrementale offline-first
+//  • Coda locale (syncQueue) nello stesso IndexedDB transaction delle modifiche → niente operazioni perse offline
+//  • Push con concorrenza ottimistica (version) · Pull incrementale per server_seq · Tombstone per le cancellazioni
+//  • Conflitto reale = entrambe le versioni conservate, confronto mostrato, scelta esplicita, risoluzione registrata
+//  • Foto nello Storage privato, impronta SHA-256 verificata al download · nessuna chiave service_role nel frontend
+//  • Non dipende da Background Sync (iOS): parte all'apertura, al ritorno online, al ritorno in primo piano e ogni minuto
+// ═══════════════════════════════════════════════════════════
+const Sync = (function(){
+    const TBL = {plant:'plants', log:'logs', photo:'photos', reminder:'reminders', setting:'settings'};
+    const ENTS = ['plant', 'log', 'photo', 'reminder', 'setting'];
+    const PAGE = 200;
+    const st = {status:'signedout', user:null, verified:false, last:null, err:null, queue:0, conflicts:0, running:false, phase:'', lastRun:0, firstSync:null};
+    const listeners = [];
+    let sb = null, timer = null, again = false, started = false;
+    class SErr extends Error { constructor(kind, msg){ super(msg); this.kind = kind; } }
+    const emit = () => { listeners.forEach(f => { try{ f(st); }catch(e){} }); chip(); };
+    const iso = () => new Date().toISOString();
+    const S = o => DL.stable(o);
+
+    function classify(err){
+        if(!err) return null;
+        const m = String(err.message || err), code = String(err.code || '');
+        if(err.status === 401 || /JWT|expired|not authenticated|invalid token/i.test(m) || code === 'PGRST301') return 'auth';
+        if(code === '23505' || err.status === 409) return 'dup';
+        if(code === '40001' || /version_conflict/.test(m)) return 'version';
+        if(code === '42501' || err.status === 403) return 'perm';
+        if(err.status === 0 || /failed to fetch|networkerror|load failed|network request failed|fetch failed/i.test(m)) return 'net';
+        return 'other';
+    }
+    const typed = (err, ctx) => new SErr(classify(err) || 'other', (ctx ? ctx + ': ' : '') + String((err && err.message) || err));
+
+    // ── mappature locale ⇄ remoto ──
+    const ms = x => { const t = new Date(x).getTime(); return isNaN(t) ? null : t; };
+    function toRemote(e, r){
+        const c = {device_id:r.deviceId || null, client_updated_at:r.updatedAt || null, deleted_at:r.deletedAt || null};
+        switch(e){
+            case 'plant': return Object.assign({id:r.uuid, ord:r.ord, body:r.body}, c);
+            case 'log': return Object.assign({id:r.uuid, plant_id:r.plantUuid, ord:r.ord, body:r.body}, c);
+            case 'photo': return Object.assign({id:r.uuid, plant_id:r.plantUuid || null, log_ref:r.logId == null ? null : String(r.logId), phase:r.phase == null ? null : r.phase, created_at:r.createdAt || null, storage_path:r.storagePath || null, sha256:r.sha256 || null, bytes:r.bytes || null, mime:r.mime || null}, c);
+            case 'reminder': return Object.assign({id:r.uuid, title:r.title, remind_at:r.datetime || null, repeat:r.repeat || 'once', active:!!r.active, created_at:r.createdAt || null}, c);
+            case 'setting': return Object.assign({key:r.key, value:r.value}, c);
+        }
+    }
+    function fromRemote(e, r){
+        const d = r.deleted_at || null;
+        switch(e){
+            case 'plant': return {uuid:r.id, ord:r.ord, body:r.body, deletedAt:d};
+            case 'log': return {uuid:r.id, plantUuid:r.plant_id, ord:r.ord, body:r.body, deletedAt:d};
+            case 'photo': return {uuid:r.id, plantUuid:r.plant_id || null, logId:r.log_ref == null ? null : r.log_ref, phase:r.phase == null ? null : r.phase, createdAt:r.created_at ? new Date(r.created_at).toISOString() : null, storagePath:r.storage_path || null, sha256:r.sha256 || null, bytes:r.bytes || null, mime:r.mime || null, deletedAt:d};
+            case 'reminder': return {uuid:r.id, title:r.title, datetime:r.remind_at ? new Date(r.remind_at).toISOString() : null, repeat:r.repeat, active:r.active ? 1 : 0, createdAt:r.created_at ? new Date(r.created_at).toISOString() : null, deletedAt:d};
+            case 'setting': return {key:r.key, value:r.value, deletedAt:d};
+        }
+    }
+    function sig(e, x){   // firma del CONTENUTO (uguale locale/remoto ⇒ nessun conflitto)
+        const del = x.deletedAt ? 1 : 0;
+        switch(e){
+            case 'plant': return S({b:x.body, del});
+            case 'log': return S({b:x.body, p:x.plantUuid, del});
+            case 'photo': return S({p:x.plantUuid || null, ph:x.phase == null ? null : x.phase, sha:x.sha256 || null, del});
+            case 'reminder': return S({t:x.title, d:ms(x.datetime), r:x.repeat, a:x.active ? 1 : 0, del});
+            case 'setting': return S({v:x.value, del});
+        }
+    }
+    const keyOf = (e, r) => e === 'setting' ? r.key : r.uuid;
+    const idCol = e => e === 'setting' ? 'key' : 'id';
+    async function getRow(e, u){
+        const v = DL.db;
+        if(e === 'plant') return v.plants.get(u);
+        if(e === 'log') return v.logs.get(u);
+        if(e === 'setting') return v.settings.get(u);
+        return v[TBL[e]].where('uuid').equals(u).first();
+    }
+    const putRow = (e, r) => DL.db[TBL[e]].put(r);
+    async function meta(k, val){ if(val === undefined){ const r = await DL.db.syncMeta.get(k); return r ? r.value : undefined; } await DL.db.syncMeta.put({key:k, value:val}); }
+
+    // ── conflitti ──
+    async function recordConflict(e, uuid, remote, kind){
+        const v = DL.db;
+        await v.transaction('rw', [v.syncMeta, v.syncQueue], async () => {
+            await v.syncMeta.put({key:'conflict:' + e + ':' + uuid, value:{entity:e, uuid, remote, kind:kind || 'edit-edit', ts:iso()}});
+            await v.syncQueue.where('[entity+uuid]').equals([e, uuid]).modify({status:'conflict'});
+        });
+        DL.holds.add(uuid);
+    }
+    async function listConflicts(){ return (await DL.db.syncMeta.toArray()).filter(r => r.key.indexOf('conflict:') === 0).map(r => r.value); }
+    async function refreshCounts(){
+        try{
+            const v = DL.db; if(!v) return;
+            const q = await v.syncQueue.toArray();
+            st.queue = q.filter(x => x.status !== 'conflict').length;
+            st.conflicts = (await listConflicts()).length;
+        }catch(e){}
+    }
+
+    // ── foto ──
+    function dataUrlParts(d){ const i = d.indexOf(','); const head = d.slice(0, i), b64 = d.slice(i + 1); const mime = (/^data:([^;,]+)/.exec(head) || [])[1] || 'image/jpeg'; return {mime, b64}; }
+    function dataUrlToBlob(d){ const {mime, b64} = dataUrlParts(d); const bin = atob(b64); const u = new Uint8Array(bin.length); for(let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], {type:mime}); }
+    const blobToDataUrl = blob => new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(fr.error); fr.readAsDataURL(blob); });
+    // impronta calcolata sui BYTE dell'immagine (indipendente dalla rappresentazione base64)
+    async function hashBytes(u8){
+        try{ if(crypto && crypto.subtle){ const b = await crypto.subtle.digest('SHA-256', u8); return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''); } }catch(e){}
+        let bin = ''; for(let i = 0; i < u8.length; i += 8192) bin += String.fromCharCode.apply(null, u8.subarray(i, i + 8192));
+        return 'cyrb53:' + await Backup.hash(bin, 'CYRB53');
+    }
+    async function photoHash(d){ const b = await dataUrlToBlob(d).arrayBuffer(); return hashBytes(new Uint8Array(b)); }
+    async function uploadPhoto(row){
+        const blob = dataUrlToBlob(row.data), path = st.user.id + '/' + row.uuid + '.jpg', sha = await photoHash(row.data), mime = dataUrlParts(row.data).mime;
+        const {error} = await sb.storage.from('photos').upload(path, blob, {contentType:mime, upsert:true});
+        if(error) throw typed(error, 'upload foto');
+        const up = {storagePath:path, sha256:sha, bytes:blob.size, mime};
+        await DL.db.photos.update(row.id, up);
+        return Object.assign({}, row, up);
+    }
+    async function downloadPhoto(r){
+        const {data, error} = await sb.storage.from('photos').download(r.storage_path);
+        if(error) throw typed(error, 'download foto');
+        const mime = r.mime || 'image/jpeg';
+        const buf = new Uint8Array(await data.arrayBuffer());
+        const want = r.sha256 || '', got = await hashBytes(buf);
+        const comparable = (want.indexOf('cyrb53:') === 0) === (got.indexOf('cyrb53:') === 0);
+        if(!want) throw new SErr('integrity', 'foto ' + r.id + ': nessuna impronta nel cloud, non posso verificarla');
+        if(comparable && want !== got) throw new SErr('integrity', 'foto ' + r.id + ': impronta non corrispondente (file corrotto)');
+        return await blobToDataUrl(new Blob([buf], {type:mime}));
+    }
+
+    // ── PUSH ──
+    async function markSynced(it, e, row, ver){
+        const v = DL.db;
+        await v.transaction('rw', [v[TBL[e]], v.syncQueue], async () => {
+            const cur = await getRow(e, keyOf(e, row)); if(cur) await putRow(e, Object.assign({}, cur, {synced:ver}));
+            await v.syncQueue.where('seq').equals(it.seq).delete();
+        });
+    }
+    async function pushOne(it, row0){
+        const e = it.entity; let row = row0;
+        if(e === 'photo' && !row.deletedAt && !row.storagePath){
+            if(!row.data) throw new SErr('other', 'foto ' + row.id + ' senza contenuto: non posso caricarla');
+            row = await uploadPhoto(row);
+        }
+        const t = TBL[e], idc = idCol(e), key = keyOf(e, row), payload = toRemote(e, row);
+        const diverge = async () => {
+            const {data: rem, error: ge} = await sb.from(t).select('*').eq(idc, key).maybeSingle();
+            if(ge) throw typed(ge, 'lettura ' + t);
+            if(!rem){ await putRow(e, Object.assign({}, row, {synced:0})); return 'retry'; }
+            if(sig(e, row) === sig(e, fromRemote(e, rem))){ await markSynced(it, e, row, rem.version); return 'adopted'; }
+            await recordConflict(e, key, rem, row.deletedAt ? 'delete-edit' : (rem.deleted_at ? 'edit-delete' : 'edit-edit'));
+            return 'conflict';
+        };
+        if(!row.synced){
+            const {data, error} = await sb.from(t).insert(Object.assign({}, payload, {version:1})).select().single();
+            if(!error){ await markSynced(it, e, row, data.version); return 'pushed'; }
+            const c = classify(error);
+            if(c === 'dup') return await diverge();
+            throw typed(error, 'invio ' + t);
+        }
+        const patch = Object.assign({}, payload, {version:row.synced + 1}); delete patch[idc];
+        const {data, error} = await sb.from(t).update(patch).eq(idc, key).eq('version', row.synced).select();
+        if(error && classify(error) !== 'version') throw typed(error, 'invio ' + t);
+        if(!error && data && data.length === 1){
+            await markSynced(it, e, row, data[0].version);
+            if(e === 'photo' && row.deletedAt && row.storagePath){ try{ await sb.storage.from('photos').remove([row.storagePath]); }catch(x){} }
+            return 'pushed';
+        }
+        return await diverge();
+    }
+    async function pushAll(){
+        const v = DL.db; let pushed = 0, guard = 0;
+        for(;;){
+            const q = (await v.syncQueue.orderBy('seq').toArray()).filter(x => x.status !== 'conflict' && x.status !== 'failed');
+            if(!q.length) break;
+            let progressed = false;
+            for(const it of q){
+                const row = await getRow(it.entity, it.uuid);
+                if(!row){ await v.syncQueue.where('seq').equals(it.seq).delete(); progressed = true; continue; }
+                st.phase = 'Invio ' + (TBL[it.entity]) + '…'; emit();
+                let res;
+                try{ res = await pushOne(it, row); }
+                catch(err){
+                    await v.syncQueue.where('seq').equals(it.seq).modify({attempts:(it.attempts || 0) + 1, lastError:String(err.message).slice(0, 300)});
+                    if(err.kind === 'other' || err.kind === 'integrity'){ await v.syncQueue.where('seq').equals(it.seq).modify({status:(it.attempts || 0) + 1 >= 5 ? 'failed' : 'pending'}); st.err = err.message; continue; }
+                    throw err;
+                }
+                if(res === 'retry') continue;
+                pushed++; progressed = true;
+            }
+            if(!progressed || ++guard > 5) break;
+        }
+        return pushed;
+    }
+
+    // ── PULL ──
+    async function applyPage(e, rows){
+        const v = DL.db; let n = 0, lastSeq = 0, stopped = false;
+        const conflictsNow = []; const touchedLogs = new Set();
+        if(e === 'photo'){
+            for(const r of rows){
+                const l = await getRow('photo', r.id), pend = await v.syncQueue.where('[entity+uuid]').equals(['photo', r.id]).first();
+                if(l && r.version <= (l.synced || 0)){ lastSeq = r.server_seq; continue; }
+                if(l && pend){ if(sig('photo', l) === sig('photo', fromRemote('photo', r))){ await markSynced(pend, 'photo', l, r.version); } else await recordConflict('photo', r.id, r, r.deleted_at ? 'edit-delete' : 'edit-edit'); lastSeq = r.server_seq; n++; continue; }
+                const f = fromRemote('photo', r);
+                if(r.deleted_at){
+                    if(l){ await v.photos.update(l.id, {data:null, deletedAt:r.deleted_at, synced:r.version, version:l.version + 1, updatedAt:iso()}); await DL.photos.tombstoneRemote(l.id); }
+                    else await v.photos.add(Object.assign({uuid:r.id, data:null, version:1, updatedAt:iso(), deviceId:r.device_id, legacyId:null, synced:r.version}, f));
+                } else if(l){
+                    await v.photos.update(l.id, {plantUuid:f.plantUuid, phase:f.phase, logId:f.logId, synced:r.version, version:l.version + 1, updatedAt:iso(), storagePath:f.storagePath, sha256:f.sha256});
+                } else {
+                    st.phase = 'Scarico foto…'; emit();
+                    let url; try{ url = await downloadPhoto(r); }catch(err){ if(err.kind === 'integrity'){ st.err = err.message; stopped = true; break; } throw err; }
+                    await DL.photos.insertRemote({uuid:r.id, plantUuid:f.plantUuid, logId:null, data:url, createdAt:f.createdAt, phase:f.phase, storagePath:f.storagePath, sha256:f.sha256, bytes:f.bytes, mime:f.mime, version:1, updatedAt:iso(), deletedAt:null, deviceId:r.device_id, synced:r.version});
+                }
+                lastSeq = r.server_seq; n++;
+            }
+            if(n && typeof Gal !== 'undefined') Gal.all = null;
+            return {cursor:lastSeq, n, stopped, race:[]};
+        }
+        const byKey = new Map(rows.map(r => [e === 'setting' ? r.key : r.id, r]));
+        const info = await DL.remoteApply(async () => {
+            let plantsChanged = false; const shared = {};
+            await v.transaction('rw', [v[TBL[e]], v.syncQueue, v.syncMeta], async () => {
+                for(const r of rows){
+                    const key = e === 'setting' ? r.key : r.id;
+                    lastSeq = r.server_seq;
+                    if(e === 'setting' && SHARED_KEYS.indexOf(key) < 0) continue;       // le preferenze del dispositivo non si sincronizzano
+                    const l = await getRow(e, key);
+                    if(l && r.version <= (l.synced || 0)) continue;
+                    const pend = await v.syncQueue.where('[entity+uuid]').equals([e, key]).first();
+                    const hasConf = await v.syncMeta.get('conflict:' + e + ':' + key);
+                    const f = fromRemote(e, r);
+                    if(l && (pend || hasConf)){
+                        if(sig(e, l) === sig(e, f)){ await putRow(e, Object.assign({}, l, {synced:r.version})); if(pend) await v.syncQueue.where('seq').equals(pend.seq).delete(); if(hasConf){ await v.syncMeta.delete('conflict:' + e + ':' + key); DL.holds.delete(key); } }
+                        else { await v.syncMeta.put({key:'conflict:' + e + ':' + key, value:{entity:e, uuid:key, remote:r, kind:l.deletedAt ? 'delete-edit' : (r.deleted_at ? 'edit-delete' : 'edit-edit'), ts:iso()}}); if(pend) await v.syncQueue.where('seq').equals(pend.seq).modify({status:'conflict'}); DL.holds.add(key); }
+                        n++; continue;
+                    }
+                    const row = Object.assign({}, l || {}, f, {version:(l ? l.version : 0) + 1, updatedAt:r.client_updated_at || iso(), deviceId:r.device_id || null, synced:r.version});
+                    if(e === 'setting'){ row.kind = 'shared'; shared[key] = r.deleted_at ? undefined : r.value; }
+                    if(e === 'reminder' && l) row.id = l.id;
+                    if(e === 'reminder' && !l) delete row.id;
+                    if(e === 'plant' || e === 'log') plantsChanged = true;
+                    if(e === 'reminder' && l){ await v.reminders.put(row); } else if(e === 'reminder'){ await v.reminders.add(row); } else await putRow(e, row);
+                    n++;
+                }
+            });
+            return {plants:plantsChanged, shared:Object.keys(shared).length ? shared : null};
+        });
+        for(const u of info.race){ const r = byKey.get(u); if(r) await recordConflict(e, u, r, 'edit-edit'); else {
+            // il conflitto di un LOG nasce durante la pagina dei log, di una PIANTA durante quella delle piante
+        } }
+        return {cursor:lastSeq, n, stopped, race:info.race};
+    }
+    async function pullTable(e){
+        const t = TBL[e], v = DL.db; let cursor = (await meta('cursor:' + t)) || 0, total = 0;
+        for(;;){
+            const {data, error} = await sb.from(t).select('*').gt('server_seq', cursor).order('server_seq', {ascending:true}).limit(PAGE);
+            if(error) throw typed(error, 'lettura ' + t);
+            if(!data.length) break;
+            const res = await applyPage(e, data);
+            if(res.cursor > cursor){ cursor = res.cursor; await meta('cursor:' + t, cursor); }
+            total += res.n;
+            if(res.stopped || data.length < PAGE) break;
+        }
+        return total;
+    }
+    async function pullAll(){
+        let total = 0;
+        for(const e of ENTS){ st.phase = 'Ricevo ' + TBL[e] + '…'; emit(); total += await pullTable(e); }
+        if(total){ remoteChanged(); }
+        return total;
+    }
+    function remoteChanged(){
+        try{ if(typeof Gal !== 'undefined') Gal.all = null; if(typeof Diary !== 'undefined') Diary.photos = null; }catch(e){}
+        try{ if(typeof renderPage === 'function' && !document.hidden && !document.querySelector('#logInput:focus, input:focus, textarea:focus')) renderPage(); }catch(e){}
+        try{ if(typeof Alerts !== 'undefined') Alerts.kick(); }catch(e){}
+    }
+
+    // ── primo sync: mai sovrascrivere senza scelta esplicita ──
+    async function enqueueAllUnsynced(){
+        const v = DL.db;
+        await v.transaction('rw', [v.plants, v.logs, v.photos, v.reminders, v.settings, v.syncQueue], async () => {
+            const add = async (e, r, key) => { if(!r.synced) await DL.enqueue(e, key, r.deletedAt ? 'delete' : 'upsert'); };
+            const pend = [];
+            await v.plants.toArray().then(a => a.forEach(r => pend.push(['plant', r, r.uuid])));
+            (await v.logs.toArray()).forEach(r => pend.push(['log', r, r.uuid]));
+            await v.photos.each(r => pend.push(['photo', {synced:r.synced, deletedAt:r.deletedAt}, r.uuid]));
+            (await v.reminders.toArray()).forEach(r => pend.push(['reminder', r, r.uuid]));
+            (await v.settings.toArray()).filter(r => r.kind === 'shared').forEach(r => pend.push(['setting', r, r.key]));
+            const seen = new Set();
+            for(const [e, r, k] of pend){ if(seen.has(e + k)) continue; seen.add(e + k); await add(e, r, k); }
+        });
+    }
+    async function remoteCounts(){
+        let tot = 0, plants = 0;
+        for(const e of ENTS){
+            const {count, error} = await sb.from(TBL[e]).select(e === 'setting' ? 'key' : 'id', {count:'exact', head:true}).is('deleted_at', null);
+            if(error) throw typed(error, 'conteggio ' + TBL[e]);
+            tot += count || 0; if(e === 'plant') plants = count || 0;
+        }
+        return {tot, plants};
+    }
+    async function localCounts(){
+        const v = DL.db, live = r => !r.deletedAt;
+        const p = (await v.plants.toArray()).filter(live).length, l = (await v.logs.toArray()).filter(live).length, ph = (await v.photos.filter(live).count()), r = (await v.reminders.toArray()).filter(live).length;
+        return {p, l, ph, r, tot:p + l + ph + r};
+    }
+    async function ensureFirstSync(){
+        const v = DL.db;
+        const acc = await meta('account');
+        if(acc && acc !== st.user.id){   // altro account: stato di sync azzerato, i dati locali restano
+            await v.transaction('rw', [v.plants, v.logs, v.photos, v.reminders, v.settings, v.syncQueue, v.syncMeta], async () => {
+                for(const t of ['plants', 'logs', 'photos', 'reminders', 'settings']) await v[t].toCollection().modify({synced:0});
+                await v.syncQueue.clear(); await v.syncMeta.clear();
+            });
+            DL.holds.clear();
+        }
+        if(await meta('firstSyncDone') && (await meta('account')) === st.user.id){ return; }
+        const rc = await remoteCounts(), lc = await localCounts();
+        let choice = 'merge';
+        if(rc.tot > 0 && lc.tot > 0){
+            st.status = 'needs-choice'; st.phase = ''; emit();
+            const picked = await SyncUI.dialog({title:'Primo collegamento al cloud', html:
+                `<p>Questo account ha già dei dati nel cloud (<b>${rc.plants}</b> piante, <b>${rc.tot}</b> elementi in tutto) e questo dispositivo ne ha altri (<b>${lc.p}</b> piante, <b>${lc.tot}</b> elementi).</p>` +
+                `<p><b>Unisci</b>: tieni tutto, sia quello del cloud sia quello di questo dispositivo (se hai le stesse piante su entrambi potresti vederle doppie: potrai eliminare le copie).</p>` +
+                `<p><b>Usa il cloud</b>: sostituisci i dati di questo dispositivo con quelli del cloud. Prima viene salvata una copia di sicurezza completa.</p><p>Niente viene cancellato dal cloud.</p>`,
+                buttons:[{id:'merge', label:'Unisci (consigliato)', primary:true}, {id:'cloud', label:'Usa il cloud'}, {id:null, label:'Decido dopo'}]});
+            if(!picked){ st.status = 'needs-choice'; throw new SErr('choice', 'Scelta del primo collegamento rimandata'); }
+            choice = picked;
+        } else if(rc.tot > 0 && lc.tot === 0) choice = 'cloud-empty';
+        if(choice === 'cloud'){
+            const b = await Backup.exportV2({auto:true, name:'grow420-copia-prima-del-cloud'});
+            if(!b.ok) throw new SErr('other', 'Copia di sicurezza non riuscita: operazione annullata, nessun dato modificato');
+            await DL.remoteApply(async () => {
+                await v.transaction('rw', [v.plants, v.logs, v.photos, v.reminders, v.settings, v.syncQueue, v.syncMeta], async () => {
+                    for(const t of ['plants', 'logs', 'photos', 'reminders']) await v[t].clear();
+                    await v.settings.where('kind').equals('shared').delete(); await v.syncQueue.clear();
+                    await v.syncMeta.toCollection().filter(r => /^(cursor|conflict):/.test(r.key)).delete();
+                });
+                return {plants:true, shared:SHARED_KEYS.reduce((o, k) => { o[k] = undefined; return o; }, {})};
+            });
+            await DL.flush();
+        } else if(choice === 'merge' || rc.tot === 0){ await enqueueAllUnsynced(); }
+        await meta('account', st.user.id); await meta('firstSyncDone', iso());
+        st.firstSync = {choice, remote:rc, local:lc};
+    }
+
+    // ── ciclo ──
+    async function exec(reason){
+        st.running = true; st.status = 'syncing'; st.err = null; st.phase = ''; emit();
+        try{
+            await DL.flush();
+            await ensureFirstSync();
+            await pushAll();
+            await pullAll();
+            await pushAll();
+            st.last = iso(); await meta('lastSync', st.last);
+            await refreshCounts();
+            st.status = st.conflicts ? 'conflict' : (st.err ? 'error' : 'idle');
+        }catch(err){
+            if(err.kind === 'choice'){ /* in attesa dell'utente */ }
+            else if(err.kind === 'net'){ st.status = 'offline'; }
+            else if(err.kind === 'auth'){
+                let ok = false; try{ const r = await sb.auth.refreshSession(); ok = !!(r.data && r.data.session); }catch(e){}
+                if(!ok){ st.status = 'signedout'; st.user = null; st.err = 'Sessione scaduta: accedi di nuovo'; } else { st.status = 'error'; st.err = 'Autenticazione: riprova'; again = true; }
+            }
+            else if(err.kind === 'perm'){ st.status = 'error'; st.err = 'Permesso negato dal server (RLS): hai eseguito gli script SQL di Supabase?'; }
+            else { st.status = 'error'; st.err = err.message; }
+            console.warn('Sync', err.kind, err.message);
+        }finally{
+            st.running = false; st.phase = ''; st.lastRun = Date.now(); await refreshCounts();
+            if(st.status === 'syncing') st.status = 'idle';
+            emit();
+            if(again){ again = false; schedule(800); }
+        }
+    }
+    async function run(reason){
+        if(!sb || !st.user || !st.verified || DL.mode !== 'v10') return;
+        if(!navigator.onLine){ st.status = 'offline'; await refreshCounts(); emit(); return; }
+        if(st.running){ again = true; return; }
+        if(navigator.locks && navigator.locks.request) await navigator.locks.request('grow420-sync', {ifAvailable:true}, async lock => { if(lock) await exec(reason); });
+        else await exec(reason);
+    }
+    function schedule(ms){ clearTimeout(timer); timer = setTimeout(() => run('auto'), ms == null ? 2500 : ms); }
+
+    // ── account ──
+    function errText(error){
+        const m = String((error && error.message) || error);
+        if(/invalid login/i.test(m)) return 'Email o password non corrette';
+        if(/email not confirmed/i.test(m)) return 'Email non ancora verificata: apri il link che ti abbiamo inviato';
+        if(/already registered|already been registered/i.test(m)) return 'Esiste già un account con questa email: accedi';
+        if(/rate limit|too many/i.test(m)) return 'Troppi tentativi: riprova tra qualche minuto';
+        if(/password/i.test(m) && /6|8|short|weak/i.test(m)) return 'Password troppo debole (almeno 8 caratteri)';
+        if(classify(error) === 'net') return 'Nessuna connessione';
+        return m;
+    }
+    async function onSession(session){
+        if(session && session.user){
+            st.user = {id:session.user.id, email:session.user.email}; st.verified = !!session.user.email_confirmed_at;
+            if(!st.verified){ st.status = 'unverified'; emit(); return; }
+            st.status = navigator.onLine ? 'idle' : 'offline'; emit(); schedule(300);
+        } else { st.user = null; st.verified = false; st.status = 'signedout'; emit(); }
+    }
+    async function signUp(email, pw){
+        if(!sb) return {ok:false, err:'Servizio cloud non disponibile'};
+        if(!/^\S+@\S+\.\S+$/.test(email || '')) return {ok:false, err:'Email non valida'};
+        if(!pw || pw.length < 8) return {ok:false, err:'La password deve avere almeno 8 caratteri'};
+        const {data, error} = await sb.auth.signUp({email, password:pw, options:{emailRedirectTo:location.origin + location.pathname}});
+        if(error) return {ok:false, err:errText(error)};
+        if(data.session && data.user && data.user.email_confirmed_at){ await onSession(data.session); return {ok:true, verified:true}; }
+        return {ok:true, verified:false, msg:'Account creato. Ti abbiamo inviato una email: apri il link di conferma, poi torna qui e accedi.'};
+    }
+    async function signIn(email, pw){
+        if(!sb) return {ok:false, err:'Servizio cloud non disponibile'};
+        const {data, error} = await sb.auth.signInWithPassword({email, password:pw});
+        if(error) return {ok:false, err:errText(error)};
+        if(!data.user || !data.user.email_confirmed_at){ try{ await sb.auth.signOut(); }catch(e){} return {ok:false, err:'Email non ancora verificata: apri il link che ti abbiamo inviato'}; }
+        await onSession(data.session); return {ok:true};
+    }
+    async function signOut(){
+        try{ if(sb) await sb.auth.signOut(); }catch(e){}
+        st.user = null; st.verified = false; st.status = 'signedout'; emit();
+    }
+    async function resetPassword(email){
+        if(!sb) return {ok:false, err:'Servizio cloud non disponibile'};
+        const {error} = await sb.auth.resetPasswordForEmail(email, {redirectTo:location.origin + location.pathname});
+        return error ? {ok:false, err:errText(error)} : {ok:true};
+    }
+
+    // ── risoluzione conflitti ──
+    function localSnap(e, row){ if(!row) return null; const o = Object.assign({}, row); if(o.data) o.data = '[contenuto foto]'; return o; }
+    async function resolve(e, uuid, choice){
+        const v = DL.db, ckey = 'conflict:' + e + ':' + uuid;
+        const c = await v.syncMeta.get(ckey); if(!c) return {ok:false, err:'Conflitto non trovato'};
+        if(!navigator.onLine) return {ok:false, err:'Serve la connessione per risolvere'};
+        const idc = idCol(e), t = TBL[e];
+        const {data:rem, error} = await sb.from(t).select('*').eq(idc, uuid).maybeSingle();
+        if(error) return {ok:false, err:errText(error)};
+        const row = await getRow(e, uuid); const f = rem ? fromRemote(e, rem) : null;
+        const logInfo = {entity:e, uuid, choice, kind:c.value.kind, local:localSnap(e, row), remote:rem};
+        if(choice === 'local'){
+            await v.transaction('rw', [v[t], v.syncQueue, v.syncMeta], async () => {
+                const cur = await getRow(e, uuid); if(cur) await putRow(e, Object.assign({}, cur, {synced:rem ? rem.version : 0}));
+                await v.syncQueue.where('[entity+uuid]').equals([e, uuid]).delete();
+                await v.syncQueue.add({entity:e, uuid, op:(cur && cur.deletedAt) ? 'delete' : 'upsert', ts:iso(), attempts:0, lastError:null, status:'pending'});
+                await v.syncMeta.delete(ckey);
+            });
+        } else {
+            const clones = choice === 'both' ? await makeClones(e, row) : null;
+            await DL.remoteApply(async () => {
+                let plantsChanged = !!clones && (e === 'plant' || e === 'log'); let shared = null;
+                await v.transaction('rw', [v.plants, v.logs, v.photos, v.reminders, v.settings, v.syncQueue, v.syncMeta], async () => {
+                    if(clones){ for(const cl of clones){ await putClone(cl); } }
+                    if(f){
+                        const cur = await getRow(e, uuid);
+                        const nr = Object.assign({}, cur || {}, f, {version:(cur ? cur.version : 0) + 1, updatedAt:iso(), synced:rem.version});
+                        if(e === 'setting'){ nr.kind = 'shared'; shared = {}; shared[uuid] = rem.deleted_at ? undefined : rem.value; }
+                        if(e === 'reminder' && cur) nr.id = cur.id;
+                        if(e === 'photo' && cur){ nr.data = rem.deleted_at ? null : cur.data; nr.id = cur.id; }
+                        if(e === 'plant' || e === 'log') plantsChanged = true;
+                        await putRow(e, nr);
+                    }
+                    await v.syncQueue.where('[entity+uuid]').equals([e, uuid]).delete();
+                    await v.syncMeta.delete(ckey);
+                });
+                return {plants:plantsChanged, shared};
+            });
+            if(e === 'photo' && f && f.deletedAt) await DL.photos.tombstoneRemote(row.id);
+        }
+        DL.holds.delete(uuid);
+        await v.migrationLog.add({ts:iso(), step:'conflict-resolved', info:logInfo});
+        await refreshCounts(); st.status = st.conflicts ? 'conflict' : 'idle'; emit();
+        remoteChanged(); schedule(300);
+        return {ok:true};
+    }
+    async function makeClones(e, row){
+        const v = DL.db, now = iso(), dev = DL.deviceId(), out = [];
+        if(!row || row.deletedAt) return null;
+        if(e === 'plant'){
+            const nu = DL.uuid(); const body = Object.assign({}, row.body, {name:(row.body.name || 'Pianta') + ' (copia locale)'});
+            out.push({e:'plant', row:{uuid:nu, ord:99, body, version:1, updatedAt:now, deletedAt:null, deviceId:dev, synced:0}});
+            (await v.logs.where('plantUuid').equals(row.uuid).toArray()).filter(l => !l.deletedAt).forEach(l => out.push({e:'log', row:Object.assign({}, l, {uuid:DL.uuid(), plantUuid:nu, version:1, updatedAt:now, synced:0})}));
+        } else if(e === 'log'){ out.push({e:'log', row:Object.assign({}, row, {uuid:DL.uuid(), version:1, updatedAt:now, synced:0})}); }
+        else if(e === 'reminder'){ const r = Object.assign({}, row, {uuid:DL.uuid(), title:row.title + ' (copia locale)', version:1, updatedAt:now, synced:0}); delete r.id; delete r.legacyId; out.push({e:'reminder', row:r}); }
+        else return null;
+        return out;
+    }
+    async function putClone(cl){ const v = DL.db; if(cl.e === 'reminder') await v.reminders.add(cl.row); else await putRow(cl.e, cl.row); await DL.enqueue(cl.e, cl.row.uuid, 'upsert'); }
+
+    // ── import dati cloud precedenti (tabella grow_sync): MAI sovrascrive, aggiunge ──
+    async function legacyPeek(){
+        const lid = lsGet('grow-user-id', null);
+        if(!lid) return {ok:false, err:'Questo dispositivo non ha un vecchio ID cloud'};
+        if(typeof supabase === 'undefined') return {ok:false, err:'Servizio cloud non disponibile'};
+        const anon = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:false, autoRefreshToken:false, detectSessionInUrl:false}});
+        const {data, error} = await anon.from('grow_sync').select('*').eq('user_id', lid).maybeSingle();
+        if(error) return {ok:false, err:'Lettura del vecchio cloud non riuscita: ' + error.message};
+        if(!data) return {ok:false, err:'Nessun dato trovato con il vecchio ID'};
+        return {ok:true, data};
+    }
+    async function legacyImport(){
+        const r = await legacyPeek(); if(!r.ok) return r;
+        const d = r.data, local = lsGet('grow-plants', []) || [];
+        const same = (a, b) => a.name === b.name && (a.startDate || '') === (b.startDate || '');
+        const incoming = (Array.isArray(d.plants) ? d.plants : []).filter(p => p && typeof p === 'object' && !local.some(l => same(l, p)));
+        const coaIn = (Array.isArray(d.coa) ? d.coa : []).filter(c => !(lsGet('grow-coa', []) || []).some(x => S(x) === S(c)));
+        const comIn = (Array.isArray(d.community) ? d.community : []).filter(c => !(lsGet('grow-community', []) || []).some(x => S(x) === S(c)));
+        const msg = 'Nel vecchio cloud ci sono ' + (d.plants || []).length + ' piante: ' + incoming.length + ' nuove da aggiungere (le piante già presenti con lo stesso nome e data non vengono toccate), ' + coaIn.length + ' COA e ' + comIn.length + ' post nuovi. Nulla viene sovrascritto. Aggiungere?';
+        if(!incoming.length && !coaIn.length && !comIn.length) return {ok:true, added:0, msg:'Il vecchio cloud non contiene nulla di nuovo rispetto a questo dispositivo'};
+        if(!(await confirmAsync(msg, {title:'Importa dati cloud precedenti', okText:'Aggiungi', danger:false}))) return {ok:false, err:'Annullato'};
+        const safety = await Backup.exportV2({auto:true, name:'grow420-copia-prima-import-cloud'});
+        if(!safety.ok) return {ok:false, err:'Copia di sicurezza non riuscita: importazione annullata'};
+        incoming.forEach(p => { delete p.uuid; (p.logs || []).forEach(l => { delete l.uuid; }); });
+        lsSet('grow-plants', local.concat(incoming));
+        if(coaIn.length) lsSet('grow-coa', (lsGet('grow-coa', []) || []).concat(coaIn));
+        if(comIn.length) lsSet('grow-community', (lsGet('grow-community', []) || []).concat(comIn));
+        await DL.flush();
+        await DL.db.migrationLog.add({ts:iso(), step:'legacy-cloud-import', info:{plants:incoming.length, coa:coaIn.length, community:comIn.length}});
+        remoteChanged(); schedule(500);
+        return {ok:true, added:incoming.length, msg:'Aggiunte ' + incoming.length + ' piante, ' + coaIn.length + ' COA, ' + comIn.length + ' post'};
+    }
+
+    // ── indicatore di stato (header + pannello) ──
+    function label(){
+        const t = st.last ? new Date(st.last).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) : '';
+        switch(st.status){
+            case 'signedout': return {ic:'☁️', tx:'Cloud non attivo', cls:'off'};
+            case 'unverified': return {ic:'✉️', tx:'Verifica la tua email', cls:'warn'};
+            case 'syncing': return {ic:'🔄', tx:'Sincronizzo…', cls:'busy'};
+            case 'offline': return {ic:'🛜', tx:'Offline' + (st.queue ? ' · ' + st.queue + ' in coda' : ''), cls:'warn'};
+            case 'conflict': return {ic:'⚠️', tx:st.conflicts + (st.conflicts === 1 ? ' conflitto' : ' conflitti') + ' da risolvere', cls:'warn'};
+            case 'needs-choice': return {ic:'❓', tx:'Scelta richiesta', cls:'warn'};
+            case 'error': return {ic:'⛔', tx:'Errore sync', cls:'err'};
+            default: return {ic:'✅', tx:'Sincronizzato' + (t ? ' ' + t : '') + (st.queue ? ' · ' + st.queue + ' in coda' : ''), cls:'ok'};
+        }
+    }
+    function chip(){ try{ document.querySelectorAll('[data-sy-chip]').forEach(el => { const l = label(); el.className = 'sy-chip ' + l.cls; el.innerHTML = '<span aria-hidden="true">' + l.ic + '</span> ' + esc(l.tx); }); }catch(e){} }
+
+    async function init(){
+        if(started) return; started = true;
+        await DL.ready;
+        if(DL.mode !== 'v10' || typeof supabase === 'undefined'){ st.status = 'signedout'; emit(); return; }
+        try{ sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:false, storageKey:'sb-grow420-auth'}}); supabaseClient = sb; }
+        catch(e){ console.warn('Supabase', e); emit(); return; }
+        sb.auth.onAuthStateChange((ev, session) => { if(ev === 'SIGNED_OUT'){ st.user = null; st.verified = false; st.status = 'signedout'; emit(); } else if(ev === 'TOKEN_REFRESHED' && session){ st.user = {id:session.user.id, email:session.user.email}; } });
+        DL.on(() => { if(st.user && st.verified) schedule(3000); refreshCounts().then(emit); });
+        window.addEventListener('online', () => { st.status = st.user ? 'idle' : 'signedout'; emit(); run('online'); });
+        window.addEventListener('offline', () => { if(st.user){ st.status = 'offline'; emit(); } });
+        document.addEventListener('visibilitychange', () => { if(!document.hidden && st.user && Date.now() - st.lastRun > 30000) run('visible'); });
+        setInterval(() => { if(!document.hidden && st.user && st.verified && st.status !== 'needs-choice') run('tick'); }, 60000);
+        try{ const {data} = await sb.auth.getSession(); await onSession(data && data.session); }catch(e){ st.status = 'signedout'; }
+        await refreshCounts(); emit();
+    }
+    return {st, init, run, schedule, signUp, signIn, signOut, resetPassword, resolve, listConflicts, legacyPeek, legacyImport, refreshCounts, label, on(f){ listeners.push(f); }, fromRemote, sig, get client(){ return sb; }, SErr};
+})();
+
+// ═══════════════════════════════════════════════════════════
+// V10 · UI Account & Sincronizzazione (pannello, dialoghi, risoluzione conflitti)
+// ═══════════════════════════════════════════════════════════
+const SyncUI = (function(){
+    let ov = null, view = 'main', msg = '', busy = false;
+    function close(){ if(ov){ ov.remove(); ov = null; } }
+    function dialog(o){
+        return new Promise(res => {
+            const d = document.createElement('div'); d.className = 'sy-dlg'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true');
+            d.innerHTML = `<div class="sy-box"><div class="sy-h">${esc(o.title)}</div><div class="sy-b">${o.html}</div><div class="sy-btns">${o.buttons.map((b, i) => `<button type="button" data-i="${i}" class="wdg-btn ${b.primary ? 'grow' : 'ghost'}">${esc(b.label)}</button>`).join('')}</div></div>`;
+            d.addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if(!b) return; d.remove(); res(o.buttons[+b.dataset.i].id); });
+            document.body.appendChild(d);
+        });
+    }
+    const fmt = x => { try{ return x ? new Date(x).toLocaleString('it-IT', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'}) : '—'; }catch(e){ return '—'; } };
+    function summ(e, x, extra){
+        if(!x) return '<i>non disponibile</i>';
+        if(x.deletedAt) return '<b>🗑️ Eliminato</b>' + (x.updatedAt ? '<br><small>' + fmt(x.updatedAt) + '</small>' : '');
+        switch(e){
+            case 'plant': { const b = x.body || {}; return `<b>${esc(b.name || 'Pianta')}</b><br>${esc(b.strain || '')} · fase ${esc(b.phase)}<br>${esc((b.notes || '').slice(0, 80))}${extra && extra.logs != null ? '<br><small>' + extra.logs + ' log</small>' : ''}`; }
+            case 'log': { const b = x.body || {}; return `<b>${esc(b.date || '')}</b><br>${esc((b.text || '').slice(0, 120))}`; }
+            case 'reminder': return `<b>${esc(x.title)}</b><br>${fmt(x.datetime)} · ${esc(x.repeat)} · ${x.active ? 'attivo' : 'concluso'}`;
+            case 'setting': return `<b>${esc(x.key)}</b><br>${Array.isArray(x.value) ? x.value.length + ' elementi' : 'valore modificato'}`;
+            case 'photo': return `<b>Foto</b> · ${fmt(x.createdAt)}<br>fase ${esc(x.phase == null ? '—' : x.phase)}`;
+        }
+        return '';
+    }
+    async function conflictsHtml(){
+        const cs = await Sync.listConflicts(); if(!cs.length) return '';
+        const v = DL.db; let h = '<div class="sy-sec"><h3>⚠️ Conflitti da risolvere</h3><p class="sy-note">Questo elemento è stato modificato sia qui sia su un altro dispositivo. Entrambe le versioni sono conservate: scegli cosa fare. La scelta viene registrata.</p>';
+        for(const c of cs){
+            const e = c.entity, row = e === 'setting' ? await v.settings.get(c.uuid) : e === 'plant' ? await v.plants.get(c.uuid) : e === 'log' ? await v.logs.get(c.uuid) : await v[e + 's'].where('uuid').equals(c.uuid).first();
+            const rem = Sync.fromRemote(e, c.remote);
+            const nlog = e === 'plant' && row ? (await v.logs.where('plantUuid').equals(row.uuid).toArray()).filter(l => !l.deletedAt).length : null;
+            const canBoth = (e === 'plant' || e === 'log' || e === 'reminder') && row && !row.deletedAt;
+            const lbl = {plant:'Pianta', log:'Nota del diario', reminder:'Promemoria', setting:'Dati condivisi', photo:'Foto'}[e];
+            h += `<div class="sy-conf" data-e="${esc(e)}" data-u="${esc(c.uuid)}"><div class="sy-ct">${lbl} · ${esc({'edit-edit':'modificata in due posti','delete-edit':'eliminata qui, modificata altrove','edit-delete':'modificata qui, eliminata altrove'}[c.kind] || '')}</div>
+<div class="sy-cols"><div class="sy-col"><span class="sy-tag">Questo dispositivo</span>${summ(e, row, {logs:nlog})}</div><div class="sy-col"><span class="sy-tag cl">Cloud</span>${summ(e, Object.assign({updatedAt:c.remote.client_updated_at}, rem), {})}</div></div>
+<div class="sy-btns"><button type="button" class="wdg-btn grow" data-ch="local">Tieni questa</button><button type="button" class="wdg-btn ghost" data-ch="remote">Usa quella del cloud</button>${canBoth ? '<button type="button" class="wdg-btn ghost" data-ch="both">Tieni entrambe</button>' : ''}</div></div>`;
+        }
+        return h + '</div>';
+    }
+    async function render(){
+        if(!ov) return;
+        const s = Sync.st, l = Sync.label();
+        const keepE = ov.querySelector('#syEmail'), keepP = ov.querySelector('#syPw'); const sv = [keepE ? keepE.value : '', keepP ? keepP.value : ''];
+        let h = `<div class="sy-top"><button type="button" class="sy-x" aria-label="Chiudi" onclick="SyncUI.close()">✕</button><h2>Account &amp; Sincronizzazione</h2></div>`;
+        h += `<div class="sy-status ${l.cls}" role="status"><span aria-hidden="true">${l.ic}</span> ${esc(l.tx)}${s.phase ? ' · ' + esc(s.phase) : ''}</div>`;
+        if(s.err) h += `<div class="sy-err" role="alert">${esc(s.err)}</div>`;
+        if(msg) h += `<div class="sy-ok" role="status">${esc(msg)}</div>`;
+        if(!s.user){
+            h += `<div class="sy-sec"><p class="sy-note">Accedi per tenere i dati allineati su più dispositivi. I tuoi dati restano sempre salvati anche sul dispositivo e l'app funziona offline: la sincronizzazione parte da sola appena c'è connessione.</p>
+<label class="sy-l">Email<input id="syEmail" type="email" autocomplete="email" inputmode="email" class="sy-in"></label>
+<label class="sy-l">Password (min. 8 caratteri)<input id="syPw" type="password" autocomplete="current-password" class="sy-in"></label>
+<div class="sy-btns"><button type="button" class="wdg-btn grow" id="syIn" ${busy ? 'disabled' : ''}>Accedi</button><button type="button" class="wdg-btn ghost" id="syUp" ${busy ? 'disabled' : ''}>Crea account</button></div>
+<button type="button" class="wdg-link" id="syReset">Password dimenticata?</button>
+<p class="sy-note">Dopo la registrazione riceverai una email: la sincronizzazione parte solo dopo aver confermato l'indirizzo.</p></div>`;
+        } else {
+            h += `<div class="sy-sec"><div class="sy-row"><span>Account</span><b>${esc(s.user.email)}</b></div><div class="sy-row"><span>Email</span><b>${s.verified ? '✓ verificata' : 'da verificare'}</b></div>
+<div class="sy-row"><span>Ultima sincronizzazione</span><b>${s.last ? fmt(s.last) : '—'}</b></div><div class="sy-row"><span>Operazioni in coda</span><b>${s.queue}</b></div>
+<div class="sy-btns"><button type="button" class="wdg-btn grow" id="sySync" ${s.running ? 'disabled' : ''}>🔄 Sincronizza ora</button><button type="button" class="wdg-btn ghost" id="syOut">Esci</button></div>
+<p class="sy-note">Uscendo, i dati restano su questo dispositivo.</p></div>`;
+            h += await conflictsHtml();
+            if(lsGet('grow-user-id', null)) h += `<div class="sy-sec"><h3>Dati del vecchio cloud</h3><p class="sy-note">Questo dispositivo usava il vecchio salvataggio cloud. Puoi aggiungere quei dati al nuovo account: non viene sovrascritto nulla.</p><div class="sy-btns"><button type="button" class="wdg-btn ghost" id="syLeg">Importa dati cloud precedenti</button></div></div>`;
+        }
+        h += `<div class="sy-sec"><h3>Dati sul dispositivo</h3><div class="sy-btns"><button type="button" class="wdg-btn ghost" onclick="exportAllData()">📥 Backup completo</button><button type="button" class="wdg-btn ghost" onclick="dataIntegrityCheck()">🛡️ Verifica dati</button></div></div>`;
+        ov.querySelector('.sy-in-wrap').innerHTML = h;
+        if(ov.querySelector('#syEmail')){ ov.querySelector('#syEmail').value = sv[0]; ov.querySelector('#syPw').value = sv[1]; }
+        wire();
+    }
+    function wire(){
+        const q = id => ov.querySelector(id);
+        const act = async (fn) => { busy = true; msg = ''; Sync.st.err = null; await render(); try{ await fn(); }finally{ busy = false; await render(); } };
+        if(q('#syIn')) q('#syIn').onclick = () => { const e = q('#syEmail').value.trim(), p = q('#syPw').value; act(async () => { const r = await Sync.signIn(e, p); if(!r.ok) Sync.st.err = r.err; }); };
+        if(q('#syUp')) q('#syUp').onclick = () => { const e = q('#syEmail').value.trim(), p = q('#syPw').value; act(async () => { const r = await Sync.signUp(e, p); if(!r.ok) Sync.st.err = r.err; else if(!r.verified) msg = r.msg; }); };
+        if(q('#syReset')) q('#syReset').onclick = () => { const e = q('#syEmail').value.trim(); if(!e){ Sync.st.err = 'Scrivi prima la tua email'; render(); return; } act(async () => { const r = await Sync.resetPassword(e); if(!r.ok) Sync.st.err = r.err; else msg = 'Ti abbiamo inviato una email per reimpostare la password.'; }); };
+        if(q('#sySync')) q('#sySync').onclick = () => { Sync.run('manual'); };
+        if(q('#syOut')) q('#syOut').onclick = () => act(() => Sync.signOut());
+        if(q('#syLeg')) q('#syLeg').onclick = () => act(async () => { const r = await Sync.legacyImport(); if(r.ok) msg = r.msg; else if(r.err !== 'Annullato') Sync.st.err = r.err; });
+        ov.querySelectorAll('.sy-conf').forEach(c => c.addEventListener('click', ev => { const b = ev.target.closest('button[data-ch]'); if(!b) return; act(async () => { const r = await Sync.resolve(c.dataset.e, c.dataset.u, b.dataset.ch); if(!r.ok) Sync.st.err = r.err; else msg = 'Conflitto risolto e registrato'; }); }));
+    }
+    function open(){
+        if(ov) return;
+        ov = document.createElement('div'); ov.className = 'sy-ov'; ov.id = 'syncPanel'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-label', 'Account e sincronizzazione');
+        ov.innerHTML = '<div class="sy-in-wrap"></div>'; document.body.appendChild(ov);
+        document.addEventListener('keydown', escH); render();
+    }
+    function escH(e){ if(e.key === 'Escape' && ov && !document.querySelector('.sy-dlg')){ close(); document.removeEventListener('keydown', escH); } }
+    Sync.on(() => { if(ov && !(document.activeElement && ov.contains(document.activeElement) && /INPUT|TEXTAREA/.test(document.activeElement.tagName))) render(); });
+    return {open, close, dialog, render};
+})();
+function renderCloudStatus(){
+    const l = Sync.label();
+    return `<button type="button" data-sy-chip class="sy-chip ${l.cls}" onclick="SyncUI.open()" aria-label="Account e sincronizzazione"><span aria-hidden="true">${l.ic}</span> ${esc(l.tx)}</button>`;
+}
+async function syncToCloud(){ SyncUI.open(); }
+async function syncFromCloud(){ SyncUI.open(); }
 
 // ── 3. PWA MANIFEST (file separato: manifest.json)
 
-// ── 4. SERVICE WORKER (file separato: sw.js) ──────────────
-// Registrazione + avviso "nuova versione" + storage persistente
+// ── 4. SERVICE WORKER / PWA MANAGER ──────────────────────
+// Registrazione, aggiornamenti CONTROLLATI (la nuova versione si attiva solo quando l'utente conferma e dopo aver
+// scritto i dati in coda), storage persistente, versione, ripresa operazioni quando il worker lo richiede.
 let _hadSWController = !!(navigator.serviceWorker && navigator.serviceWorker.controller);
+let _swReg = null, _swUserUpdate = false;
 if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
             .then(reg => {
-                console.log('SW registrato');
+                _swReg = reg;
+                if(reg.waiting && navigator.serviceWorker.controller) showUpdateBanner();
+                reg.addEventListener('updatefound', () => {
+                    const w = reg.installing; if(!w) return;
+                    w.addEventListener('statechange', () => { if(w.state === 'installed' && navigator.serviceWorker.controller) showUpdateBanner(); });
+                });
                 setInterval(() => reg.update().catch(() => {}), 60 * 60 * 1000);
+                document.addEventListener('visibilitychange', () => { if(!document.hidden) reg.update().catch(() => {}); });
             })
             .catch(e => console.warn('SW errore', e));
         navigator.serviceWorker.addEventListener('controllerchange', () => {
-            // il primo controllo (prima installazione) non è un aggiornamento
-            if(!_hadSWController){ _hadSWController = true; return; }
-            showUpdateBanner();
+            if(!_hadSWController){ _hadSWController = true; return; }   // prima installazione: non è un aggiornamento
+            if(_swUserUpdate) location.reload();                        // ricarica solo se l'utente ha chiesto di aggiornare
         });
+        navigator.serviceWorker.addEventListener('message', e => { if(e.data && e.data.type === 'SYNC_REQUIRED'){ try{ Sync.run('bg'); }catch(x){} } });
         try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+    });
+}
+function swVersion(){
+    return new Promise(res => {
+        try{
+            const c = navigator.serviceWorker && navigator.serviceWorker.controller; if(!c) return res(null);
+            const ch = new MessageChannel(); ch.port1.onmessage = e => res(e.data); c.postMessage({type:'GET_VERSION'}, [ch.port2]); setTimeout(() => res(null), 1500);
+        }catch(e){ res(null); }
     });
 }
 function showUpdateBanner(){
     if(document.getElementById('updateBanner')) return;
     const b = document.createElement('div');
     b.id = 'updateBanner'; b.className = 'update-banner'; b.setAttribute('role','status');
-    b.innerHTML = '<span>🆕 Nuova versione disponibile</span><button type="button">Aggiorna</button>';
-    b.querySelector('button').onclick = () => location.reload();
+    b.innerHTML = '<span>🆕 Nuova versione disponibile · i tuoi dati restano al sicuro</span><button type="button">Aggiorna</button>';
+    b.querySelector('button').onclick = async () => {
+        b.querySelector('button').disabled = true;
+        try{ await DL.flush(); }catch(e){}                                    // 1) scrive ogni modifica ancora in memoria
+        try{ if(Sync.st.user && navigator.onLine) await Promise.race([Sync.run('update'), new Promise(r => setTimeout(r, 6000))]); }catch(e){}   // 2) prova a inviare la coda
+        _swUserUpdate = true;
+        if(_swReg && _swReg.waiting) _swReg.waiting.postMessage({type:'SKIP_WAITING'}); else location.reload();   // 3) attiva
+    };
     document.body.appendChild(b);
 }
 
@@ -999,7 +2549,7 @@ window.addEventListener('appinstalled', () => {
 });
 try{ window.matchMedia('(display-mode: standalone)').addEventListener('change', updateInstallUI); }catch(e){}
 // ── 5. OFFLINE BADGE ──────────────────────────────────────
-function updateOnlineStatus(){const b=document.getElementById('offlineBadge');if(b)b.classList.toggle('show',!navigator.onLine)}
+function updateOnlineStatus(){const b=document.getElementById('offlineBadge');if(b){b.classList.toggle('show',!navigator.onLine);let q=0;try{q=Sync.st.queue||0}catch(e){}b.textContent=navigator.onLine?'':('🛜 Offline — dati salvati sul dispositivo'+(q?' · '+q+' in coda':''))}}
 window.addEventListener('online',updateOnlineStatus);window.addEventListener('offline',updateOnlineStatus);setTimeout(updateOnlineStatus,500);
 
 // ── 6. GLOSSARY DB ────────────────────────────────────────
@@ -1140,9 +2690,9 @@ async function initReminders() {
 }
 
 async function checkReminders() {
-    if (!db) return;
+    if (!db && DL.mode === 'off') return;
     const now = new Date();
-    const reminders = await db.reminders.where('active').equals(1).toArray();
+    const reminders = await DL.reminders.listActive();
     reminders.forEach(async r => {
         const dt = new Date(r.datetime);
         if (dt <= now) {
@@ -1170,16 +2720,17 @@ async function checkReminders() {
                 const next = new Date(dt);
                 const step = r.repeat === 'weekly' ? 7 : 1;
                 do { next.setDate(next.getDate() + step); } while (next <= now);
-                await db.reminders.update(r.id, { datetime: next.toISOString() });
+                await DL.reminders.update(r.id, { datetime: next.toISOString() });
             } else {
-                await db.reminders.update(r.id, { active: 0 });
+                await DL.reminders.update(r.id, { active: 0 });
             }
         }
     });
 }
 
 async function addReminder(title, datetime, repeat) {
-    if (!db) { notify('Database non disponibile: impossibile salvare il promemoria.'); return false; }
+    await DL.ready;
+    if (DL.mode === 'off') { notify('Database non disponibile: impossibile salvare il promemoria.'); return false; }
     if ('Notification' in window && Notification.permission === 'default') {
         try { await Notification.requestPermission(); } catch(e) {}
     }
@@ -1187,12 +2738,12 @@ async function addReminder(title, datetime, repeat) {
         // il promemoria viene salvato comunque: comparirà dentro l'app quando scade
         setTimeout(() => { try { Toast.show('Notifiche disattivate: il promemoria apparirà solo dentro l\'app', 'warn', 4500); } catch(e) {} }, 100);
     }
-    await db.reminders.add({ title, datetime, repeat: repeat || 'once', active: 1, createdAt: new Date().toISOString() });
+    await DL.reminders.add({ title, datetime, repeat: repeat || 'once', active: 1, createdAt: new Date().toISOString() });
     return true;
 }
 
-async function deleteReminder(id) { await db.reminders.delete(id); }
-async function toggleReminder(id, active) { await db.reminders.update(id, { active: active ? 1 : 0 }); }
+async function deleteReminder(id) { await DL.reminders.remove(id); }
+async function toggleReminder(id, active) { await DL.reminders.update(id, { active: active ? 1 : 0 }); }
 
 // ── 8. PHOTO SYSTEM (IndexedDB) ───────────────────────────
 async function addPhoto(plantId, file) {
@@ -1236,8 +2787,8 @@ async function addPhoto(plantId, file) {
                         0.82
                     );
                     const pPl = (lsGet('grow-plants', []) || [])[plantId];
-                    const id = await db.photos.add({
-                        plantId,
+                    const id = await DL.photos.add({
+                        plantIdx: plantId,
                         logId: null,
                         data,
                         createdAt: new Date().toISOString(),
@@ -1258,67 +2809,12 @@ async function addPhoto(plantId, file) {
     });
 }
 async function getPlantPhotos(plantId, limit = 50) {
-    return await db.photos.where('plantId').equals(plantId).reverse().limit(limit).toArray();
+    return await DL.photos.byPlant(plantId, limit);
 }
-async function deletePhoto(id) { await db.photos.delete(id); if (typeof Gal !== 'undefined') Gal.all = null; }
+async function deletePhoto(id) { await DL.photos.remove(id); if (typeof Gal !== 'undefined') Gal.all = null; }
 
 // ── 9. EXPORT / IMPORT ────────────────────────────────────
-async function exportAllData() {
-    const data = { version: 1, exportedAt: new Date().toISOString(), localStorage: {}, indexedDB: {} };
-    for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); data.localStorage[k] = localStorage.getItem(k); }
-    data.indexedDB.plants = await db.plants.toArray();
-    data.indexedDB.logs = await db.logs.toArray();
-    data.indexedDB.photos = await db.photos.toArray();
-    data.indexedDB.reminders = await db.reminders.toArray();
-    data.indexedDB.settings = await db.settings.toArray();
-    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `grow420-backup-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url);
-}
-
-async function exportCSV() {
-    const logs = await db.logs.toArray();
-    if (!logs.length) { notify('Nessun log da esportare'); return; }
-    const header = 'Data,PiantaID,Testo,Tag,pH,EC,Temp,Umidita,PesoFresco_g,PesoSecco_g,Resa_pct\n';
-    const rows = logs.map(l => {
-        const tags = (l.tags || []).join(';');
-        const m = l.metrics || {};
-        const fresh = m.fresh || '';
-        const dry = m.dry || '';
-        const yieldPct = (fresh && dry) ? ((dry/fresh)*100).toFixed(1) : '';
-        return `"${l.date}","${l.plantId || ''}","${(l.text || '').replace(/"/g,'""')}","${tags}","${m.ph || ''}","${m.ec || ''}","${m.temp || ''}","${m.humidity || ''}","${fresh}","${dry}","${yieldPct}"`;
-    }).join('\n');
-    const blob = new Blob([header + rows], {type: 'text/csv'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href = url; a.download = `grow420-logs-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
-}
-
-async function importData(file) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                if (!data.version) { notify('File non valido'); resolve(false); return; }
-                if (!(await confirmAsync('Questo sovrascriverà tutti i dati esistenti. Continuare?', {title:'Importa dati', okText:'Importa'}))) { resolve(false); return; }
-                // Restore localStorage
-                if (data.localStorage) { Object.keys(data.localStorage).forEach(k => localStorage.setItem(k, data.localStorage[k])); }
-                // Restore IndexedDB
-                await db.transaction('rw', db.plants, db.logs, db.photos, db.reminders, db.settings, async () => {
-                    await db.plants.clear(); if (data.indexedDB.plants) await db.plants.bulkAdd(data.indexedDB.plants);
-                    await db.logs.clear(); if (data.indexedDB.logs) await db.logs.bulkAdd(data.indexedDB.logs);
-                    await db.photos.clear(); if (data.indexedDB.photos) await db.photos.bulkAdd(data.indexedDB.photos);
-                    await db.reminders.clear(); if (data.indexedDB.reminders) await db.reminders.bulkAdd(data.indexedDB.reminders);
-                    await db.settings.clear(); if (data.indexedDB.settings) await db.settings.bulkAdd(data.indexedDB.settings);
-                });
-                alert("Dati importati con successo! L'app verrà ricaricata.");
-                location.reload();
-                resolve(true);
-            } catch(err) { console.error(err); notify("Errore durante l'importazione: " + err.message); resolve(false); }
-        };
-        reader.readAsText(file);
-    });
-}
+// (export/import/CSV: vedi BACKUP MANAGER V2)
 
 // ── 10. STRUCTURED LOG SYSTEM ─────────────────────────────
 async function addStructuredLog(plantId, text, metrics, photoFiles) {
@@ -1331,7 +2827,7 @@ async function addStructuredLog(plantId, text, metrics, photoFiles) {
     if (photoFiles && photoFiles.length) {
         for (const file of photoFiles) {
             const photoId = await addPhoto(plantId, file);
-            await db.photos.update(photoId, { logId });
+            await DL.photos.update(photoId, { logId });
             log.photos.push(photoId);
         }
         await db.logs.update(logId, { photos: log.photos });
@@ -1857,7 +3353,11 @@ function renderJointProgress(pct, size=400){
     </div>`;
 }
 function lsGet(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def}catch(e){return def}}
-function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function lsSet(k,v){
+    try{ if(k==='grow-plants') DL.prepPlants(v); }catch(e){}
+    try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}
+    try{ DL.onLsSet(k,v); }catch(e){ console.warn('DL',e); }
+}
 // FIX GIORNO PIANTA: il campo "day" salvato rappresenta il giorno ALLA data di inizio (utile se inizi a
 // tracciare una pianta già cresciuta). Il giorno mostrato ovunque si calcola sempre da qui, sommando i
 // giorni realmente trascorsi da "Data Inizio" ad oggi — così non resta mai fermo.
@@ -2247,7 +3747,8 @@ default:html=renderHome()
 // stessa pagina (toggle step, filtri, stoner…): niente fade-in e scroll invariato → niente "sfarfallio"
 const samePage=app.dataset.page===currentPage&&!!app.firstElementChild;
 const keepY=window.scrollY;
-const pageHtml=`<div class="page-bg" style="${getPageBg()}"></div><div class="page${samePage?' same':''}">${html}</div>`;
+const pageBgEl=document.getElementById('pageBg');if(pageBgEl)pageBgEl.style.cssText=getPageBg();
+const pageHtml=`<div class="page${samePage?' same':''}">${html}</div>`;
 if(samePage&&MORPH_PAGES.has(currentPage)){morphInto(app,pageHtml)}
 else{app.innerHTML=pageHtml;if(samePage)window.scrollTo(0,keepY)}
 app.dataset.page=currentPage;
@@ -2522,14 +4023,14 @@ let html=`<div>
 <button onclick="newPlant()" class="btn" style="background:var(--np);color:#fff;font-size:11px;padding:10px 16px;${plants.length>=5?'opacity:.4;pointer-events:none;':''}">＋ Nuova ${plants.length>=5?'(Max 5)':''}</button>
 </div>
 <div class="export-bar">
-<button onclick="exportAllData()" class="btn" style="background:#1a1a1a;color:var(--ng);border:1px solid #333">📥 Export JSON</button>
+<button onclick="exportAllData()" class="btn" style="background:#1a1a1a;color:var(--ng);border:1px solid #333">📥 Backup completo (V2)</button>
 <button onclick="exportCSV()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">📄 Export CSV</button>
 <label class="btn" style="background:#1a1a1a;color:var(--ny);border:1px solid #333;cursor:pointer;display:inline-block">
-📤 Import Backup
+📤 Ripristina backup
 <input type="file" accept=".json" onchange="const f=this.files[0];if(f)importData(f);this.value=''" style="display:none">
 </label>
-<button onclick="syncToCloud()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">☁️ Sync su Cloud</button>
-<button onclick="syncFromCloud()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">⬇️ Scarica da Cloud</button>
+<button onclick="dataIntegrityCheck()" class="btn" style="background:#1a1a1a;color:var(--ng);border:1px solid #333">🛡️ Verifica dati</button>
+<button onclick="SyncUI.open()" class="btn" style="background:#1a1a1a;color:var(--nc);border:1px solid #333">☁️ Account &amp; Sync</button>
 </div>
 <div style="text-align:right;margin-bottom:16px">${renderCloudStatus()}</div>`;
 if(!plants.length){
@@ -2811,11 +4312,7 @@ if(tagMatches) logEntry.tags = tagMatches.map(t => t.slice(1));
 if(Object.keys(metrics).length) logEntry.metrics = metrics;
 plants[journalEditId].logs.push(logEntry);
 lsSet('grow-plants',plants);
-// Salva anche in IndexedDB per Fase 2+
-try {
-    const plantId = plants[journalEditId].id || journalEditId;
-    await db.logs.add({plantId, date: logEntry.date, text, tags: logEntry.tags || [], metrics, isProblem: isProblem ? 1 : 0, photos: []});
-} catch(e) {}
+// v10: il log è già nel Data Layer (lsSet → DL, ID stabile + coda di sync); il vecchio doppione in db.logs non si scrive più
 input.value='';
 document.getElementById('logPH').value='';
 document.getElementById('logEC').value='';
@@ -4932,7 +6429,7 @@ async function initRemindersPage(){
     checkReminders();
     const list = document.getElementById('reminderList');
     if(!list) return;
-    const reminders = await db.reminders.reverse().toArray();
+    const reminders = await DL.reminders.listAll();
     if(!reminders.length){ list.innerHTML = '<div style="text-align:center;padding:40px;color:#808080"><div style="font-size:48px;margin-bottom:12px">⏰</div><div style="font-family:Orbitron;font-size:14px">Nessun promemoria</div></div>'; return; }
     list.innerHTML = reminders.map(r => {
         const dt = new Date(r.datetime);
@@ -5654,43 +7151,7 @@ function initShop(){}
 // ═══════════════════════════════════════════════════════════
 // CLOUD SYNC (#17) — Supabase standby → attivo
 // ═══════════════════════════════════════════════════════════
-async function syncToCloud(){
-    if(!supabaseClient){notify('Supabase non disponibile');return;}
-    try{
-        const userId = lsGet('grow-user-id', null) || 'anon_'+Math.random().toString(36).slice(2,10);
-        lsSet('grow-user-id', userId);
-        const payload = {
-            user_id: userId,
-            plants: lsGet('grow-plants',[]),
-            coa: lsGet('grow-coa',[]),
-            community: lsGet('grow-community',[]),
-            settings: {stoner: lsGet('stoner-mode',false), activePlant: getActivePlantIndex()},
-            updated_at: new Date().toISOString()
-        };
-        const {error} = await supabaseClient.from('grow_sync').upsert(payload, {onConflict: 'user_id'});
-        if(error){console.error(error);notify('Errore sync: '+error.message);}
-        else{lsSet('grow-cloud-status','synced');Toast.show('☁️ Dati sincronizzati su cloud!','success');renderPage();}
-    }catch(e){notify('Errore: '+e.message);}
-}
-async function syncFromCloud(){
-    if(!supabaseClient){notify('Supabase non disponibile');return;}
-    try{
-        const userId = lsGet('grow-user-id', null);
-        if(!userId){notify('Nessun ID utente. Fai prima un upload.');return;}
-        const {data,error} = await supabaseClient.from('grow_sync').select('*').eq('user_id',userId).single();
-        if(error||!data){notify('Nessun dato remoto trovato');return;}
-        if(!(await confirmAsync('Sovrascrivere i dati locali con quelli del cloud?',{title:'Scarica dal cloud',okText:'Sovrascrivi'})))return;
-        lsSet('grow-plants',data.plants||[]);
-        lsSet('grow-coa',data.coa||[]);
-        lsSet('grow-community',data.community||[]);
-        if(data.settings){lsSet('stoner-mode',data.settings.stoner||false);lsSet('grow-active-plant',data.settings.activePlant||0);}
-        alert('☁️ Dati scaricati dal cloud!');location.reload();
-    }catch(e){notify('Errore: '+e.message);}
-}
-function renderCloudStatus(){
-    const status=lsGet('grow-cloud-status','offline');
-    return `<span style="font-size:10px;color:${status==='synced'?'var(--ng)':'#555'}">☁️ ${status==='synced'?'Sync OK':'Offline'}</span>`;
-}
+// (cloud sync: vedi SYNC ENGINE v10)
 
 // ═══════════════════════════════════════════════════════════
 // VERSIONING COMPLETO LIBRERIA (#16)
@@ -5796,9 +7257,6 @@ async function wdgAddLog(text, metrics, isProblem){
     if(metrics && Object.keys(metrics).length) entry.metrics = metrics;
     pl.logs.push(entry);
     lsSet('grow-plants', plants);
-    try{
-        await db.logs.add({plantId:pl.id || idx, date:entry.date, text, tags:entry.tags || [], metrics:metrics || {}, isProblem:isProblem ? 1 : 0, photos:[]});
-    }catch(e){}
     return true;
 }
 
@@ -6128,9 +7586,9 @@ const Wdg = {
     async remLoad(){
         const el = document.getElementById('wRemList');
         if(!el) return;
-        if(!db){ el.innerHTML = '<div class="wdg-muted">Database non disponibile</div>'; return; }
+        if(DL.mode === 'off'){ el.innerHTML = '<div class="wdg-muted">Database non disponibile</div>'; return; }
         let all = [];
-        try{ all = await db.reminders.where('active').equals(1).toArray(); }catch(e){}
+        try{ all = await DL.reminders.listActive(); }catch(e){}
         all.sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
         const next = all.slice(0, 3);
         const el2 = document.getElementById('wRemList');
@@ -6161,12 +7619,12 @@ const Wdg = {
     },
     async remDone(id){
         try{
-            const r = await db.reminders.get(id);
+            const r = await DL.reminders.get(id);
             if(r && r.repeat && r.repeat !== 'once'){
                 const step = r.repeat === 'weekly' ? 7 : 1;
                 const next = new Date(r.datetime);
                 do{ next.setDate(next.getDate() + step); }while(next <= new Date());
-                await db.reminders.update(id, {datetime:next.toISOString()});
+                await DL.reminders.update(id, {datetime:next.toISOString()});
             }else{
                 await toggleReminder(id, 0);
             }
@@ -7029,8 +8487,8 @@ const Alerts = {
         }
         // 6) promemoria in scadenza (entro 24 h) — la notifica vera resta quella dei Promemoria
         try{
-            if(db){
-                const rs = await db.reminders.where('active').equals(1).toArray();
+            if(DL.mode !== 'off'){
+                const rs = await DL.reminders.listActive();
                 rs.forEach(r => {
                     const t = new Date(r.datetime).getTime();
                     if(isNaN(t) || t - now > 24 * V9H) return;
@@ -7276,7 +8734,7 @@ const Gal = {
     all:null, view:[], vi:0, err:false, busy:false,
     async load(force){
         if(force || !Gal.all){
-            try{ Gal.all = db ? await db.photos.toArray() : []; Gal.err = false; }
+            try{ Gal.all = await DL.photos.all(); Gal.err = false; }
             catch(e){ Gal.all = []; Gal.err = true; }
         }
         return Gal.all;
@@ -7512,7 +8970,7 @@ const Profile = {
     pick(i){ Profile.sel = i; const r = document.getElementById('pfRoot'); if(r){ r.innerHTML = Profile.html(); Profile.fillPhotos(); } },
     async fillPhotos(){
         let n = 0;
-        try{ n = db ? await db.photos.count() : 0; }catch(e){}
+        try{ n = await DL.photos.count(); }catch(e){}
         const e = document.getElementById('pfPh'); if(e) e.textContent = n;
         const m = document.getElementById('pfMs'); if(m) m.innerHTML = Profile.miles(Profile.stats(), n).map(Profile.ms).join('');
     }
@@ -7584,10 +9042,11 @@ ${mnIs420() ? '<div class="mn-banner" role="status">🕓 4:20 — È L\'ORA!</di
 <button type="button" class="mn-row" onclick="Menu.stoner()" role="switch" aria-checked="${stoner}"><span class="ic">🌈</span><span>Stoner Mode</span>${sw(stoner)}</button>
 <button type="button" class="mn-row" id="menuInstall" onclick="installApp()" style="${installHidden() ? 'display:none' : ''}"><span class="ic">📲</span><span>Installa l'app</span><span class="st">Home screen</span></button>
 <button type="button" class="mn-row" onclick="Menu.notif()"><span class="ic">🔔</span><span>Notifiche promemoria</span><span class="st" id="mnNotif">${mnNotifLabel()}</span></button>
-<button type="button" class="mn-row" onclick="Menu.backup()"><span class="ic">📥</span><span>Backup dei dati</span><span class="st">JSON</span></button>
+<button type="button" class="mn-row" onclick="closeMenu();SyncUI.open()"><span class="ic">☁️</span><span>Account &amp; Sync</span><span class="st" data-sy-txt>${esc(Sync.label().tx)}</span></button>
+<button type="button" class="mn-row" onclick="Menu.backup()"><span class="ic">📥</span><span>Backup dei dati</span><span class="st">V2</span></button>
 <button type="button" class="mn-row" onclick="Menu.resetWidgets()"><span class="ic">↺</span><span>Ripristina i widget</span></button>
 </section>
-<div class="mn-foot">GROW 420 · v8${navigator.onLine ? '' : ' · OFFLINE'}</div>`;
+<div class="mn-foot">GROW 420 · v10${navigator.onLine ? '' : ' · OFFLINE'}</div>`;
     },
     puff(){
         const s = jtState();
@@ -7658,9 +9117,13 @@ updateHeader();
 renderBottomNav();
 renderPage();
 updateInstallUI();
-initReminders();
-Alerts.refresh();
-setInterval(() => { if(!document.hidden) Alerts.refresh(); }, 60000);
+DL.init().then(() => {
+    if(DL.st.hydrated){ try{ renderPage(); }catch(e){} }
+    if(DL.mode !== 'v10'){ setTimeout(() => { try{ Toast.show('⚠️ Modalità sicura: i tuoi dati sono intatti nel formato precedente. Esporta un backup e controlla «Verifica dati».', 'warn', 7000); }catch(e){} }, 1200); }
+    initReminders(); Alerts.refresh();
+    Sync.init(); Sync.on(() => { try{ updateOnlineStatus(); }catch(e){} });
+});
+setInterval(() => { if(!document.hidden && DL.mode !== 'init') Alerts.refresh(); }, 60000);
 window.addEventListener('focus', Alerts.kick);
 </script>
 <script>
